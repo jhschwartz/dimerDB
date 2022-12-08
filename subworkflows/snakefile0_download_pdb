@@ -1,0 +1,69 @@
+import os
+
+
+# force pdb update
+pdb_updated = 'intermediates/pdb_updated.done'
+#os.remove(pdb_updated) if os.path.exists(pdb_updated) else None
+
+
+rule all:
+    input:
+        'intermediates/pdb_split.done'
+        #pdb_updated
+    output:
+        done = "intermediates/subflow0.done"
+    shell:
+        "touch {output.done}"
+
+
+rule download:
+    output:
+        done = pdb_updated
+    shell:
+        """
+        cd lib 
+        rsync -rlpt -v -z --delete --port=33444 \
+        rsync.rcsb.org::ftp_data/biounit/PDB/divided/ ./rcsb_pdb
+        touch ../{output.done}
+        """
+
+
+rule ungzip:
+    input:
+        pdb_updated
+    output:
+        done = 'intermediates/pdb_ungzip.done'
+    threads: 48
+    shell:
+        """
+        cd lib/rcsb_pdb
+        parallel --bar -j{threads} gzip -d {{}}/*.gz ::: * 
+        touch ../../{output.done}
+        """
+
+
+rule split_pdb:
+    input:
+        'intermediates/pdb_ungzip.done' 
+    output:
+        done = 'intermediates/pdb_split.done'
+    threads: 48 
+    shell:
+        """
+        cd lib/rcsb_pdb;
+
+        # only split pdbs that haven't been split!
+        # assumes unsplit pdb filenames will be 4 characters then a period
+        function split_if_not_yet_split {{
+            for infile in $@; do
+                local pattern="\/(.{{4}})\.";                      # filename must have a slash, 4 chars, then a period
+                if [[ $infile =~ $pattern ]]; then                 #        e.g. 00/100b.pdb would pass, 00/100bA.pdb would not
+                    ../../bin/PDBParser/split_chain $infile;
+                fi
+            done 
+        }}
+       
+        export -f split_if_not_yet_split;
+        parallel -j{threads} --bar split_if_not_yet_split {{}}/*.pdb* ::: *;
+        touch ../../{output.done}
+        """

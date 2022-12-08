@@ -1,0 +1,5 @@
+intermediates/
+data/
+keep-intermediates/
+lib/
+slurm-*.out

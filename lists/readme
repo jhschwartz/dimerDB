@@ -1,0 +1,2 @@
+pdb_chain_uniprot_2022-11-01.csv    -   the listing of all uniprot PDB chains and their corresponding uniprot (only included if matching a uniprot)
+pdb_chain_uniprot_HEADER.txt        -   the headers to explain the columns of the above file
