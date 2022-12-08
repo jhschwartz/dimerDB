@@ -3,3 +3,5 @@ data/
 keep-intermediates/
 lib/
 slurm-*.out
+benchmarks/data/
+benchmarks/scripts/test/data/
