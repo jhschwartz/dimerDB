@@ -1,0 +1,3 @@
+[submodule "PDBParser"]
+	path = PDBParser
+	url = https://github.com/kad-ecoli/PDBParser
