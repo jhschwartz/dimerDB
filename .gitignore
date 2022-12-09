@@ -5,3 +5,5 @@ lib/
 slurm-*.out
 benchmarks/data/
 benchmarks/scripts/test/data/
+.snakemake/
+scripts/__pycache__/

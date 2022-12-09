@@ -5,6 +5,7 @@ import os
 pdb_updated = 'intermediates/pdb_updated.done'
 #os.remove(pdb_updated) if os.path.exists(pdb_updated) else None
 
+localrules: all, download
 
 rule all:
     input:
@@ -21,6 +22,7 @@ rule download:
         done = pdb_updated
     shell:
         """
+        mkdir -p lib
         cd lib 
         rsync -rlpt -v -z --delete --port=33444 \
         rsync.rcsb.org::ftp_data/biounit/PDB/divided/ ./rcsb_pdb
@@ -33,9 +35,13 @@ rule ungzip:
         pdb_updated
     output:
         done = 'intermediates/pdb_ungzip.done'
-    threads: 48
+    threads: 128
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000" 
     shell:
         """
+        mkdir -p lib/rcsb_pdb
         cd lib/rcsb_pdb
         parallel --bar -j{threads} gzip -d {{}}/*.gz ::: * 
         touch ../../{output.done}
@@ -47,7 +53,10 @@ rule split_pdb:
         'intermediates/pdb_ungzip.done' 
     output:
         done = 'intermediates/pdb_split.done'
-    threads: 48 
+    threads: 128,
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000"
     shell:
         """
         cd lib/rcsb_pdb;

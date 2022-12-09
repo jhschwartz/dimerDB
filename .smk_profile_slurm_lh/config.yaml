@@ -1,0 +1,23 @@
+jobs: 2000
+default-resources:
+    - queue="sigbio"
+    - account="sigbio_project1"
+    - mem_mb=1000
+    - time="01:00:00"
+cluster:
+    mkdir -p logs/{rule} &&
+    sbatch
+        --partition={resources.queue}
+        --cpus-per-task={threads}
+        --mem={resources.mem_mb}
+        --job-name={rule}-{wildcards.sample}
+        --output=logs/{rule}/{rule}-{wildcards.sample}-%j.out
+        --time={resources.time}
+        --account={resources.account}
+        --parsable
+cluster-status: cluster_status.py
+cluster-cancel: scancel
+printshellcmds: True
+latency-wait: 60 
+keep-going: True
+rerun-incomplete: True
