@@ -41,6 +41,7 @@ def get_id_mapping():
 #rule all:
 #    input: expand("prots/{div}/{uniprot}/status/all.done", zip, uniprot=uniprots, div=divs) 
 
+localrules: all, retrieve_id_mapping_file
 
 rule all:
     input: 
@@ -66,6 +67,10 @@ rule create_uniparc_to_others:
         id_mapping = id_mapping_fn
     output:
         uniparc2others = "intermediates/uniparc2others.yaml"
+    threads: 1
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
     run:
         from scripts.uniparc_to_uniprot_and_pdb import make_uniparc2others
         make_uniparc2others(input.id_mapping, output.uniparc2others)
@@ -78,6 +83,10 @@ rule derive_all_homodimers:
         uniparc2others = "intermediates/uniparc2others.yaml"
     output:
         homodimers = "intermediates/all_homodimers.yaml"
+    threads: 1
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
     run:
         from scripts.derive_all_homodimers import homodimers
         homodimers(input.uniparc2others, output.homodimers)
