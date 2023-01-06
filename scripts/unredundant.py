@@ -11,8 +11,8 @@ import contextlib
 import subprocess
 import yaml
 from name_pdb import dimer2pdbs
-
-
+import threading
+from multiprocessing import Pool
 
 
 class RedundantThings:
@@ -21,7 +21,7 @@ class RedundantThings:
         self.threshold = threshold
 
 
-    def prune_redundancy(self, num_workers: int = 1) -> list:
+    def prune_redundancy(self, num_workers=1) -> list:
         self.initiate_distance_matrix(num_workers)
         num_clusters = self.initiate_clusters()
         self.non_redundant_things = []
@@ -31,18 +31,74 @@ class RedundantThings:
             self.non_redundant_things.append(rep)
         return self.non_redundant_things
 
+
+
+
+    def _distance_thread_helper(self, i, j):
+        distance = self.distance(self.things[i], self.things[j])
+        self.distance_matrix[i,j] = distance
+        self.distance_matrix[j,i] = distance
+        return self.distance_matrix 
     
-    def initiate_distance_matrix(self, num_workers: int = 1) -> None:
-        # TODO: parallelize with num_workers
+    def _distance_thread_helper_2(self, i, j):
+        return self.distance(self.things[i], self.things[j])
+
+    
+    def initiate_distance_matrix(self, num_workers=1) -> None:
         N = len(self.things)
         self.distance_matrix = np.zeros((N,N))
+       
+        ## single thread method
+       # for i in range(N):
+       #     for j in range(i, N):
+       #         if i == j:
+       #             continue
+       #         distance = self.distance(self.things[i], self.things[j])
+       #         self.distance_matrix[i,j] = distance
+       #         self.distance_matrix[j,i] = distance
+
+
+
+        ## multithreaded method 3
+        args = []
         for i in range(N):
             for j in range(i, N):
                 if i == j:
                     continue
-                distance = self.distance(self.things[i], self.things[j])
-                self.distance_matrix[i,j] = distance
-                self.distance_matrix[j,i] = distance
+                args.append((i,j))
+
+        with Pool(processes=num_workers) as p:
+            distances = p.starmap(self._distance_thread_helper_2, args)
+
+        for distance, (i, j) in zip(distances, args):
+            self.distance_matrix[i,j] = distance
+            self.distance_matrix[j,i] = distance
+
+        ## multithreaded method 2
+        #args = []
+        #for i in range(N):
+        #    for j in range(i, N):
+        #        if i == j:
+        #            continue
+        #        args.append((i,j))
+
+        #with Pool(processes=num_workers) as p:
+        #    print(p.starmap(self._distance_thread_helper, args))
+
+        
+        # multithreaded method 1
+        #pool = []
+        #for i in range(N):
+        #    for j in range(i, N):
+        #        if i == j:
+        #            continue
+        #        thread = threading.Thread(target=self._distance_thread_helper, args=(i, j))
+        #        pool.append(thread)
+        #
+        #for thread in pool:
+        #    thread.start()
+        #for thread in pool:
+        #    thread.join()
 
 
     def initiate_clusters(self) -> None:
@@ -67,9 +123,15 @@ class RedundantThings:
 
     def _things_of_lowest_distance_to_others(self, cluster):
         mean_dist_to_others = []
-        for thing in cluster:
+        for index, thing in enumerate(cluster):
             dists = [self.distance(thing, other_thing) for other_thing in cluster]
-            dists.remove(0) # take out self distance
+            dists.pop(index) # take out self distance
+
+            for i, d in enumerate(dists):
+                # avoid gmean divide by zero
+                if d == 0:
+                    dists[i] = 0.00000001
+            
             geometric_mean = gmean(dists)
             mean_dist_to_others.append(geometric_mean)
         
@@ -93,24 +155,15 @@ class RedundantThings:
 
 
 class RedundantDimers(RedundantThings):
-    def __init__(self, dimer_names, threshold):
+    def __init__(self, dimer_names, threshold, config):
         super().__init__(things=dimer_names, threshold=threshold)
-
-    @property
-    @abstractmethod
-    def pdb_base_dir(self): pass
-    
-    @property
-    @abstractmethod
-    def mmalign_exe(self): pass
+        self.config = config
 
 
-    @contextlib.contextmanager
     @staticmethod
-    def _tmp_assembly_file(dimer_name):
-        f0name, f1name = dimer2pdbs(dimer_name, pdb_base_dir)
-
-        with open(f0name, 'r') as f0, open(f1name, 'r') as f1:
+    @contextlib.contextmanager
+    def _tmp_assembly_file(pdb_path_0, pdb_path_1):
+        with open(pdb_path_0, 'r') as f0, open(pdb_path_1, 'r') as f1:
             dimer_data = f0.read() + '\n' + f1.read()
         
         with tempfile.NamedTemporaryFile(mode='w') as f:
@@ -119,10 +172,12 @@ class RedundantDimers(RedundantThings):
             yield f.name
 
 
-    def distance(dimer0_name, dimer1_name):
-        with RedundantDimers._tmp_assembly_file(dimer0_name) as d0file, \
-                RedundantDimers._tmp_assembly_file(dimer1_name) as d1file:
-            cmd = f'{mmalign_exe} {dimer0_name} {dimer1_name}'
+    def distance(self, dimer0_name, dimer1_name):
+        dimer0_pdb0, dimer0_pdb1 = dimer2pdbs(dimer0_name, self.config['paths']['lib'])
+        dimer1_pdb0, dimer1_pdb1 = dimer2pdbs(dimer1_name, self.config['paths']['lib'])
+        with RedundantDimers._tmp_assembly_file(dimer0_pdb0, dimer0_pdb1) as d0file, \
+                RedundantDimers._tmp_assembly_file(dimer1_pdb0, dimer1_pdb1) as d1file:
+            cmd = f'{self.config["paths"]["mmalign_exe"]} {d0file} {d1file}'
             result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
             if result.stderr != '':
                 raise RuntimeError(result.stderr)
@@ -141,29 +196,32 @@ class RedundantDimers(RedundantThings):
         with open(pdbfile, 'r') as f:
             while line := f.readline():
                 if line.startswith('ATOM') or line.startswith('HETATM'):
-                    atom_kind = line[12:15].strip()
-                    res_num = line[22:25].strip()
+                    atom_kind = line[12:16].strip()
+                    res_num = line[22:26].strip()
+                    chain = line[21]
+                    residue_tuple = (res_num, chain)
                     if atom_kind in ['CA', 'CB']:
-                        residues_found.add(res_num)
+                        residues_found.add(residue_tuple)
         return len(residues_found)
 
 
-    @staticmethod
-    def _dimer_coverage(dimer_name):
-        mono0, mono1 = dimer2pdbs(dimer_name)
+    def _dimer_coverage(self, dimer_name):
+        mono0, mono1 = dimer2pdbs(dimer_name, self.config['paths']['lib'])
         num0 = RedundantDimers._num_residues(mono0)
         num1 = RedundantDimers._num_residues(mono1)
         return gmean([num0, num1])
 
 
-    @staticmethod
-    def representative(cluster):
+    def representative(self, cluster):
         # Criterion 1: keep only structures with greater than half the maximum coverage,
         #               where coverage is defined as the gemoetric mean number of residues
         #               in two chains
-        coverages = [RedundantDimers._dimer_coverage(dimer_name) for dimer_name in cluster]
+        coverages = [self._dimer_coverage(dimer_name) for dimer_name in cluster]
         cutoff = max(coverages)/2 
-        choices = cluster[np.where(coverages >= cutoff)]
+        choices = []
+        for index, dimer in enumerate(cluster):
+            if coverages[index] >= cutoff:
+                choices.append(dimer)
 
         # end if no tie
         if len(choices) == 1:
@@ -290,23 +348,4 @@ class RedundantSeqs(RedundantThings):
 
         # Criterion 4: pick the first seq name alphabetically
         return sorted(seq_names)[0]
-
-
-
-
-
-
-
-
-
-# def example():
-#     seq_names = ['ABC123', 'XYZ987', 'ERT456', 'QWE399']
-#     threshold = 0.7
-#     red_seqs = RedundantSeqs(seq_names, threshold)
-#     nonredundant_seq_names = red_seqs.prune_redundancy(num_workers=4)
-
-
-
-
-
 

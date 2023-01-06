@@ -57,7 +57,7 @@ rule all:
         done = config['snake_donefiles']['sub2_all_done']
     threads: 1
     resources:
-        mem_mb = 5000
+        mem_mb = 5000,
         time = '12:00:00'
     run:
         data = {}

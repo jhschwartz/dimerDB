@@ -26,39 +26,39 @@ subworkflow filter_homodimers:
 
 
 
-subworkflow prune_homo_structures:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile3.1']
-
-
-subworkflow prune_homo_seqs:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile4.1']
-
-
-subworkflow filter_homodimers:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile2.2']
-
-
-subworkflow prune_hetero_structures:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile3.2']
-
-
-subworkflow prune_hetero_seqs:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile4.2']
+#subworkflow prune_homo_structures:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile3.1']
+#
+#
+#subworkflow prune_homo_seqs:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile4.1']
+#
+#
+#subworkflow filter_homodimers:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile2.2']
+#
+#
+#subworkflow prune_hetero_structures:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile3.2']
+#
+#
+#subworkflow prune_hetero_seqs:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile4.2']
 
 
 rule all:
