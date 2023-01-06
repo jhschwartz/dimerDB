@@ -16,9 +16,9 @@ def name_pdb_file(pdb_base, chain, lib_path):
 
 
 
-def dimer2pdbs(dimer_name, pdb_base_dir):
+def dimer2pdbs(dimer_name, lib_path):
     pdb0, chain0 = dimer_name.split('-')[0].split('_')
     pdb1, chain1 = dimer_name.split('-')[1].split('_')
-    return name_pdb_file(pdb0, chain0, pdb_base_dir), name_pdb_file(pdb1, chain1, pdb_base_dir)
+    return name_pdb_file(pdb0, chain0, lib_path), name_pdb_file(pdb1, chain1, lib_path)
     
 

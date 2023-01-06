@@ -55,18 +55,19 @@ class TestRedundantGeneric(unittest.TestCase):
 
     def test_distance_matrix_mono(self):
         rg = RedundantGeneric(numbers=[1,2,3], threshold=0.1)
-        rg.initiate_distance_matrix(num_workers=1)
+        rg.initiate_distance_matrix()
         self.assertTrue(np.array_equal(rg.distance_matrix[0,:], np.array([0,1,2])))
         self.assertTrue(np.array_equal(rg.distance_matrix[1,:], np.array([1,0,1])))
         self.assertTrue(np.array_equal(rg.distance_matrix[2,:], np.array([2,1,0])))
 
 
-    def test_distance_matrix_parallel(self):
+    def test_distance_matrix_multi(self):
         rg = RedundantGeneric(numbers=[1,2,3], threshold=0.1)
-        rg.initiate_distance_matrix(num_workers=1)
+        rg.initiate_distance_matrix(num_workers=2)
         self.assertTrue(np.array_equal(rg.distance_matrix[0,:], np.array([0,1,2])))
         self.assertTrue(np.array_equal(rg.distance_matrix[1,:], np.array([1,0,1])))
         self.assertTrue(np.array_equal(rg.distance_matrix[2,:], np.array([2,1,0])))
+
 
 
     def test_things_of_lowest_distance_to_others(self):
@@ -89,7 +90,7 @@ class TestRedundantGeneric(unittest.TestCase):
         n2 = list(range(500,505))
         numbers = n1 + n2
         rg = RedundantGeneric(numbers=numbers, threshold=10)
-        result = rg.prune_redundancy(num_workers=1)
+        result = rg.prune_redundancy()
         self.assertEqual(sorted(result), [2, 502])
 
     
