@@ -95,8 +95,8 @@ def homodimers(infile, outfile):
         # combinations of chains, e.g. ('1abc_A', '1abc_C')
         prot_homodimers = derive_homodimers_from_groups(grouped_chains)
 
-        # convert each tuple to a list because yaml can't save tuples
-        prot_homodimers = [list(ph) for ph in prot_homodimers]
+        # convert each tuple to a combined name like '1abc_A-1abc_C'
+        prot_homodimers = [f'{ph[0]}-{ph[1]}' for ph in prot_homodimers]
 
         # save the homodimers to the dict if there are any
         if prot_homodimers != []:

@@ -1,9 +1,9 @@
-intermediates/
 data/
-keep-intermediates/
-lib/
+*intermediates*/
+*lib*/
 slurm-*.out
 benchmarks/data/
 benchmarks/scripts/test/data/
 .snakemake/
-scripts/__pycache__/
+**/__pycache__/
+logs/

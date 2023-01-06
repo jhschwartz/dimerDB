@@ -1,5 +1,6 @@
 import unittest
 import sys
+import os 
 import numpy as np
 
 sys.path.append('..')
@@ -10,8 +11,6 @@ class RedundantGeneric(RedundantThings):
     def __init__(self, numbers, threshold):
         super().__init__(things=numbers, threshold=threshold)
 
-    def rm_all_temp_files(self):
-        pass
 
     @classmethod 
     def distance(cls, number1, number2):
@@ -32,7 +31,7 @@ class TestRedundantGeneric(unittest.TestCase):
         rg = RedundantGeneric(numbers=[1,2,3], threshold=0.1)
         self.assertEqual([1,2,3], rg.things)
         self.assertEqual(0.1, rg.threshold)
-        self.assertTrue('tmp' in rg.tmp_dir)
+        
 
     def test_distance(self):
         dist = RedundantGeneric.distance(5, 6)
@@ -71,9 +70,10 @@ class TestRedundantGeneric(unittest.TestCase):
 
 
     def test_things_of_lowest_distance_to_others(self):
-        result = RedundantGeneric._things_of_lowest_distance_to_others([1,2,3])
+        rg = RedundantGeneric(numbers=[], threshold=0.1)
+        result = rg._things_of_lowest_distance_to_others([1,2,3])
         self.assertEqual(result, [2])
-        result = RedundantGeneric._things_of_lowest_distance_to_others([1,2,3,4])
+        result = rg._things_of_lowest_distance_to_others([1,2,3,4])
         self.assertEqual(result, [2,3])
     
     
@@ -107,6 +107,8 @@ class TestRedundantGeneric(unittest.TestCase):
         self.assertEqual(i1, i2)
         self.assertEqual(i3, i4)
         self.assertNotEqual(i1, i3)
+
+
 
 
 if __name__ == '__main__':

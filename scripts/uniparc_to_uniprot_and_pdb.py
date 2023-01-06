@@ -7,11 +7,14 @@ from sortedcontainers import SortedSet, SortedDict
 def _extract_chains(chain_str):
     #   'abcd:A; efghA:A; zxvd:B;' --> ['abcd_A', 'efgh_A', 'zxvd_B']
     chains_list = chain_str.split(';')
-    chains_list_clean = [c.strip().replace(':','_') for c in chains_list]
     chains = set()
-    for c in chains_list_clean:
+    for c in chains_list:
+        if not ':' in c:
+            continue
+        pdb_base, pdb_chain = c.strip().split(':')
+        pdb_base = pdb_base.lower()
         if c != '':
-            chains.add(c)
+            chains.add(f'{pdb_base}_{pdb_chain}')
     return chains
 
 

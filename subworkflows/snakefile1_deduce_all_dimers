@@ -1,0 +1,148 @@
+import os
+import sys
+import requests
+
+configfile: 'config.yaml'
+
+sys.path.append(config['paths']['scripts'])
+from simple_write import simple_write
+
+
+
+
+
+python = config['runtime']['python']
+
+id_mapping_fn = config['snake_data_yaml_files']['sub1_id_mapping_fn']
+
+# force id_mapping update
+if config['database_settings']['force_update_id_mapping'] and os.path.exists(id_mapping):
+    os.remove(id_mapping)
+
+
+
+def get_id_mapping():
+    # avoid redownloading 
+    if not os.path.exists(id_mapping_fn):
+        shell('''
+            wget -O {id_mapping_fn} ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping_selected.tab.gz;
+        ''')
+    else:
+        shell(''' touch {id_mapping_fn} ''')
+
+
+localrules: all, retrieve_id_mapping_file, spotcheck_uniparc2others, spotcheck_homodimers, spotcheck_heterodimers
+
+rule all:
+    input: 
+        config['snake_data_yaml_files']['sub1_all_homodimers_yaml'],
+        config['snake_data_yaml_files']['sub1_all_heterodimers_yaml'],
+        config['snake_donefiles']['sub1_homodimers_checked_done'],
+        config['snake_donefiles']['sub1_heterodimers_checked_done']
+        
+    output:
+        done = config['snake_donefiles']['sub1_all_done']
+    run:
+        simple_write(output.done, 'success')
+
+
+
+
+rule retrieve_id_mapping_file:
+    output:
+        filename = id_mapping_fn
+    run:
+        get_id_mapping()
+
+
+
+rule create_uniparc_to_others:
+    input:
+        id_mapping = id_mapping_fn
+    output:
+        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+    threads: 1
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
+    run:
+        from scripts.uniparc_to_uniprot_and_pdb import make_uniparc2others
+        make_uniparc2others(input.id_mapping, output.uniparc2others)
+
+
+
+rule spotcheck_uniparc2others:
+    input:
+        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+    output:
+        passed = config['snake_donefiles']['sub1_uniparc2others_checked_done']
+    threads: 1
+    run:
+        from spotcheck_subflow1_yamls import check_uniparc2others
+        check_uniparc2others(input.yamlfile)
+        simple_write(output.passed, 'success')
+
+
+
+
+           
+rule derive_all_homodimers:
+    input:
+        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done']
+    output:
+        homodimers = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
+    threads: 1
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
+    run:
+        from scripts.derive_all_homodimers import homodimers
+        homodimers(input.uniparc2others, output.homodimers)
+
+
+
+
+rule spotcheck_homodimers:
+    input:
+        yamlfile = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
+    output:
+        passed = config['snake_donefiles']['sub1_homodimers_checked_done']
+    threads: 1
+    run:
+        from spotcheck_subflow1_yamls import check_homodimers
+        check_homodimers(input.yamlfile)
+        simple_write(output.passed, 'success')
+
+
+
+rule derive_all_heterodimers:
+    input:
+        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done']
+    output:
+        heterodimers = config['snake_data_yaml_files']['sub1_all_heterodimers_yaml']
+    threads: 1
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
+    run:
+        from scripts.derive_all_heterodimers import heterodimers
+        heterodimers(input.uniparc2others, output.heterodimers)
+    
+
+
+rule spotcheck_heterodimers:
+    input:
+        yamlfile = config['snake_data_yaml_files']['sub1_all_heterodimers_yaml']
+    output:
+        passed = config['snake_donefiles']['sub1_heterodimers_checked_done']
+    threads: 1
+    run:
+        from spotcheck_subflow1_yamls import check_heterodimers
+        check_heterodimers(input.yamlfile)
+        simple_write(output.passed, 'success')
+
+
+
+
