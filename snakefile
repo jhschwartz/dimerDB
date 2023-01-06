@@ -1,38 +1,71 @@
 from snakemake.utils import min_version
 min_version('7.12')
 
+configfile: 'config.yaml'
 
 subworkflow download_pdb:
     workdir:
-        './'
+        config['paths']['basepath']
     snakefile:
-        'subworkflows/snakefile0_download_pdb'
+        config['workflow']['snakefile0']
 
 
-subworkflow retrieve_all_homodimers:
+subworkflow deduce_all_dimers:
     workdir:
-        './'
+        config['paths']['basepath']
     snakefile:
-        'subworkflows/snakefile1_retrieve_all'
+        config['workflow']['snakefile1']
 
 
-#subworkflow prune_homodimers:
-#    workdir:
-#        './'
-#    snakefile:
-#        'subworkflows/snakefile2_prune_dimers'
-#
-#
-#subworkflow prune_seqs:
-#    workdir:
-#        './'
-#    snakefile:
-#        'subworkflows/snakefile3_prune_seqs'
+
+subworkflow filter_homodimers:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile2.1']
+
+
+
+subworkflow prune_homo_structures:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile3.1']
+
+
+subworkflow prune_homo_seqs:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile4.1']
+
+
+subworkflow filter_homodimers:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile2.2']
+
+
+subworkflow prune_hetero_structures:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile3.2']
+
+
+subworkflow prune_hetero_seqs:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile4.2']
+
 
 rule all:
     input:
-        download_pdb('intermediates/subflow0.done'),
-        retrieve_all_homodimers('intermediates/subflow1.done')
+        download_pdb(config['snake_donefiles']['sub0_all_done']),
+        deduce_all_dimers(config['snake_donefiles']['sub1_all_done']),
+        filter_homodimers(config['snake_donefiles']['sub2_all_done'])
         #prune_homodimers('intermediates/subflow2.done'),
         #prune_seqs('intermediates/subflow4.done'),
         #'intermediates/cleanup.done'

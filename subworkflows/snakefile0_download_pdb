@@ -1,78 +1,189 @@
 import os
 
+configfile: 'config.yaml'
+
 
 # force pdb update
-pdb_updated = 'intermediates/pdb_updated.done'
-#os.remove(pdb_updated) if os.path.exists(pdb_updated) else None
+pdb_main_updated = config['snake_donefiles']['sub0_pdb_main_download_done']
+pdb_oversized_updated = config['snake_donefiles']['sub0_pdb_oversized_download_done']
+if config['database_settings']['force_update_pdb'] and os.path.exists(pdb_main_updated):
+    os.remove(pdb_main_updated)
+if config['database_settings']['force_update_pdb'] and os.path.exists(pdb_oversized_updated):
+    os.remove(pdb_oversized_updated)
 
-localrules: all, download
+
+localrules: all, download_main_pdb, download_oversized_pdb
 
 rule all:
     input:
-        'intermediates/pdb_split.done'
+        #'intermediates/pdb_split.done'
         #pdb_updated
+        config['snake_donefiles']['sub0_split_pdb_main_done'],
+        config['snake_donefiles']['sub0_split_pdb_oversized_done'],
+        config['snake_donefiles']['sub0_rename_oversized_done']
     output:
-        done = "intermediates/subflow0.done"
+        done =  config['snake_donefiles']['sub0_all_done'] 
     shell:
         "touch {output.done}"
 
 
-rule download:
+rule download_main_pdb:
     output:
-        done = pdb_updated
+        done =  config['snake_donefiles']['sub0_pdb_main_download_done'] 
     shell:
         """
         mkdir -p lib
         cd lib 
-        rsync -rlpt -v -z --delete --port=33444 \
+        rsync -rlpt -v -z -q --delete --port=33444 \
         rsync.rcsb.org::ftp_data/biounit/PDB/divided/ ./rcsb_pdb
         touch ../{output.done}
         """
 
 
-rule ungzip:
-    input:
-        pdb_updated
+rule download_oversized_pdb:
     output:
-        done = 'intermediates/pdb_ungzip.done'
-    threads: 128
+        done = config['snake_donefiles']['sub0_pdb_oversized_download_done'],
+        listfile = config['paths']['pdb_oversized_listfile']
+    shell:
+        """
+        mkdir -p lib
+        cd lib 
+        rsync -rlpt -v -z -q --delete --port=33444 \
+        rsync.rcsb.org::ftp/compatible/pdb_bundle/ ./rcsb_oversized
+        cp rcsb_oversized/pdb_bundle_index.txt ../{output.listfile}
+        touch ../{output.done}
+        """
+
+
+
+#rule rechain_move_oversized_chains:
+#    input:
+#        done = config['snake_donefiles']['sub0_pdb_oversized_download_done'],
+#        listfile = config['paths']['pdb_oversized_listfile']
+#    output:
+#        done = config['snake_donefiles']['sub0_pdb_oversized_rechain_move_done']
+#    run:
+#        with open(input.listfile, 'r') as lf:
+#            while pdb := lf.readline().strip():
+#                div = pdb[1:3]
+#                source_tar = '{}/{}/{}-pdb-bundle.tar.gz'.format(config['paths']['oversized_pdb'], div, pdb)
+#                target_dir = f'{target_lib}/{div}/{pdb}/'
+#                fill_rechained_pdb_into_lib(pdb, source_tar, target_dir)
+#        simple_write(output.done, 'success')
+
+
+
+
+rule ungzip_main:
+    input:
+        config['snake_donefiles']['sub0_pdb_main_download_done'],
+    output:
+        done =  config['snake_donefiles']['sub0_ungzip_main_done'] 
+    threads: config['runtime']['max_threads']
     resources:
         time = "12:00:00",
         mem_mb = "1000000" 
+    params:
+        scripts = config['paths']['scripts'],
+        rcsb = config['paths']['rcsb']
     shell:
         """
-        mkdir -p lib/rcsb_pdb
-        cd lib/rcsb_pdb
-        parallel --bar -j{threads} gzip -d {{}}/*.gz ::: * 
-        touch ../../{output.done}
+        {params.scripts}/parallel_ungzip_all.sh {params.rcsb} {threads} 1000
+        touch {output.done};
         """
 
 
-rule split_pdb:
+
+rule unarchive_oversized:
     input:
-        'intermediates/pdb_ungzip.done' 
+        config['snake_donefiles']['sub0_pdb_oversized_download_done'],
     output:
-        done = 'intermediates/pdb_split.done'
-    threads: 128,
+        done =  config['snake_donefiles']['sub0_unarchive_oversized_done'] 
+    threads: config['runtime']['max_threads']
     resources:
         time = "12:00:00",
         mem_mb = "1000000"
+    params:
+        scripts = config['paths']['scripts'],
+        rcsb_oversized = config['paths']['rcsb_oversized']
     shell:
         """
-        cd lib/rcsb_pdb;
-
-        # only split pdbs that haven't been split!
-        # assumes unsplit pdb filenames will be 4 characters then a period
-        function split_if_not_yet_split {{
-            for infile in $@; do
-                local pattern="\/(.{{4}})\.";                      # filename must have a slash, 4 chars, then a period
-                if [[ $infile =~ $pattern ]]; then                 #        e.g. 00/100b.pdb would pass, 00/100bA.pdb would not
-                    ../../bin/PDBParser/split_chain $infile;
-                fi
-            done 
-        }}
-       
-        export -f split_if_not_yet_split;
-        parallel -j{threads} --bar split_if_not_yet_split {{}}/*.pdb* ::: *;
-        touch ../../{output.done}
+        {params.scripts}/parallel_untar_all.sh {params.rcsb_oversized} {threads} 1000
+        touch {output.done};
         """
+
+
+
+rule split_pdb_main:
+    input:
+        config['snake_donefiles']['sub0_ungzip_main_done'] 
+    output:
+        done =  config['snake_donefiles']['sub0_split_pdb_main_done'] 
+    threads: config['runtime']['max_threads']
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000"
+    params:
+        scripts = config['paths']['scripts'],
+        rcsb = config['paths']['rcsb'],
+        split_chain = config['paths']['split_chain']
+    shell:
+        """
+        {params.scripts}/parallel_split_pdb.pl {params.rcsb} {threads} {params.split_chain}
+        touch {output.done}
+        """
+
+
+rule split_pdb_oversized:
+    input:
+        config['snake_donefiles']['sub0_unarchive_oversized_done'] 
+    output:
+        done =  config['snake_donefiles']['sub0_split_pdb_oversized_done'] 
+    threads: config['runtime']['max_threads']
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000"
+    params:
+        scripts = config['paths']['scripts'],
+        rcsb_oversized = config['paths']['rcsb_oversized'],
+        split_chain = config['paths']['split_chain']
+    shell:
+        """
+        {params.scripts}/parallel_split_pdb.pl {params.rcsb_oversized} {threads} {params.split_chain}
+        touch {output.done}
+        """
+
+
+rule rename_oversized_chains:
+    input:
+        done = config['snake_donefiles']['sub0_split_pdb_oversized_done'],
+        listfile = config['paths']['pdb_oversized_listfile']
+    output:
+        done = config['snake_donefiles']['sub0_rename_oversized_done']
+    threads: config['runtime']['max_threads']
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000"
+    params:
+        python = config['runtime']['python'],
+        scripts = config['paths']['scripts'],
+        rcsb_oversized = config['paths']['rcsb_oversized']
+    shell:
+        """
+        parallel -j{threads} {params.python} {params.scripts}/rename_oversized_chains.py --lib {params.rcsb_oversized} --pdb-id {{}} :::: {input.listfile};
+        touch {output.done};
+        """
+
+
+
+
+
+
+
+
+
+
+
+
+
+

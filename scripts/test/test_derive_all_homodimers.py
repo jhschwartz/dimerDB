@@ -41,7 +41,6 @@ class TestDeriveHomodimers(unittest.TestCase):
         groups = [['1abc_A', '1abc_B', '1abc_C', '1abc_D']]
         expected = [('1abc_A', '1abc_B'), ('1abc_A', '1abc_C'), ('1abc_A', '1abc_D'), ('1abc_B', '1abc_C'), ('1abc_B', '1abc_D'), ('1abc_C', '1abc_D')]
         result = derive_homodimers_from_groups(groups)
-        print(f'the result was \n {result}')
         self.assertEqual(expected, result)
 
     def test_homodimers_yaml(self):
@@ -50,8 +49,8 @@ class TestDeriveHomodimers(unittest.TestCase):
         homodimers(infile, outfile)
 
         expected = {
-            'UPI00000C0390': [['1ON3_A', '1ON3_B'], ['1ON9_A', '1ON9_B'], ['1ON9_A', '1ON9_C'], ['1ON9_B', '1ON9_C']],
-            'UPI00001BD6BE': [['6K3G_B', '6K3G_FAKE']]
+            'UPI00000C0390': ['1ON3_A-1ON3_B', '1ON9_A-1ON9_B', '1ON9_A-1ON9_C', '1ON9_B-1ON9_C'],
+            'UPI00001BD6BE': ['6K3G_B-6K3G_FAKE']
         }
         
         with open(outfile, 'r') as f:

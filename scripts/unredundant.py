@@ -2,16 +2,16 @@ from abc import ABC, abstractmethod
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 import sys
-import random
 import requests
-import glob
 import re
 import os
 import tempfile
+from scipy.stats import gmean
+import contextlib
+import subprocess
+import yaml
+from name_pdb import dimer2pdbs
 
-MMALIGN='../bin/MMalign'
-SPLITPDB = '../bin/PDBParser/split_chain'
-NWALIGN = '../../bin/NWalign/align'
 
 
 
@@ -19,14 +19,6 @@ class RedundantThings:
     def __init__(self, things: list, threshold: float):
         self.things = things
         self.threshold = threshold
-        self.tmp_dir = f'/tmp/{str(random.randint(1,999999))}'
-
-    def __enter__(self):
-        return self
-
-
-    def __exit__(self):
-        /
 
 
     def prune_redundancy(self, num_workers: int = 1) -> list:
@@ -37,10 +29,9 @@ class RedundantThings:
             cluster = self.retrieve_cluster(cluster_index)
             rep = self.representative(cluster)
             self.non_redundant_things.append(rep)
-        self.rm_all_temp_files()
         return self.non_redundant_things
 
-
+    
     def initiate_distance_matrix(self, num_workers: int = 1) -> None:
         # TODO: parallelize with num_workers
         N = len(self.things)
@@ -74,34 +65,23 @@ class RedundantThings:
         return [t for i, t in enumerate(self.things) if self.things_cluster_labels[i] == cluster_index]
 
 
-    @staticmethod
-    def _things_of_lowest_distance_to_others(cluster):
-        lowest_mean_distance = sys.maxsize
-        reps = []
-        assert False # fixme
-        thing_indecies = [self.things.index(thing) for thing in cluster] # shouldn't look at all things but rather cluster only
-        for ti in thing_indecies:                                               # needs a lot of work...what exactly should be happening here?? 
-            distances = [self.distance_matrix[other_index] \
-                            for other_index in thing_indecies \
-                            if ti != other_index]
-            avg = np.mean(distances)
-            if avg < lowest_mean_distance:
-                lowest_mean_distance = avg
-                reps = [ self.things[di] ]
-            elif avg == lowest_mean_distance:
-                reps.append(self.things[di])
-        assert False # this has to be a geometric mean
-        return reps
+    def _things_of_lowest_distance_to_others(self, cluster):
+        mean_dist_to_others = []
+        for thing in cluster:
+            dists = [self.distance(thing, other_thing) for other_thing in cluster]
+            dists.remove(0) # take out self distance
+            geometric_mean = gmean(dists)
+            mean_dist_to_others.append(geometric_mean)
+        
+        things_to_return = []
+        for i, thing in enumerate(cluster):
+            if mean_dist_to_others[i] == min(mean_dist_to_others):
+                things_to_return.append(thing)
+        return things_to_return
 
 
     @abstractmethod
-    def rm_all_temp_files(self) -> int:
-        pass
-
-
-    @classmethod
-    @abstractmethod
-    def distance(cls, thing1, thing2) -> float:
+    def distance(self, thing1, thing2) -> float:
         pass
 
 
@@ -113,116 +93,76 @@ class RedundantThings:
 
 
 class RedundantDimers(RedundantThings):
-    def __init__(self, dimer_tuples, threshold):
-        super().__init__(things=dimer_tuples, threshold=threshold)
-        self.tmpfiles = self._download_files
+    def __init__(self, dimer_names, threshold):
+        super().__init__(things=dimer_names, threshold=threshold)
+
+    @property
+    @abstractmethod
+    def pdb_base_dir(self): pass
+    
+    @property
+    @abstractmethod
+    def mmalign_exe(self): pass
 
 
-    def _filename(self, pdb, chain):
-        return f'{self.tmp_dir}/{pdb}_{chain}.pdb'
-
-
+    @contextlib.contextmanager
     @staticmethod
-    def _download_pdb(pdb):
-        baseurl = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
-        divider = pdb[1:3]
-        url = f'{baseurl}/{divider}/{pdb}.pdb1.gz'
-        result = requests.get(url)
-        if result.status_code != 200:
-            raise ConnectionError(f'Failed to retrieve pdb assembly for {pdb}.\
-                                    Attempted url was {url} and response was {result.text}')
-        pdb_data = result.text
-        filename = self._filename(pdb)
-        with open(_filename, 'w') as f:
-            f.write(pdb_data)
-        return filename
+    def _tmp_assembly_file(dimer_name):
+        f0name, f1name = dimer2pdbs(dimer_name, pdb_base_dir)
 
-
-
-    @staticmethod
-    def _split_pdb_file(file):
-        exe = f'{SPLITPDB} {file}'
-        result = subprocess.run(exe, text=True, capture_output=True, shell=True)
-        if result.stderr != '':
-            raise RuntimeError(f'split_chain for {file} failed with stderr: {result.stderr}')
-        file_base_path = file.split('.')[0]
-        chain_files = []
-        for f in glob.glob(f'{file_base_path}*'):
-            if f == file:
-                continue
-            chain = f.replace(file)
-            chain_tuple = (chain, f)
-            chain_files.append(chain_tuple)
-        return chain_files
-
-
-    def _download_files(self):
-        files = {} # 'pdb': {'A': '/tmp/whatever'}
-        for name1, name2 in self.things:
-            pdb = name1.split('_')[0]
-            if name2.split('_')[0] != pdb:
-                raise ValueError(f'chain1 and chain2 of dimer {name1}-{name2} do not \
-                                    match in pdb code. This should never happen.')
-            file = self._download_pdb(pdb)
-            files[pdb]['assembly'] = file
-            chains_files = _split_pdb_file(file)
-            for chain, chainfile in chains_files:
-                files[pdb][chain] = chainfile
-        return files
-
-
-    @staticmethod
-    def _dimer_assembly_file(dimer_tuple):
-        name1, name2 = dimer_tuple
-        pbb = name1.split('_')[0]
-        chain1 = name1.split('_')[1]
-        chain2 = name2.split('_')[1]
-        if chain1+chain2 in self.tmpfiles[pdb]:
-            return self.tmpfiles[pdb][chain1+chain2]
-        file1 = self.tmpfiles[pdb][chain1]
-        file2 = self.tmpfiles[pdb][chain2]
-        with open(file1, 'r') as f1, open(file2, 'r') as f2:
-            dimer_data = f1.read() + '\n' + f2.read()
-        outfile = self._filename(pdb, chain1+chain2)
-        with open(outfile, 'w') as f:
+        with open(f0name, 'r') as f0, open(f1name, 'r') as f1:
+            dimer_data = f0.read() + '\n' + f1.read()
+        
+        with tempfile.NamedTemporaryFile(mode='w') as f:
             f.write(dimer_data)
-        self.tmpfiles[pdb][chain1+chain2] = outfile
-        return outfile
+            f.seek(0)
+            yield f.name
 
 
-    def rm_all_temp_files(self) -> int:
-        count = 0
-        for pdb, files in self.tmpfiles.items():
-            for file in files:
-                os.remove(file)
-                count += 1
-        self.tmpfiles = {}
-        return count
+    def distance(dimer0_name, dimer1_name):
+        with RedundantDimers._tmp_assembly_file(dimer0_name) as d0file, \
+                RedundantDimers._tmp_assembly_file(dimer1_name) as d1file:
+            cmd = f'{mmalign_exe} {dimer0_name} {dimer1_name}'
+            result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
+            if result.stderr != '':
+                raise RuntimeError(result.stderr)
+
+            TMscores = re.findall('TM-score=\s([\d\.]+)', result.stdout)
+            if len(TMscores) != 2:
+                raise ValueError(f'was unable to retrieve both TMscores, instead found {len(TMscores)} scores.')
+            score = max([float(tm) for tm in TMscores])
+
+            return 1 - score
+
+    
+    @staticmethod
+    def _num_residues(pdbfile):
+        residues_found = set()
+        with open(pdbfile, 'r') as f:
+            while line := f.readline():
+                if line.startswith('ATOM') or line.startswith('HETATM'):
+                    atom_kind = line[12:15].strip()
+                    res_num = line[22:25].strip()
+                    if atom_kind in ['CA', 'CB']:
+                        residues_found.add(res_num)
+        return len(residues_found)
 
 
-    @classmethod
-    def distance(cls, dimer1_tuple, dimer2_tuple):
-        dimer1file = cls._dimer_assembly_file(dimer1_tuple)
-        dimer2file = cls._dimer_assembly_file(dimer2_tuple)
-
-        cmd = f'{MMALIGN} {dimer1file} {dimer2file}'
-        result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
-        if result.stderr != '':
-            raise RuntimeError(result.stderr)
-
-        TMscores = re.findall('TM-score=\s([\d\.]+)', result.stdout)
-        if len(TMscores) != 2:
-            raise ValueError(f'was unable to retrieve both TMscores, instead found {len(TMscores)} scores.')
-        score = max([float(tm) for tm in TMscores])
-
-        return 1 - score
+    @staticmethod
+    def _dimer_coverage(dimer_name):
+        mono0, mono1 = dimer2pdbs(dimer_name)
+        num0 = RedundantDimers._num_residues(mono0)
+        num1 = RedundantDimers._num_residues(mono1)
+        return gmean([num0, num1])
 
 
     @staticmethod
     def representative(cluster):
-        # Criterion 1: keep 25th percentile and up of coverage
-        coverages = [self._count_coverage(dimer) for dimer in cluster]
-        cutoff = np.percentile(coverages, 25)
+        # Criterion 1: keep only structures with greater than half the maximum coverage,
+        #               where coverage is defined as the gemoetric mean number of residues
+        #               in two chains
+        coverages = [RedundantDimers._dimer_coverage(dimer_name) for dimer_name in cluster]
+        cutoff = max(coverages)/2 
         choices = cluster[np.where(coverages >= cutoff)]
 
         # end if no tie
@@ -266,13 +206,6 @@ class RedundantSeqs(RedundantThings):
         self.tmpfiles[seq_name] = fasta_file
         return fasta_file
 
-
-    def rm_all_temp_files(self) -> int:
-        count = 0
-        for seq_name, file in self.tmpfiles:
-            os.remove(file)
-            count += 1
-        return count
 
 
     @classmethod
