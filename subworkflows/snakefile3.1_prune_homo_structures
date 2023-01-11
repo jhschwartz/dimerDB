@@ -2,58 +2,64 @@ import os
 import sys
 import yaml
 
+configfn = 'config.yaml'
+configfile: configfn
+
 sys.path.append('..')
 from scripts.simple_write import simple_write
+from scripts.simple_filters import filter_by_max_len, filter_by_in_afdb
+from scripts.unredundant import RedundantDimers
 
 
-intermediates = os.getcwd()
-
-all_homodimers_file = f'{intermediates}/all_homodimers.yaml'
+all_homodimers_file = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
 with open(all_homodimers_file, 'r') as f:
     all_homodimers = yaml.safe_load(f)
 
-all_dimers = list(all_homodimers.keys())
+all_dimers_names = list(all_homodimers.keys())
 
 
 rule all:
     input:
-        expand('intermediates/all_homodimer_tmp/{dimer}/nonredundant.yaml', dimer=all_dimers)
+        expand(config['paths']['intermediates_homodimer_filtering']+'/{dimer}/nonredundant.yaml', dimer=all_dimers_names) 
     output:
-        done = 'intermediates/subflow2.done',
-        list_ 'intermediates/nonredundant_homodimers.yaml'
+        done = config['paths']['snake_donefiles']['sub2_all_done'],
+        yamlfile = config['snake_data_yaml_files']['sub3.1_nonredundant_homodimers']
     run:
         for list_ in input:
-            shell(''' cat {list_} >> intermediates/nonredundant_homodimers.yaml ''')
+            shell(''' cat {list_} >> {output.yamlfile} ''')
         simple_write(output.done, 'success')
 
 
 rule prefilter_structures:
     output:
-        list_ = 'intermediates/all_homodimer_tmp/{dimer}/prefiltered.yaml'
+        yamlfile = f"{ config['paths']['intermediates_homodimer_filtering'] }/{dimer}/prefiltered.yaml"
     params:
-        structures = all_dimers[dimer]
+        structures = all_homodimers[dimer]
     run:
-        from scripts.simple_filters import filter_by_max_len, filter_by_in_afdb
         valid_structures = filter_by_max_len(params.structures, 1024)
         valid_structures = filter_by_in_afdb(valid_structures)
         filtered = {dimer: valid_structures}
-        with open(output.list_, 'w') as f:
+        with open(output.yamlfile, 'w') as f:
             yaml.dump(filtered, f, default_flow_style=None)
 
 
 rule prune_structures:
     input:
-        list_ = 'intermediates/all_homodimer_tmp/{dimer}/prefiltered.yaml'
+        yamlfile = f"{ config['paths']['intermediates_homodimer_filtering'] }/{dimer}/prefiltered.yaml"
     output:
-        list_ = 'intermediates/all_homodimer_tmp/{dimer}/nonredundant.yaml'
+        yamlfile = f"{ config['paths']['intermediates_homodimer_filtering'] }/{dimer}/nonredundant.yaml"
+    threads: 4
+    resources:
+        memory_mb: 5000,
+        time: "4:00:00" 
     run:
-        from scripts.unredundant import RedundantDimers
-        with open(input.list_, 'r') as f:
+        with open(input.yamlfile, 'r') as f:
             loaded = yaml.safe_load()
-        uniprot = loaded.keys()[0]
+        uniparc = loaded.keys()[0]
         structures = list(loaded.values())
-        dimers = RedundantDimers(dimer_tuples=structures, threshold=0.5)
+        dimers = RedundantDimers(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
         non_redundant_dimers = {}
-        non_redundant_dimers[uniprot] = dimers.prune_redundance(num_workers=1)
+        non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads)
         with open(output.list_, 'w') as f:
             yaml.dump(non_redundant_dimers, f, default_flow_style=None)
+

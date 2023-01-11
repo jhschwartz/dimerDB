@@ -20,7 +20,7 @@ runtime:
 workflow:
     snakefile0: subworkflows/snakefile0_download_pdb
     snakefile1: subworkflows/snakefile1_deduce_all_dimers
-    snakefile2.1: subworkflows/snakefile2.1_prefilter_homodimers
+    snakefile2: subworkflows/snakefile2_prefilter
     snakefile3.1: subworkflows/snakefile3.1_prune_homo_structures
     snakefile4.1: subworkflows/snakefile4.1_prune_homo_seqs
     snakefile2.2: subworkflows/snakefile2.2_prefilter_heterodimers
@@ -73,3 +73,5 @@ snake_data_yaml_files:
     
     sub2_homo_prefiltered_yaml: intermediates/all_homodimers_prefiltered.yaml
     sub2_uniparc2af_yaml: intermediates/homodimers_uniparc2af.yaml
+
+    sub3.1_nonredundant_homodimers: nonredundant_homodimers.yaml
