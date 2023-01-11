@@ -34,71 +34,27 @@ class RedundantThings:
 
 
 
-    def _distance_thread_helper(self, i, j):
-        distance = self.distance(self.things[i], self.things[j])
-        self.distance_matrix[i,j] = distance
-        self.distance_matrix[j,i] = distance
-        return self.distance_matrix 
-    
-    def _distance_thread_helper_2(self, i, j):
-        return self.distance(self.things[i], self.things[j])
 
-    
+    def _distance_thread_helper(self, i, j):
+        return self.distance(self.things[i], self.things[j])   
+
     def initiate_distance_matrix(self, num_workers=1) -> None:
         N = len(self.things)
         self.distance_matrix = np.zeros((N,N))
        
-        ## single thread method
-       # for i in range(N):
-       #     for j in range(i, N):
-       #         if i == j:
-       #             continue
-       #         distance = self.distance(self.things[i], self.things[j])
-       #         self.distance_matrix[i,j] = distance
-       #         self.distance_matrix[j,i] = distance
-
-
-
-        ## multithreaded method 3
         args = []
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i+1, N):
                 args.append((i,j))
-
+    
         with Pool(processes=num_workers) as p:
-            distances = p.starmap(self._distance_thread_helper_2, args)
+            distances = p.starmap(self._distance_thread_helper, args)
 
         for distance, (i, j) in zip(distances, args):
             self.distance_matrix[i,j] = distance
             self.distance_matrix[j,i] = distance
 
-        ## multithreaded method 2
-        #args = []
-        #for i in range(N):
-        #    for j in range(i, N):
-        #        if i == j:
-        #            continue
-        #        args.append((i,j))
 
-        #with Pool(processes=num_workers) as p:
-        #    print(p.starmap(self._distance_thread_helper, args))
-
-        
-        # multithreaded method 1
-        #pool = []
-        #for i in range(N):
-        #    for j in range(i, N):
-        #        if i == j:
-        #            continue
-        #        thread = threading.Thread(target=self._distance_thread_helper, args=(i, j))
-        #        pool.append(thread)
-        #
-        #for thread in pool:
-        #    thread.start()
-        #for thread in pool:
-        #    thread.join()
 
 
     def initiate_clusters(self) -> None:
@@ -241,12 +197,10 @@ class RedundantDimers(RedundantThings):
 
 
 
-class RedundantSeqs(RedundantThings):
-    def __init__(self, seq_names, threshold, homodimers_dict):
+class RedundantSeqs(RedundantThings): 
+    def __init__(self, seq_names, threshold, config):
         super().__init__(things=seq_names, threshold=threshold)
-        # self.homodimers_yaml_file = homodimers_yaml_file
-        self.homodimers_dict = homodimers_dict
-        self.tmpfiles = {}
+        self.config = config
 
 
     def _retrieve_seqfile(self, seq_name):
