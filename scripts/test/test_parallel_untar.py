@@ -5,13 +5,20 @@ import glob
 import os
 import shutil
 
-exe_tar = os.path.realpath('../parallel_untar_all.sh')
-exe_gzip = os.path.realpath('../parallel_ungzip_all.sh')
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
+
+exe_tar = os.path.realpath(f'{test_dir}/../parallel_untar_all.sh')
+exe_gzip = os.path.realpath(f'{test_dir}/../parallel_ungzip_all.sh')
 
         
 
 
 class TestParallelUntar(unittest.TestCase):
+    @classmethod
+    def tearDownClass(cls):
+        os.chdir(test_dir) # prevent downstream dir issues from these test cases' chdir
+
     def test_parallel_untar_divisible(self):
         with tempfile.TemporaryDirectory() as td:
             os.chdir(td)

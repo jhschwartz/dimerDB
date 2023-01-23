@@ -4,9 +4,12 @@ import glob
 import tempfile
 import shutil
 
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
+
 class TestParallelSplitChain(unittest.TestCase):
     def test_split(self):
-        pdbs = glob.glob('data/splitchains/*.pdb*')
+        pdbs = glob.glob(f'{test_dir}/data/splitchains/*.pdb*')
         self.assertEqual(len(pdbs), 26)
         with tempfile.TemporaryDirectory() as td:
             for pdb in pdbs:

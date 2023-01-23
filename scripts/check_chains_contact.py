@@ -1,3 +1,14 @@
+'''
+check_chains_contact.py - functions to check that two chains of one PDB assembly, each in their own file, make contact
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in December 2022.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+These functions are unitested by test/test_check_chains_contact.py and passing as of 1/12/2023.
+This work requires python >= 3.8
+'''
+
 import numpy as np
 
 

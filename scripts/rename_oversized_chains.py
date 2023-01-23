@@ -1,3 +1,16 @@
+'''
+rename_oversized_chains.py - handles the renaming required to use oversized PDB assemblies in this pipeline.
+                             Specifically, uses the id mapping file in each oversized pdb directory (from
+                             rcsb) to rename the files with the original, author assigned chains, in a new
+                             subdirectory "split_renamed" of the oversized pdb directory.
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in January 2023.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+This function is unittested by test/test_rename_oversized_chains.py and passing as of 1/12/2023.
+This work requires python >= 3.8
+'''
 import re
 import argparse
 import shutil
@@ -97,8 +110,6 @@ if __name__ == '__main__':
     div = args.pdb_id[1:3]
     prot_dir = f'{args.lib}/{div}/{args.pdb_id}'
 
-    # avoid empty pdb archives until RCSB fixes it  
-    if not args.pdb_id in ['7nwh', '7nwi', '7nwg']:
-        _rename_chainfiles_in_dir(prot_dir, args.pdb_id)
+    _rename_chainfiles_in_dir(prot_dir, args.pdb_id)
 
 

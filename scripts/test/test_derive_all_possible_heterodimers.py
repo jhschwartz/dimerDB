@@ -4,14 +4,14 @@ import yaml
 import os
 
 sys.path.append('..')
-import derive_all_heterodimers
+import derive_all_possible_heterodimers
 
 
 class TestDeriveHeterodimers(unittest.TestCase):
     def test_heterodimers_yaml(self):
         infile = 'data/fake_uniparc2others.yaml'
         outfile = 'testout.tmp'
-        derive_all_heterodimers.heterodimers(infile, outfile)
+        derive_all_possible_heterodimers.heterodimers(infile, outfile)
 
         expected = {
             'UPI00000C0390-UPI00001BD6BE': ['1ZZZ_R-1ZZZ_D']
@@ -40,7 +40,7 @@ class TestDeriveHeterodimers(unittest.TestCase):
             [ ('UP987', 'QWER', 'O') ]
         ]
 
-        result = derive_all_heterodimers.group_by_assembly(monomers)
+        result = derive_all_possible_heterodimers.group_by_assembly(monomers)
 
         self.assertTrue(expected == result)
 
@@ -59,7 +59,7 @@ class TestDeriveHeterodimers(unittest.TestCase):
             'UP000-UP987': ['DEFG_A-DEFG_R'] 
         }
 
-        result = derive_all_heterodimers.derive_heterodimers_from_assembly_groups(monomers_grouped)
+        result = derive_all_possible_heterodimers.derive_heterodimers_from_assembly_groups(monomers_grouped)
 
         self.assertTrue(expected == result)
 
@@ -91,7 +91,7 @@ class TestDeriveHeterodimers(unittest.TestCase):
             ('UP789', 'FFFF', 'Q')
         ]
 
-        result = derive_all_heterodimers.chains_as_tuples(data)
+        result = derive_all_possible_heterodimers.chains_as_tuples(data)
 
         self.assertEqual(expected, result)
 

@@ -1,3 +1,17 @@
+'''
+derive_all_possible_heterodimers.py - from a preprocessed yaml file that matches uniparc sequences to pdb structures
+                             generates a yaml file of all possible heterodimers in the pdb.
+                             Does not check that chains are in contact. Merely checks that two chains of
+                             different sequences are in the same overall pdb assembly.
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in December 2022.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+These functions are unittested by test/test_derive_all_possible_heterodimers.py and passing as of 1/12/2023.
+This work requires python >= 3.8
+'''
+
 import itertools
 import yaml
 

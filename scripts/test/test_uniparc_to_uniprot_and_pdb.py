@@ -5,12 +5,13 @@ import os
 import yaml
 import unittest
 
-
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
 
 class Uniparc2othersTestCase(unittest.TestCase):
     def test_uniparc2others(self):
-        infile = 'data/idmapping_selected.tab.fake.gz'
-        outfile = 'testout.yaml.tmp'
+        infile = f'{test_dir}/data/idmapping_selected.tab.fake.gz'
+        outfile = f'{test_dir}/testout.yaml.tmp'
         uniparc_to_uniprot_and_pdb.make_uniparc2others(infile, outfile)
 
         expected = {

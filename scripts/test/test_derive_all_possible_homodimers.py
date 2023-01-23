@@ -4,7 +4,7 @@ sys.path.append('..')
 import os 
 import unittest
 import yaml
-from derive_all_homodimers import *
+from derive_all_possible_homodimers import *
 
 class TestDeriveHomodimers(unittest.TestCase):
     def test_group_chains_1(self):
