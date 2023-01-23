@@ -1,7 +1,18 @@
+'''
+name_pdb.py - functions to give the path to pdb files of chains in the rcsb pdb, assuming that the pdb
+              has been downloaded according to the organization of the dimerDB pipeline.
+              Works whether a pdb chain belongs to the normal PDB or to an oversized structure that
+              was split and renamed. Assumes a lib_path, which should be defined by the config file
+              and passed to here.
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in January 2023.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+This function is unittested by test/test_name_pdb.py and passing as of 1/12/2023.
+This work requires python >= 3.8
+'''
 import os
-
-
-
 
 
 def name_pdb_file(pdb_base, chain, lib_path):

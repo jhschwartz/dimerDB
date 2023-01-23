@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# parallel_ungzip_all.pl - script to ungzip the files in a folder (searching recursively) using parallel
+#                          processing. Given the directory to search in, and the number of threads to use, 
+#                          queues the jobs and uses GNU parallel to perform the ungzips. This is necessary
+#                          because in this pipeline there might be too many files to split to fit in a
+#                          single shell command, thus we cannot use GNU parallel directly without a queue.
+# 
+# Written by Jacob Schwartz (jaschwa@umich.edu) in December 2022.
+# Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+# https://freddolino-lab.med.umich.edu
+# 
+# This function is unittested by test/test_parallel_ungzip.py and passing as of 1/12/2023
+# This work requires python >= 3.8
+
 dir_=$1;
 threads=$2;
 

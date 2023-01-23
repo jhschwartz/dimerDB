@@ -1,4 +1,19 @@
 #!/usr/bin/perl
+
+# parallel_split_pdb.pl - script to split the pdb files in a folder (searching recursively) using parallel
+#                         processing. Given the directory to search in, the number of threads to use, and
+#                         the path the the PDBParser split_chain executable, queues the jobs and uses GNU
+#                         parallel to perform the splits. This is necessary because in this pipeline there
+#                         might be too many files to split to fit in a single shell command, thus we cannot
+#                         use GNU parallel directly without a queue. 
+# 
+# Written by Jacob Schwartz (jaschwa@umich.edu) in December 2022.
+# Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+# https://freddolino-lab.med.umich.edu
+# 
+# This function is unittested by test/test_parallel_split_chain.py and passing as of 1/12/2023.
+# This work requires python >= 3.8
+
 use strict;
 use warnings;
 

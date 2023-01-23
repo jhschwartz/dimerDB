@@ -8,7 +8,7 @@ configfile: configfn
 sys.path.append('..')
 from scripts.simple_write import simple_write
 from scripts.simple_filters import filter_by_max_len, filter_by_in_afdb
-from scripts.unredundant import RedundantDimers
+from scripts.unredundant import RedundantDimerStructures
 
 
 all_homodimers_file = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
@@ -57,7 +57,7 @@ rule prune_structures:
             loaded = yaml.safe_load()
         uniparc = loaded.keys()[0]
         structures = list(loaded.values())
-        dimers = RedundantDimers(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
+        dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
         non_redundant_dimers = {}
         non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads)
         with open(output.list_, 'w') as f:

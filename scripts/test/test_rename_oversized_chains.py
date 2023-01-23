@@ -7,6 +7,9 @@ import glob
 sys.path.append('..')
 import rename_oversized_chains as oversized_pdb
 
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
+
 
 class OversizedPDB_Test(unittest.TestCase):
     def test_read_bundle_mappingline_1(self):
@@ -30,7 +33,7 @@ class OversizedPDB_Test(unittest.TestCase):
 
 
     def test_read_mappings(self):
-        mappingfile = 'data/fake_oversized_mapping.txt' 
+        mappingfile = f'{test_dir}/data/fake_oversized_mapping.txt' 
         mappings = oversized_pdb._read_mappings(mappingfile)
         self.assertEqual(mappings['bundle1']['A'], 'U1')
         self.assertEqual(mappings['bundle1']['B'], 'U2')
@@ -54,32 +57,32 @@ class OversizedPDB_Test(unittest.TestCase):
 
 
     def test_derive_new_name(self):
-        mappingfile = 'data/fake_oversized_mapping.txt' 
+        mappingfile = f'{test_dir}/data/fake_oversized_mapping.txt' 
         mappings = oversized_pdb._read_mappings(mappingfile)
         result = oversized_pdb._derive_new_name('7w5z-pdb-bundle1A.pdb', mappings)
         self.assertEqual(result, '7w5zU1.pdb')
 
 
     def test_file_is_single_chain_pos(self):
-        mappingfile = 'data/fake_oversized_mapping.txt'
+        mappingfile = f'{test_dir}/data/fake_oversized_mapping.txt'
         mappings = oversized_pdb._read_mappings(mappingfile)
         result = oversized_pdb._file_is_single_chain('7w5z-pdb-bundle2Z.pdb', mappings)
         self.assertTrue(result)
 
 
     def test_file_is_single_chain_neg(self):
-        mappingfile = 'data/fake_oversized_mapping.txt'
+        mappingfile = f'{test_dir}/data/fake_oversized_mapping.txt'
         mappings = oversized_pdb._read_mappings(mappingfile)
         result = oversized_pdb._file_is_single_chain('7w5z-pdb-bundle2.pdb', mappings)
         self.assertFalse(result)
 
 
     def test_rename(self):
-        data_folder = 'data/stored-7a01-pdb-bundle'
+        data_folder = f'{test_dir}/data/stored-7a01-pdb-bundle'
         with tempfile.TemporaryDirectory() as td:
             copy_tree(data_folder, td)
             oversized_pdb._rename_chainfiles_in_dir(td, '7a01')
-            rechained_files = [fn for fn in glob.glob(f'{td}/*.pdb') if not 'bundle' in fn]
+            rechained_files = [fn for fn in glob.glob(f'{td}/split_renamed/*.pdb') if not 'bundle' in fn]
             self.assertEqual(len(rechained_files), 85)
 
 

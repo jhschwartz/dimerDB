@@ -40,7 +40,11 @@ with open(heterodimers_yaml, 'r') as f:
     samples_hetero = homodimers_data.keys()
 
 divs_homo = [s[-2:] for s in samples_homo]
-divs_hetero = [s[-2:] for s in samples_hetero]
+
+def make_het_div(heterodimer_name):
+    u1, u2 = heterodimer_name.split('-')
+    return f'{ u1[-1] }-{ u2[-1] }'
+divs_hetero = [make_het_div(s) for s in samples_hetero]
 
 with open(uniparc2others_yaml, 'r') as f:
     uniparc2others = yaml.safe_load(f)
@@ -105,12 +109,16 @@ def init_indiv_yamls(data, yamlfiles):
             yaml.dump(unit_data, f, default_flow_style=None)
 
 
-def write_yes_if_len_ok(fasta, outfile, maxlen):
+def write_yes_if_func(outfile, func, *args):
+    if func(*args):
+        simple_write(outfile, 'yes')
+    
+def len_ok(fasta, maxlen):
     _, seq = next(read_prot_from_fasta(fasta))
     if len(seq) <= 0:
         raise ValueError(f'failed to read seq for fastafile {fasta}')
-    if len(seq) <= maxlen:
-        simple_write(output.info, 'yes')
+    return len(seq) <= maxlen
+
 
 
 def match_seq_to_afdb(query_fasta, afdb_fasta):
@@ -173,7 +181,8 @@ rule prefilter_by_length_homo:
     run:
         simple_write(output.info, 'no')
         download_fasta(wildcards.sample_homo, output.fasta)
-        write_yes_if_len_ok(fasta=output.fasta, outfile=output.info, maxlen=config['database_settings'])
+	maxlen = config['database_settings']['chain_max_seq_len']
+	write_yes_if_func(output.info, len_ok, output.fasta, maxlen)
 
 
 
@@ -258,14 +267,19 @@ rule prefilter_by_length_hetero:
         yamlfile = out_base_path_hetero+'/{div}/{sample_hetero}/initial.yaml'
     output:
         info = out_base_path_hetero+'/{div}/{sample_hetero}/ok_len.info',
-        fasta = out_base_path_hetero+'/{div}/{sample_hetero}/seq.fasta'
+        fasta1 = out_base_path_hetero+'/{div}/{sample_hetero}/seq1.fasta'
+        fasta2 = out_base_path_hetero+'/{div}/{sample_hetero}/seq2.fasta'
     threads: 1
     resources:
         mem_mb = "8000"
     run:
         simple_write(output.info, 'no')
-        download_fasta(wildcards.sample_hetero, output.fasta)
-        write_yes_if_len_ok(fasta=output.fasta, outfile=output.info, maxlen=config['database_settings'])
+	uniparc1, uniparc2 = wildcards.sample_hetero.split('-')
+        download_fasta(uniparc1, output.fasta1)
+        download_fasta(uniparc2, output.fasta2)
+	maxlen = config['database_settings']['chain_max_seq_len']
+	both_len_ok = lambda fasta1, fasta2: len_ok(fasta1, maxlen) and len_ok(fasta2, maxlen)
+        write_yes_if_func(output.info, both_len_ok, output.fasta1, output.fasta2)
 
 
 rule prefilter_by_in_afdb_hetero:
