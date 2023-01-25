@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Running tests for label generation. Should take only 1-2 minutes...";
+<<<<<<< HEAD
+/nfs/turbo/umms-petefred/jaschwa/.conda/SLIPPI/bin/python -m unittest -v;
+=======
+/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python -m unittest -v;
+>>>>>>> ffd7132ae7e7bceb4a65c6aa2bc06d4a1f699758

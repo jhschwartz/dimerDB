@@ -1,14 +1,15 @@
 import unittest
 import sys
 
-labels_dir = '/scratch/sigbio_project_root/sigbio_project1/jaschwa/HDpred_working/preprocessing/bin/labels'
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
+
+labels_dir = f'{test_dir}/bin/labels'
 sys.path.append(labels_dir)
 sys.path.append('..')
 import labels as label_funcs
 import check_chains_contact
 
-import pathlib
-test_dir = pathlib.Path(__file__).parent.resolve()
 
 class TestCheckChainsContact(unittest.TestCase):
     def test_pos_pairwise(self):
