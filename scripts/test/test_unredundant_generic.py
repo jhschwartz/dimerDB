@@ -69,7 +69,6 @@ class TestRedundantGeneric(unittest.TestCase):
         self.assertTrue(np.array_equal(rg.distance_matrix[2,:], np.array([2,1,0])))
 
 
-
     def test_things_of_lowest_distance_to_others(self):
         rg = RedundantGeneric(numbers=[], threshold=0.1)
         result = rg._things_of_lowest_distance_to_others([1,2,3])

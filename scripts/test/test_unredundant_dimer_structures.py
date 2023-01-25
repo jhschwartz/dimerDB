@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+import time
 
 sys.path.append('..')
 from unredundant import RedundantDimerStructures
@@ -117,6 +118,33 @@ class TestRedundantDimerStructures(unittest.TestCase):
         results = set(rg.prune_redundancy(num_workers=4))
         expected = set(['3lue_D-3lue_M', '3lue_A-3lue_K'])
         self.assertEqual(results, expected)
+
+
+    def test_prune_redundancy_heterodimers_alternate(self):
+        rg = RedundantDimerStructures(['3o8o_A-3o8o_B', '3o8o_C-3o8o_D', '3o8o_A-3o8o_D', '3o8o_B-3o8o_C'], 0.2, config)
+        results = set(rg.prune_redundancy(num_workers=2))
+        expected = set(['3o8o_C-3o8o_D', '3o8o_B-3o8o_C'])
+        self.assertEqual(results, expected)
+
+
+    def test_prune_redundancy_heterodimers_parallel_spedup(self):
+        rg = RedundantDimerStructures(['3o8o_A-3o8o_B', '3o8o_C-3o8o_D', '3o8o_A-3o8o_D', '3o8o_B-3o8o_C'], 0.2, config)
+
+        t = time.time()
+        results1 = set(rg.prune_redundancy(num_workers=1))
+        elapsed1 = time.time() - t
+        
+        t = time.time()
+        results2 = set(rg.prune_redundancy(num_workers=4))
+        elapsed2 = time.time() - t
+        
+        expected = set(['3o8o_C-3o8o_D', '3o8o_B-3o8o_C'])
+        self.assertEqual(results1, expected)
+        self.assertEqual(results2, expected)
+
+        # check speedup
+        print(elapsed1, elapsed2)
+        self.assertTrue(elapsed2 < elapsed1)
 
 
 if __name__ == '__main__':

@@ -67,16 +67,14 @@ class RedundantThings:
         args = []
         for i in range(N):
             for j in range(i+1, N):
-                self.distance_matrix[i,j] = self.distance(self.things[i], self.things[j]) #tmp
-                self.distance_matrix[j,i] = self.distance_matrix[i,j] # tmp
-                #args.append((i,j))
+                args.append((i,j))
         
-        #with Pool(processes=num_workers) as p:
-        #    distances = p.starmap(self._distance_thread_helper, args)
-        #
-        #for distance, (i, j) in zip(distances, args):
-        #    self.distance_matrix[i,j] = distance
-        #    self.distance_matrix[j,i] = distance
+        with Pool(processes=num_workers) as p:
+            distances = p.starmap(self._distance_thread_helper, args)
+        
+        for distance, (i, j) in zip(distances, args):
+            self.distance_matrix[i,j] = distance
+            self.distance_matrix[j,i] = distance
 
 
 
@@ -214,7 +212,7 @@ class RedundantDimerStructures(RedundantThings):
             return choices[0]
 
         # Criterion 3: pick the newest, assuming higher in alphabetical order is newer
-        return sorted(choices, key=lambda dimer_tuple: dimer_tuple[0].split('_')[0])[-1]
+        return sorted(choices, key=lambda dimer_tuple: dimer_tuple[0])[-1]
 
 
 
@@ -226,32 +224,31 @@ class RedundantSeqs(RedundantThings):
         self.config = config
         with open(yamlfile, 'r') as f:
             self.dimers = yaml.safe_load(f)
+        self.nw = self.config['paths']['nwalign']
 
 
     @staticmethod
-    def _distance_helper(nw, fasta1, fasta2):
+    def _calc_nw(nw, fasta1: str, fasta2: str) -> float:
         exe = f'{nw} {fasta1} {fasta2}'
         result = subprocess.run(exe, text=True, capture_output=True, shell=True)
         if result.stderr != '':
             raise RuntimeError(f'nwalign for seqs {fasta1} and {fasta2} failed with stderr: {result.stderr}')
         # The line we want looks like "Sequence identity:    0.625 (=   5/   8)"
         identity = float(re.findall(r'Sequence identity:\s+([\d\.]+)', result.stdout)[0])
-        return 1 - identity
+        return identity
         
-
-    def distance(self, dimer1name: str, dimer2name: str) -> float:
-            with self.dimer_tmp_fasta(dimer1name) as fasta1, self.dimer_tmp_fasta(dimer2name) as fasta2:
-                nw = self.config['paths']['nwalign']
-                left = RedundantSeqs._distance_helper(nw, fasta1, fasta2)
-                right = RedundantSeqs._distance_helper(nw, fasta2, fasta1)
-                if left < right:
-                    return left
-                return right
+    
+    @staticmethod
+    def max_both_ways_nw(nw, fasta1: str, fasta2: str) -> float:
+        left = RedundantSeqs._calc_nw(nw, fasta1, fasta2)
+        right = RedundantSeqs._calc_nw(nw, fasta2, fasta1)
+        if left > right:
+            return left
+        return right
 
 
     @abstractmethod
-    @contextlib.contextmanager
-    def dimer_tmp_fasta(self, dimer_name: str):
+    def _count_dimer_length(self, dimer_name: str) -> int:
         pass
 
 
@@ -275,14 +272,16 @@ class RedundantSeqs(RedundantThings):
         if len(best_dimer_names) == 1:
             return best_dimer_names[0]
 
-        # Criterion 3: pick the longest seq dimer_name
-        lengths = {}
+        # Criterion 3: pick the longest seq
+        best_dimer_names = []
+        max_len = -1
         for dimer_name in seq_cluster:
-            with self.dimer_tmp_fasta(dimer_name) as fasta:
-                _, seq = next(read_prot_from_fasta(fasta)) 
-                lengths[dimer_name] = len(seq)
-        max_len = max(lengths.values())
-        best_dimer_names = [dimer_name for dimer_name, len_ in lengths.items() if len_ == max_len]
+            L = self._count_dimer_length(dimer_name)
+            if L > max_len:
+                best_dimer_names = [ dimer_name ]
+                max_len = L
+            elif L == max_len:
+                best_dimer_names.append(dimer_name)
 
         # end if no tie
         if len(best_dimer_names) == 1:
@@ -295,29 +294,59 @@ class RedundantSeqs(RedundantThings):
 class RedundantSeqsHomodimer(RedundantSeqs):
     def __init__(self, dimer_names, yamlfile, threshold, config):
         super().__init__(dimer_names, yamlfile, threshold, config)
+        self.fd = self.config['paths']['intermediates_homodimer_filtering']
 
-    @contextlib.contextmanager
-    def dimer_tmp_fasta(self, dimer_name: str):
-        fasta = get_homodimer_fasta(uniparc_id=dimer_name, \
-                    filtering_dir=self.config['paths']['intermediates_homodimer_filtering'])
-        with tempfile.NamedTemporaryFile(mode='w') as tf:
-            shutil.copy(fasta, tf.name)
-            yield tf.name
+    
+    def _count_dimer_length(self, dimer_name: str) -> int:
+        fasta = get_homodimer_fasta(uniparc_id=dimer_name, filtering_dir=self.fd)
+        _, seq = next(read_prot_from_fasta(fasta))
+        return 2*len(seq)
+    
+    
+    def distance(self, dimer1name: str, dimer2name: str) -> float:
+        fasta1 = get_homodimer_fasta(uniparc_id=dimer1name, filtering_dir=self.fd)
+        fasta2 = get_homodimer_fasta(uniparc_id=dimer2name, filtering_dir=self.fd)
+        nw_val = super().max_both_ways_nw(self.nw, fasta1, fasta2)
+        return 1 - nw_val
 
 
 class RedundantSeqsHeterodimer(RedundantSeqs):
     def __init__(self, dimer_names, yamlfile, threshold, config):
         super().__init__(dimer_names, yamlfile, threshold, config)
+        self.fd = self.config['paths']['intermediates_heterodimer_filtering']
+  
 
-    @contextlib.contextmanager
-    def dimer_tmp_fasta(self, dimer_name: str):
-        fasta1, fasta2 = get_heterodimer_fasta(dimer_name=dimer_name, \
-                            filtering_dir=self.config['paths']['intermediates_heterodimer_filtering'])
+    def _count_dimer_length(self, dimer_name: str) -> int:
+        uniparc1, uniparc2 = dimer_name.split('-')
+        fasta1, fasta2 = get_heterodimer_fasta(dimer_name=dimer_name, filtering_dir=self.fd)
         _, seq1 = next(read_prot_from_fasta(fasta1))
         _, seq2 = next(read_prot_from_fasta(fasta2))
-        with tempfile.NamedTemporaryFile(mode='w') as outfasta:
-            outfasta.write('> temp header')
-            outfasta.write(seq1+seq2)
-            outfastsa.seek(0)
-            yield outfasta.name
+        return len(seq1) + len(seq2)
+
+
+    def distance(self, dimer1name: str, dimer2name: str) -> float:
+        fasta1A, fasta1B = get_heterodimer_fasta(dimer_name=dimer1name, filtering_dir=self.fd)
+        fasta2A, fasta2B = get_heterodimer_fasta(dimer_name=dimer2name, filtering_dir=self.fd)
+
+        # must first figure out if the correspondance is 1A->2A or 1A->2B (and 1B->2B or 1B->2A)
+        #   we call the 1A->2A / 1B->2B case "forwards"
+        #   we call the 1A->2B / 1B->2A case "backwards"
+        nw_1A_2A = super().max_both_ways_nw(self.nw, fasta1A, fasta2A)
+        nw_1A_2B = super().max_both_ways_nw(self.nw, fasta1A, fasta2B)
+        nw_1B_2A = super().max_both_ways_nw(self.nw, fasta1B, fasta2A)
+        nw_1B_2B = super().max_both_ways_nw(self.nw, fasta1B, fasta2B)
+
+        forward_tot = nw_1A_2A + nw_1B_2B
+        backward_tot = nw_1A_2B + nw_1B_2A
+
+        if forward_tot > backward_tot:
+            nw_I = nw_1A_2A
+            nw_II = nw_1B_2B
+        else:
+            nw_I = nw_1A_2B
+            nw_II = nw_1B_2A
+
+        avg_nw = (nw_I + nw_II) / 2
+        return 1 - avg_nw
+
 
