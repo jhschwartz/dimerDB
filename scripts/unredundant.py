@@ -15,7 +15,7 @@ https://freddolino-lab.med.umich.edu
 This function is unittested by:
     - test/test_unredundant_generic.py - tests abstract class RedundantThings, passing as of 1/12/2023.
     - test/test_unredundant_dimer_structures.py - tests RedundantDimerStructures, passing as of 1/12/2023.
-    - test/test_unredundant_dimer_seqs.py - tests RedundantSeqsHomodimer and RedundantSeqsHeterodimer, untested as of 1/12/23.
+    - test/test_unredundant_dimer_seqs.py - tests RedundantSeqsHomodimer and RedundantSeqsHeterodimer, all passing as of 1/25/2023.
 This work requires python >= 3.8
 '''
 
@@ -68,7 +68,7 @@ class RedundantThings:
         for i in range(N):
             for j in range(i+1, N):
                 args.append((i,j))
-        
+
         with Pool(processes=num_workers) as p:
             distances = p.starmap(self._distance_thread_helper, args)
         
