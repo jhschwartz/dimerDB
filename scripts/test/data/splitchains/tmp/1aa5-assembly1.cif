@@ -1,0 +1,846 @@
+data_XXXX
+# 
+loop_
+_audit_author.name 
+_audit_author.pdbx_ordinal 
+"Loll, P.J."     1 
+"Bevivino, A.E." 2 
+"Korty, B.D."    3 
+"Axelsen, P.H."  4 
+# 
+_struct.entry_id                  XXXX 
+_struct.title                     VANCOMYCIN 
+_struct.pdbx_model_details        ? 
+_struct.pdbx_CASP_flag            ? 
+_struct.pdbx_model_type_details   ? 
+# 
+_struct_keywords.entry_id        XXXX 
+_struct_keywords.pdbx_keywords   ANTIBIOTIC 
+_struct_keywords.text            "GLYCOPEPTIDE, ANTIBIOTIC" 
+# 
+_exptl.entry_id          XXXX 
+_exptl.method            "X-RAY DIFFRACTION" 
+_exptl.crystals_number   2 
+# 
+_citation.id                        primary 
+_citation.title                     "Simultaneous Recognition of a Carboxylate-Containing Ligand and an Intramolecular Surrogate Ligand in the Crystal Structure of an Asymmetric Vancomycin Dimer." 
+_citation.journal_abbrev            J.Am.Chem.Soc. 
+_citation.journal_volume            119 
+_citation.page_first                1516 
+_citation.page_last                 ? 
+_citation.year                      1997 
+_citation.journal_id_ASTM           JACSAT 
+_citation.country                   US 
+_citation.journal_id_ISSN           0002-7863 
+_citation.journal_id_CSD            0004 
+_citation.book_publisher            ? 
+_citation.pdbx_database_id_PubMed   ? 
+_citation.pdbx_database_id_DOI      10.1021/JA963566P 
+# 
+loop_
+_citation_author.citation_id 
+_citation_author.name 
+_citation_author.ordinal 
+_citation_author.identifier_ORCID 
+primary "Loll, P.J."     1 ? 
+primary "Bevivino, A.E." 2 ? 
+primary "Korty, B.D."    3 ? 
+primary "Axelsen, P.H."  4 ? 
+# 
+_entity_poly.entity_id                      1 
+_entity_poly.type                           "polypeptide(L)" 
+_entity_poly.nstd_linkage                   no 
+_entity_poly.nstd_monomer                   yes 
+_entity_poly.pdbx_seq_one_letter_code       "(MLU)(OMZ)N(GHP)(GHP)(OMY)(3FG)" 
+_entity_poly.pdbx_seq_one_letter_code_can   XXNGGYX 
+_entity_poly.pdbx_strand_id                 A,B-2 
+_entity_poly.pdbx_target_identifier         ? 
+# 
+loop_
+_entity_poly_seq.entity_id 
+_entity_poly_seq.num 
+_entity_poly_seq.mon_id 
+_entity_poly_seq.hetero 
+1 1 MLU n 
+1 2 OMZ n 
+1 3 ASN n 
+1 4 GHP n 
+1 5 GHP n 
+1 6 OMY n 
+1 7 3FG n 
+# 
+loop_
+_entity.id 
+_entity.type 
+_entity.src_method 
+_entity.pdbx_description 
+_entity.formula_weight 
+_entity.pdbx_number_of_molecules 
+_entity.pdbx_ec 
+_entity.pdbx_mutation 
+_entity.pdbx_fragment 
+_entity.details 
+1 polymer     syn VANCOMYCIN                               1149.977 2  ? ? ? ? 
+2 branched    man "vancosamine-(1-2)-beta-D-glucopyranose" 323.340  2  ? ? ? ? 
+3 non-polymer syn "ACETIC ACID"                            60.052   1  ? ? ? ? 
+4 non-polymer syn "CHLORIDE ION"                           35.453   4  ? ? ? ? 
+5 water       nat water                                    18.015   55 ? ? ? ? 
+# 
+loop_
+_pdbx_poly_seq_scheme.asym_id 
+_pdbx_poly_seq_scheme.entity_id 
+_pdbx_poly_seq_scheme.seq_id 
+_pdbx_poly_seq_scheme.mon_id 
+_pdbx_poly_seq_scheme.ndb_seq_num 
+_pdbx_poly_seq_scheme.pdb_seq_num 
+_pdbx_poly_seq_scheme.auth_seq_num 
+_pdbx_poly_seq_scheme.pdb_mon_id 
+_pdbx_poly_seq_scheme.auth_mon_id 
+_pdbx_poly_seq_scheme.pdb_strand_id 
+_pdbx_poly_seq_scheme.pdb_ins_code 
+_pdbx_poly_seq_scheme.hetero 
+A   1 1 MLU 1 1 1 MLU MLU A   ? n 
+A   1 2 OMZ 2 2 2 OMZ OMZ A   ? n 
+A   1 3 ASN 3 3 3 ASN ASN A   ? n 
+A   1 4 GHP 4 4 4 GHP GHP A   ? n 
+A   1 5 GHP 5 5 5 GHP GHP A   ? n 
+A   1 6 OMY 6 6 6 OMY OMY A   ? n 
+A   1 7 3FG 7 7 7 3FG 3FG A   ? n 
+B-2 1 1 MLU 1 1 1 MLU MLU B-2 ? n 
+B-2 1 2 OMZ 2 2 2 OMZ OMZ B-2 ? n 
+B-2 1 3 ASN 3 3 3 ASN ASN B-2 ? n 
+B-2 1 4 GHP 4 4 4 GHP GHP B-2 ? n 
+B-2 1 5 GHP 5 5 5 GHP GHP B-2 ? n 
+B-2 1 6 OMY 6 6 6 OMY OMY B-2 ? n 
+B-2 1 7 3FG 7 7 7 3FG 3FG B-2 ? n 
+# 
+loop_
+_pdbx_nonpoly_scheme.asym_id 
+_pdbx_nonpoly_scheme.entity_id 
+_pdbx_nonpoly_scheme.mon_id 
+_pdbx_nonpoly_scheme.ndb_seq_num 
+_pdbx_nonpoly_scheme.pdb_seq_num 
+_pdbx_nonpoly_scheme.auth_seq_num 
+_pdbx_nonpoly_scheme.pdb_mon_id 
+_pdbx_nonpoly_scheme.auth_mon_id 
+_pdbx_nonpoly_scheme.pdb_strand_id 
+_pdbx_nonpoly_scheme.pdb_ins_code 
+E   3 ACY 1  11   11   ACY ACY A   ? 
+F   4 CL  1  21   21   CL  CL  A   ? 
+G   4 CL  1  22   22   CL  CL  A   ? 
+H-2 4 CL  1  21   21   CL  CL  B-2 ? 
+I-2 4 CL  1  22   22   CL  CL  B-2 ? 
+J   5 HOH 1  2001 2001 HOH HOH A   ? 
+J   5 HOH 2  2002 2002 HOH HOH A   ? 
+J   5 HOH 3  2003 2003 HOH HOH A   ? 
+J   5 HOH 4  2004 2004 HOH HOH A   ? 
+J   5 HOH 5  2005 2005 HOH HOH A   ? 
+J   5 HOH 6  2006 2006 HOH HOH A   ? 
+J   5 HOH 7  2007 2007 HOH HOH A   ? 
+J   5 HOH 8  2008 2008 HOH HOH A   ? 
+J   5 HOH 9  2009 2009 HOH HOH A   ? 
+J   5 HOH 10 2010 2010 HOH HOH A   ? 
+J   5 HOH 11 2011 2011 HOH HOH A   ? 
+J   5 HOH 12 2012 2012 HOH HOH A   ? 
+J   5 HOH 13 2013 2013 HOH HOH A   ? 
+J   5 HOH 14 2014 2014 HOH HOH A   ? 
+J   5 HOH 15 2015 2015 HOH HOH A   ? 
+J   5 HOH 16 2016 2016 HOH HOH A   ? 
+J   5 HOH 17 2017 2017 HOH HOH A   ? 
+J   5 HOH 18 2018 2018 HOH HOH A   ? 
+J   5 HOH 19 2019 2019 HOH HOH A   ? 
+J   5 HOH 20 2020 2020 HOH HOH A   ? 
+J   5 HOH 21 2021 2021 HOH HOH A   ? 
+J   5 HOH 22 2022 2022 HOH HOH A   ? 
+J   5 HOH 23 2023 2023 HOH HOH A   ? 
+J   5 HOH 24 2024 2024 HOH HOH A   ? 
+J   5 HOH 25 2025 2025 HOH HOH A   ? 
+J   5 HOH 26 2026 2026 HOH HOH A   ? 
+J   5 HOH 27 2027 2027 HOH HOH A   ? 
+J   5 HOH 28 2028 2028 HOH HOH A   ? 
+J   5 HOH 29 2029 2029 HOH HOH A   ? 
+J   5 HOH 30 2030 2030 HOH HOH A   ? 
+J   5 HOH 31 2031 2031 HOH HOH A   ? 
+J   5 HOH 32 2032 2032 HOH HOH A   ? 
+J   5 HOH 33 2033 2033 HOH HOH A   ? 
+J   5 HOH 34 2034 2034 HOH HOH A   ? 
+K-2 5 HOH 1  2001 2001 HOH HOH B-2 ? 
+K-2 5 HOH 2  2002 2002 HOH HOH B-2 ? 
+K-2 5 HOH 3  2003 2003 HOH HOH B-2 ? 
+K-2 5 HOH 4  2004 2004 HOH HOH B-2 ? 
+K-2 5 HOH 5  2005 2005 HOH HOH B-2 ? 
+K-2 5 HOH 6  2006 2006 HOH HOH B-2 ? 
+K-2 5 HOH 7  2007 2007 HOH HOH B-2 ? 
+K-2 5 HOH 8  2008 2008 HOH HOH B-2 ? 
+K-2 5 HOH 9  2009 2009 HOH HOH B-2 ? 
+K-2 5 HOH 10 2010 2010 HOH HOH B-2 ? 
+K-2 5 HOH 11 2011 2011 HOH HOH B-2 ? 
+K-2 5 HOH 12 2012 2012 HOH HOH B-2 ? 
+K-2 5 HOH 13 2013 2013 HOH HOH B-2 ? 
+K-2 5 HOH 14 2014 2014 HOH HOH B-2 ? 
+K-2 5 HOH 15 2015 2015 HOH HOH B-2 ? 
+K-2 5 HOH 16 2016 2016 HOH HOH B-2 ? 
+K-2 5 HOH 17 2017 2017 HOH HOH B-2 ? 
+K-2 5 HOH 18 2018 2018 HOH HOH B-2 ? 
+K-2 5 HOH 19 2019 2019 HOH HOH B-2 ? 
+K-2 5 HOH 20 2020 2020 HOH HOH B-2 ? 
+K-2 5 HOH 21 2021 2021 HOH HOH B-2 ? 
+# 
+loop_
+_chem_comp.id 
+_chem_comp.type 
+_chem_comp.mon_nstd_flag 
+_chem_comp.name 
+_chem_comp.pdbx_synonyms 
+_chem_comp.formula 
+_chem_comp.formula_weight 
+3FG "L-peptide linking"           . "(2S)-amino(3,5-dihydroxyphenyl)ethanoic acid" ?           "C8 H9 N O4"     183.161 
+ACY non-polymer                   . "ACETIC ACID"                                  ?           "C2 H4 O2"       60.052  
+ASN "L-peptide linking"           y ASPARAGINE                                     ?           "C4 H8 N2 O3"    132.118 
+BGC "D-saccharide, beta linking"  . beta-D-glucopyranose                           ?           "C6 H12 O6"      180.156 
+CL  non-polymer                   . "CHLORIDE ION"                                 ?           "Cl -1"          35.453  
+GHP "D-peptide linking"           . "(2R)-amino(4-hydroxyphenyl)ethanoic acid"     ?           "C8 H9 N O3"     167.162 
+HOH non-polymer                   . WATER                                          ?           "H2 O"           18.015  
+MLU "D-peptide linking"           . N-methyl-D-leucine                             ?           "C7 H15 N O2"    145.199 
+OMY "L-peptide linking"           n "(betaR)-3-chloro-beta-hydroxy-L-tyrosine"     ?           "C9 H10 Cl N O4" 231.633 
+OMZ "D-peptide linking"           . "(betaR)-3-CHLORO-BETA-HYDROXY-D-TYROSINE"     ?           "C9 H10 Cl N O4" 231.633 
+RER "L-saccharide, alpha linking" . vancosamine                                    VANCOSAMINE "C7 H15 N O3"    161.199 
+# 
+loop_
+_struct_asym.id 
+_struct_asym.pdbx_blank_PDB_chainid_flag 
+_struct_asym.pdbx_modified 
+_struct_asym.entity_id 
+_struct_asym.details 
+A   N N 1 ? 
+B-2 N N 1 ? 
+C   N N 2 ? 
+D-2 N N 2 ? 
+E   N N 3 ? 
+F   N N 4 ? 
+G   N N 4 ? 
+H-2 N N 4 ? 
+I-2 N N 4 ? 
+J   N N 5 ? 
+K-2 N N 5 ? 
+# 
+loop_
+_pdbx_struct_oper_list.id 
+_pdbx_struct_oper_list.type 
+_pdbx_struct_oper_list.name 
+_pdbx_struct_oper_list.symmetry_operation 
+_pdbx_struct_oper_list.matrix[1][1] 
+_pdbx_struct_oper_list.matrix[1][2] 
+_pdbx_struct_oper_list.matrix[1][3] 
+_pdbx_struct_oper_list.vector[1] 
+_pdbx_struct_oper_list.matrix[2][1] 
+_pdbx_struct_oper_list.matrix[2][2] 
+_pdbx_struct_oper_list.matrix[2][3] 
+_pdbx_struct_oper_list.vector[2] 
+_pdbx_struct_oper_list.matrix[3][1] 
+_pdbx_struct_oper_list.matrix[3][2] 
+_pdbx_struct_oper_list.matrix[3][3] 
+_pdbx_struct_oper_list.vector[3] 
+1 "identity operation"         1_555 x,y,z              1.0000000000 0.0000000000  0.0000000000 0.0000000000  0.0000000000 1.0000000000 0.0000000000 0.0000000000  0.0000000000 0.0000000000 1.0000000000 0.0000000000   
+2 "crystal symmetry operation" 3_554 -y+1/2,x+1/2,z-1/4 0.0000000000 -1.0000000000 0.0000000000 14.2250000000 1.0000000000 0.0000000000 0.0000000000 14.2250000000 0.0000000000 0.0000000000 1.0000000000 -16.4600000000 
+# 
+_atom_sites.entry_id                    XXXX 
+_atom_sites.fract_transf_matrix[1][1]   0.035149 
+_atom_sites.fract_transf_matrix[1][2]   0.000000 
+_atom_sites.fract_transf_matrix[1][3]   0.000000 
+_atom_sites.fract_transf_matrix[2][1]   0.000000 
+_atom_sites.fract_transf_matrix[2][2]   0.035149 
+_atom_sites.fract_transf_matrix[2][3]   0.000000 
+_atom_sites.fract_transf_matrix[3][1]   0.000000 
+_atom_sites.fract_transf_matrix[3][2]   0.000000 
+_atom_sites.fract_transf_matrix[3][3]   0.015188 
+_atom_sites.fract_transf_vector[1]      0.00000 
+_atom_sites.fract_transf_vector[2]      0.00000 
+_atom_sites.fract_transf_vector[3]      0.00000 
+# 
+loop_
+_atom_type.symbol 
+C  
+CL 
+H  
+N  
+O  
+# 
+_entry.id   XXXX 
+# 
+loop_
+_pdbx_branch_scheme.asym_id 
+_pdbx_branch_scheme.entity_id 
+_pdbx_branch_scheme.mon_id 
+_pdbx_branch_scheme.num 
+_pdbx_branch_scheme.pdb_asym_id 
+_pdbx_branch_scheme.pdb_mon_id 
+_pdbx_branch_scheme.pdb_seq_num 
+_pdbx_branch_scheme.auth_asym_id 
+_pdbx_branch_scheme.auth_mon_id 
+_pdbx_branch_scheme.auth_seq_num 
+_pdbx_branch_scheme.hetero 
+C   2 BGC 1 C   BGC 1 A BGC 8 n 
+C   2 RER 2 C   RER 2 A RER 9 n 
+D-2 2 BGC 1 D-2 BGC 1 B BGC 8 n 
+D-2 2 RER 2 D-2 RER 2 B RER 9 n 
+# 
+loop_
+_pdbx_chain_remapping.entity_id 
+_pdbx_chain_remapping.label_asym_id 
+_pdbx_chain_remapping.auth_asym_id 
+_pdbx_chain_remapping.orig_label_asym_id 
+_pdbx_chain_remapping.orig_auth_asym_id 
+_pdbx_chain_remapping.applied_operations 
+1 A   A   A A 1 
+1 B-2 B-2 B B 2 
+2 C   C   C C 1 
+2 D-2 D-2 D D 2 
+3 E   A   E A 1 
+4 F   A   F A 1 
+4 G   A   G A 1 
+4 H-2 B-2 H B 2 
+4 I-2 B-2 I B 2 
+5 J   A   J A 1 
+5 K-2 B-2 K B 2 
+# 
+_pdbx_entity_branch.entity_id   2 
+_pdbx_entity_branch.type        oligosaccharide 
+# 
+loop_
+_pdbx_entity_branch_descriptor.ordinal 
+_pdbx_entity_branch_descriptor.entity_id 
+_pdbx_entity_branch_descriptor.descriptor 
+_pdbx_entity_branch_descriptor.type 
+_pdbx_entity_branch_descriptor.program 
+_pdbx_entity_branch_descriptor.program_version 
+1 2 "WURCS=2.0/2,2,1/[a2122h-1b_1-5][ad621m-1a_1-5_3*C_3*N]/1-2/a2-b1" WURCS  PDB2Glycan 1.1.0 
+2 2 "[][D-1-deoxy-Glcp]{[(2+1)][a-L-2-deoxy-Fucp3N]{}}"                LINUCS PDB-CARE   ?     
+# 
+_pdbx_entity_branch_link.link_id                    1 
+_pdbx_entity_branch_link.entity_id                  2 
+_pdbx_entity_branch_link.entity_branch_list_num_1   2 
+_pdbx_entity_branch_link.comp_id_1                  RER 
+_pdbx_entity_branch_link.atom_id_1                  C1 
+_pdbx_entity_branch_link.leaving_atom_id_1          O1 
+_pdbx_entity_branch_link.entity_branch_list_num_2   1 
+_pdbx_entity_branch_link.comp_id_2                  BGC 
+_pdbx_entity_branch_link.atom_id_2                  O2 
+_pdbx_entity_branch_link.leaving_atom_id_2          HO2 
+_pdbx_entity_branch_link.value_order                sing 
+_pdbx_entity_branch_link.details                    ? 
+# 
+loop_
+_pdbx_entity_branch_list.entity_id 
+_pdbx_entity_branch_list.comp_id 
+_pdbx_entity_branch_list.num 
+_pdbx_entity_branch_list.hetero 
+2 BGC 1 n 
+2 RER 2 n 
+# 
+loop_
+_pdbx_entity_nonpoly.entity_id 
+_pdbx_entity_nonpoly.name 
+_pdbx_entity_nonpoly.comp_id 
+3 "ACETIC ACID"  ACY 
+4 "CHLORIDE ION" CL  
+5 water          HOH 
+# 
+loop_
+_pdbx_entity_remapping.entity_id 
+_pdbx_entity_remapping.orig_entity_id 
+1 1 
+2 2 
+3 3 
+4 4 
+5 5 
+# 
+loop_
+_atom_site.group_PDB 
+_atom_site.id 
+_atom_site.type_symbol 
+_atom_site.label_atom_id 
+_atom_site.label_alt_id 
+_atom_site.label_comp_id 
+_atom_site.label_asym_id 
+_atom_site.label_entity_id 
+_atom_site.label_seq_id 
+_atom_site.pdbx_PDB_ins_code 
+_atom_site.Cartn_x 
+_atom_site.Cartn_y 
+_atom_site.Cartn_z 
+_atom_site.occupancy 
+_atom_site.B_iso_or_equiv 
+_atom_site.Cartn_x_esd 
+_atom_site.Cartn_y_esd 
+_atom_site.Cartn_z_esd 
+_atom_site.occupancy_esd 
+_atom_site.B_iso_or_equiv_esd 
+_atom_site.pdbx_formal_charge 
+_atom_site.auth_seq_id 
+_atom_site.auth_comp_id 
+_atom_site.auth_asym_id 
+_atom_site.auth_atom_id 
+_atom_site.pdbx_PDB_model_num 
+HETATM 1   N  N    . MLU A   1 1 ? 10.127  8.826  -4.030  1.00 4.98  ? ? ? ? ? ? 1    MLU A   N    1 
+HETATM 2   C  CN   . MLU A   1 1 ? 10.446  10.141 -4.639  1.00 7.32  ? ? ? ? ? ? 1    MLU A   CN   1 
+HETATM 3   C  CA   . MLU A   1 1 ? 8.858   8.812  -3.244  1.00 4.18  ? ? ? ? ? ? 1    MLU A   CA   1 
+HETATM 4   C  C    . MLU A   1 1 ? 7.715   9.246  -4.189  1.00 3.80  ? ? ? ? ? ? 1    MLU A   C    1 
+HETATM 5   O  O    . MLU A   1 1 ? 7.547   8.688  -5.252  1.00 5.85  ? ? ? ? ? ? 1    MLU A   O    1 
+HETATM 6   C  CB   . MLU A   1 1 ? 8.552   7.426  -2.726  1.00 4.30  ? ? ? ? ? ? 1    MLU A   CB   1 
+HETATM 7   C  CG   . MLU A   1 1 ? 9.587   6.788  -1.780  1.00 4.89  ? ? ? ? ? ? 1    MLU A   CG   1 
+HETATM 8   C  CD1  A MLU A   1 1 ? 9.125   5.395  -1.392  0.74 5.46  ? ? ? ? ? ? 1    MLU A   CD1  1 
+HETATM 9   C  CD1  B MLU A   1 1 ? 10.667  6.044  -2.523  0.26 5.31  ? ? ? ? ? ? 1    MLU A   CD1  1 
+HETATM 10  C  CD2  A MLU A   1 1 ? 9.835   7.620  -0.583  0.74 7.84  ? ? ? ? ? ? 1    MLU A   CD2  1 
+HETATM 11  C  CD2  B MLU A   1 1 ? 8.866   5.876  -0.846  0.26 5.59  ? ? ? ? ? ? 1    MLU A   CD2  1 
+HETATM 12  H  H    . MLU A   1 1 ? 10.887  8.557  -3.424  1.00 7.47  ? ? ? ? ? ? 1    MLU A   H    1 
+HETATM 13  H  HCN1 . MLU A   1 1 ? 11.271  10.077 -5.126  1.00 10.98 ? ? ? ? ? ? 1    MLU A   HCN1 1 
+HETATM 14  H  HCN2 . MLU A   1 1 ? 10.533  10.801 -3.948  1.00 10.98 ? ? ? ? ? ? 1    MLU A   HCN2 1 
+HETATM 15  H  HCN3 . MLU A   1 1 ? 9.740   10.396 -5.238  1.00 10.98 ? ? ? ? ? ? 1    MLU A   HCN3 1 
+HETATM 16  H  HA   . MLU A   1 1 ? 8.925   9.440  -2.494  1.00 6.27  ? ? ? ? ? ? 1    MLU A   HA   1 
+HETATM 17  H  HB2  . MLU A   1 1 ? 8.440   6.837  -3.489  1.00 6.45  ? ? ? ? ? ? 1    MLU A   HB2  1 
+HETATM 18  H  HB3  . MLU A   1 1 ? 7.701   7.460  -2.261  1.00 6.45  ? ? ? ? ? ? 1    MLU A   HB3  1 
+HETATM 19  H  HG   . MLU A   1 1 ? 10.432  6.702  -2.269  1.00 7.34  ? ? ? ? ? ? 1    MLU A   HG   1 
+HETATM 20  H  HD11 A MLU A   1 1 ? 8.972   4.876  -2.185  0.74 8.19  ? ? ? ? ? ? 1    MLU A   HD11 1 
+HETATM 21  H  HD11 B MLU A   1 1 ? 8.184   6.367  -0.382  0.26 8.38  ? ? ? ? ? ? 1    MLU A   HD11 1 
+HETATM 22  H  HD12 A MLU A   1 1 ? 8.311   5.457  -0.888  0.74 8.19  ? ? ? ? ? ? 1    MLU A   HD12 1 
+HETATM 23  H  HD12 B MLU A   1 1 ? 9.487   5.511  -0.211  0.26 8.38  ? ? ? ? ? ? 1    MLU A   HD12 1 
+HETATM 24  H  HD13 A MLU A   1 1 ? 9.801   4.971  -0.858  0.74 8.19  ? ? ? ? ? ? 1    MLU A   HD13 1 
+HETATM 25  H  HD21 A MLU A   1 1 ? 10.127  8.494  -0.855  0.74 11.77 ? ? ? ? ? ? 1    MLU A   HD21 1 
+HETATM 26  H  HD21 B MLU A   1 1 ? 11.298  5.684  -1.895  0.26 7.97  ? ? ? ? ? ? 1    MLU A   HD21 1 
+HETATM 27  H  HD22 A MLU A   1 1 ? 10.515  7.210  -0.043  0.74 11.77 ? ? ? ? ? ? 1    MLU A   HD22 1 
+HETATM 28  H  HD22 B MLU A   1 1 ? 11.118  6.647  -3.119  0.26 7.97  ? ? ? ? ? ? 1    MLU A   HD22 1 
+HETATM 29  H  HD23 A MLU A   1 1 ? 9.025   7.698  -0.073  0.74 11.77 ? ? ? ? ? ? 1    MLU A   HD23 1 
+HETATM 30  H  HD23 B MLU A   1 1 ? 10.274  5.329  -3.028  0.26 7.97  ? ? ? ? ? ? 1    MLU A   HD23 1 
+HETATM 31  H  HN22 . MLU A   1 1 ? 10.062  8.136  -4.764  1.00 7.47  ? ? ? ? ? ? 1    MLU A   HN22 1 
+HETATM 32  N  N    . OMZ A   1 2 ? 6.894   10.223 -3.742  1.00 3.44  ? ? ? ? ? ? 2    OMZ A   N    1 
+HETATM 33  C  CA   . OMZ A   1 2 ? 5.824   10.725 -4.588  1.00 3.72  ? ? ? ? ? ? 2    OMZ A   CA   1 
+HETATM 34  C  C    . OMZ A   1 2 ? 4.491   9.963  -4.459  1.00 3.04  ? ? ? ? ? ? 2    OMZ A   C    1 
+HETATM 35  O  O    . OMZ A   1 2 ? 3.547   10.291 -5.161  1.00 3.76  ? ? ? ? ? ? 2    OMZ A   O    1 
+HETATM 36  C  CB   . OMZ A   1 2 ? 5.544   12.254 -4.376  1.00 3.81  ? ? ? ? ? ? 2    OMZ A   CB   1 
+HETATM 37  O  OC   . OMZ A   1 2 ? 6.731   13.006 -4.505  1.00 4.29  ? ? ? ? ? ? 2    OMZ A   OC   1 
+HETATM 38  C  CG   . OMZ A   1 2 ? 4.868   12.532 -3.066  1.00 3.68  ? ? ? ? ? ? 2    OMZ A   CG   1 
+HETATM 39  C  CD1  . OMZ A   1 2 ? 3.489   12.760 -3.038  1.00 4.01  ? ? ? ? ? ? 2    OMZ A   CD1  1 
+HETATM 40  C  CD2  . OMZ A   1 2 ? 5.577   12.564 -1.859  1.00 3.89  ? ? ? ? ? ? 2    OMZ A   CD2  1 
+HETATM 41  C  CE1  . OMZ A   1 2 ? 2.836   12.923 -1.830  1.00 4.46  ? ? ? ? ? ? 2    OMZ A   CE1  1 
+HETATM 42  CL CL   . OMZ A   1 2 ? 1.135   13.234 -1.833  1.00 7.25  ? ? ? ? ? ? 2    OMZ A   CL   1 
+HETATM 43  C  CE2  . OMZ A   1 2 ? 4.904   12.695 -0.669  1.00 4.34  ? ? ? ? ? ? 2    OMZ A   CE2  1 
+HETATM 44  C  CZ   . OMZ A   1 2 ? 3.523   12.845 -0.655  1.00 4.40  ? ? ? ? ? ? 2    OMZ A   CZ   1 
+HETATM 45  O  OH   . OMZ A   1 2 ? 2.866   12.894 0.557   1.00 4.99  ? ? ? ? ? ? 2    OMZ A   OH   1 
+HETATM 46  H  H    . OMZ A   1 2 ? 7.005   10.548 -2.953  1.00 5.16  ? ? ? ? ? ? 2    OMZ A   H    1 
+HETATM 47  H  HA   . OMZ A   1 2 ? 6.123   10.618 -5.515  1.00 5.58  ? ? ? ? ? ? 2    OMZ A   HA   1 
+HETATM 48  H  HB   . OMZ A   1 2 ? 4.935   12.542 -5.088  1.00 5.71  ? ? ? ? ? ? 2    OMZ A   HB   1 
+HETATM 49  H  HC   . OMZ A   1 2 ? 7.083   12.839 -5.227  1.00 6.44  ? ? ? ? ? ? 2    OMZ A   HC   1 
+HETATM 50  H  HD1  . OMZ A   1 2 ? 3.009   12.801 -3.834  1.00 6.01  ? ? ? ? ? ? 2    OMZ A   HD1  1 
+HETATM 51  H  HD2  . OMZ A   1 2 ? 6.505   12.495 -1.863  1.00 5.83  ? ? ? ? ? ? 2    OMZ A   HD2  1 
+HETATM 52  H  HE2  . OMZ A   1 2 ? 5.375   12.684 0.132   1.00 6.50  ? ? ? ? ? ? 2    OMZ A   HE2  1 
+ATOM   53  N  N    . ASN A   1 3 ? 4.449   8.963  -3.584  1.00 3.20  ? ? ? ? ? ? 3    ASN A   N    1 
+ATOM   54  C  CA   . ASN A   1 3 ? 3.334   8.009  -3.566  1.00 3.32  ? ? ? ? ? ? 3    ASN A   CA   1 
+ATOM   55  C  C    . ASN A   1 3 ? 2.302   8.294  -2.468  1.00 2.84  ? ? ? ? ? ? 3    ASN A   C    1 
+ATOM   56  O  O    . ASN A   1 3 ? 1.165   8.692  -2.806  1.00 3.32  ? ? ? ? ? ? 3    ASN A   O    1 
+ATOM   57  C  CB   . ASN A   1 3 ? 3.841   6.575  -3.629  1.00 3.47  ? ? ? ? ? ? 3    ASN A   CB   1 
+ATOM   58  C  CG   . ASN A   1 3 ? 4.943   6.227  -2.632  1.00 3.25  ? ? ? ? ? ? 3    ASN A   CG   1 
+ATOM   59  O  OD1  . ASN A   1 3 ? 5.227   6.979  -1.683  1.00 3.62  ? ? ? ? ? ? 3    ASN A   OD1  1 
+ATOM   60  N  ND2  . ASN A   1 3 ? 5.555   5.076  -2.861  1.00 3.99  ? ? ? ? ? ? 3    ASN A   ND2  1 
+ATOM   61  H  H    . ASN A   1 3 ? 5.089   8.874  -3.016  1.00 4.81  ? ? ? ? ? ? 3    ASN A   H    1 
+ATOM   62  H  HA   . ASN A   1 3 ? 2.859   8.152  -4.411  1.00 4.98  ? ? ? ? ? ? 3    ASN A   HA   1 
+ATOM   63  H  HB2  . ASN A   1 3 ? 3.092   5.978  -3.479  1.00 5.21  ? ? ? ? ? ? 3    ASN A   HB2  1 
+ATOM   64  H  HB3  . ASN A   1 3 ? 4.173   6.406  -4.525  1.00 5.21  ? ? ? ? ? ? 3    ASN A   HB3  1 
+ATOM   65  H  HD21 . ASN A   1 3 ? 5.321   4.591  -3.531  1.00 5.99  ? ? ? ? ? ? 3    ASN A   HD21 1 
+ATOM   66  H  HD22 . ASN A   1 3 ? 6.186   4.813  -2.339  1.00 5.99  ? ? ? ? ? ? 3    ASN A   HD22 1 
+HETATM 67  N  N    . GHP A   1 4 ? 2.669   8.100  -1.216  1.00 2.95  ? ? ? ? ? ? 4    GHP A   N    1 
+HETATM 68  C  CA   . GHP A   1 4 ? 1.695   8.107  -0.115  1.00 3.06  ? ? ? ? ? ? 4    GHP A   CA   1 
+HETATM 69  C  C    . GHP A   1 4 ? 1.887   6.862  0.723   1.00 2.95  ? ? ? ? ? ? 4    GHP A   C    1 
+HETATM 70  O  O    . GHP A   1 4 ? 2.988   6.455  1.041   1.00 3.19  ? ? ? ? ? ? 4    GHP A   O    1 
+HETATM 71  C  C1   . GHP A   1 4 ? 1.720   9.379  0.737   1.00 3.09  ? ? ? ? ? ? 4    GHP A   C1   1 
+HETATM 72  C  C2   . GHP A   1 4 ? 1.139   9.408  1.973   1.00 3.55  ? ? ? ? ? ? 4    GHP A   C2   1 
+HETATM 73  C  C3   . GHP A   1 4 ? 1.145   10.574 2.737   1.00 3.86  ? ? ? ? ? ? 4    GHP A   C3   1 
+HETATM 74  C  C4   . GHP A   1 4 ? 1.693   11.737 2.232   1.00 3.66  ? ? ? ? ? ? 4    GHP A   C4   1 
+HETATM 75  O  O4   . GHP A   1 4 ? 1.794   12.903 3.004   1.00 4.62  ? ? ? ? ? ? 4    GHP A   O4   1 
+HETATM 76  C  C5   . GHP A   1 4 ? 2.275   11.709 0.977   1.00 3.85  ? ? ? ? ? ? 4    GHP A   C5   1 
+HETATM 77  C  C6   . GHP A   1 4 ? 2.290   10.550 0.247   1.00 3.65  ? ? ? ? ? ? 4    GHP A   C6   1 
+HETATM 78  H  H    . GHP A   1 4 ? 3.500   7.966  -1.039  1.00 4.43  ? ? ? ? ? ? 4    GHP A   H    1 
+HETATM 79  H  HA   . GHP A   1 4 ? 0.804   8.049  -0.519  1.00 4.59  ? ? ? ? ? ? 4    GHP A   HA   1 
+HETATM 80  H  HC2  . GHP A   1 4 ? 0.734   8.641  2.309   1.00 5.33  ? ? ? ? ? ? 4    GHP A   HC2  1 
+HETATM 81  H  H6   . GHP A   1 4 ? 2.690   10.545 -0.592  1.00 5.48  ? ? ? ? ? ? 4    GHP A   H6   1 
+HETATM 82  N  N    . GHP A   1 5 ? 0.734   6.293  1.150   1.00 2.98  ? ? ? ? ? ? 5    GHP A   N    1 
+HETATM 83  C  CA   . GHP A   1 5 ? 0.718   5.365  2.242   1.00 3.22  ? ? ? ? ? ? 5    GHP A   CA   1 
+HETATM 84  C  C    . GHP A   1 5 ? -0.686  5.468  2.895   1.00 3.21  ? ? ? ? ? ? 5    GHP A   C    1 
+HETATM 85  O  O    . GHP A   1 5 ? -1.628  5.852  2.205   1.00 3.91  ? ? ? ? ? ? 5    GHP A   O    1 
+HETATM 86  C  C1   . GHP A   1 5 ? 0.930   3.872  1.977   1.00 3.30  ? ? ? ? ? ? 5    GHP A   C1   1 
+HETATM 87  C  C2   . GHP A   1 5 ? 1.938   3.204  2.649   1.00 3.06  ? ? ? ? ? ? 5    GHP A   C2   1 
+HETATM 88  C  C3   . GHP A   1 5 ? 2.017   1.808  2.682   1.00 3.62  ? ? ? ? ? ? 5    GHP A   C3   1 
+HETATM 89  C  C4   . GHP A   1 5 ? 1.043   1.086  1.989   1.00 4.21  ? ? ? ? ? ? 5    GHP A   C4   1 
+HETATM 90  O  O4   . GHP A   1 5 ? 1.089   -0.286 2.062   1.00 5.46  ? ? ? ? ? ? 5    GHP A   O4   1 
+HETATM 91  C  C5   . GHP A   1 5 ? 0.080   1.751  1.263   1.00 4.79  ? ? ? ? ? ? 5    GHP A   C5   1 
+HETATM 92  C  C6   . GHP A   1 5 ? 0.018   3.128  1.238   1.00 3.73  ? ? ? ? ? ? 5    GHP A   C6   1 
+HETATM 93  H  H    . GHP A   1 5 ? -0.005  6.492  0.758   1.00 4.47  ? ? ? ? ? ? 5    GHP A   H    1 
+HETATM 94  H  HA   . GHP A   1 5 ? 1.384   5.656  2.900   1.00 4.82  ? ? ? ? ? ? 5    GHP A   HA   1 
+HETATM 95  H  HC2  . GHP A   1 5 ? 2.586   3.701  3.094   1.00 4.60  ? ? ? ? ? ? 5    GHP A   HC2  1 
+HETATM 96  H  HO4  . GHP A   1 5 ? 0.476   -0.604 1.619   1.00 8.19  ? ? ? ? ? ? 5    GHP A   HO4  1 
+HETATM 97  H  H5   . GHP A   1 5 ? -0.543  1.260  0.779   1.00 7.18  ? ? ? ? ? ? 5    GHP A   H5   1 
+HETATM 98  H  H6   . GHP A   1 5 ? -0.631  3.558  0.730   1.00 5.59  ? ? ? ? ? ? 5    GHP A   H6   1 
+HETATM 99  N  N    . OMY A   1 6 ? -0.841  5.066  4.156   1.00 3.29  ? ? ? ? ? ? 6    OMY A   N    1 
+HETATM 100 C  CA   . OMY A   1 6 ? 0.153   4.642  5.068   1.00 3.77  ? ? ? ? ? ? 6    OMY A   CA   1 
+HETATM 101 O  OCZ  . OMY A   1 6 ? 0.644   10.625 4.037   1.00 4.40  ? ? ? ? ? ? 6    OMY A   OCZ  1 
+HETATM 102 C  CE2  . OMY A   1 6 ? -0.746  8.966  5.056   1.00 3.69  ? ? ? ? ? ? 6    OMY A   CE2  1 
+HETATM 103 C  CE1  . OMY A   1 6 ? 1.622   8.643  5.053   1.00 4.14  ? ? ? ? ? ? 6    OMY A   CE1  1 
+HETATM 104 C  CZ   . OMY A   1 6 ? 0.519   9.416  4.702   1.00 3.74  ? ? ? ? ? ? 6    OMY A   CZ   1 
+HETATM 105 C  CG   . OMY A   1 6 ? 0.211   6.945  5.959   1.00 3.36  ? ? ? ? ? ? 6    OMY A   CG   1 
+HETATM 106 C  CD2  . OMY A   1 6 ? -0.899  7.756  5.699   1.00 3.72  ? ? ? ? ? ? 6    OMY A   CD2  1 
+HETATM 107 C  CD1  . OMY A   1 6 ? 1.487   7.428  5.657   1.00 3.69  ? ? ? ? ? ? 6    OMY A   CD1  1 
+HETATM 108 C  CB   . OMY A   1 6 ? 0.072   5.496  6.406   1.00 3.80  ? ? ? ? ? ? 6    OMY A   CB   1 
+HETATM 109 CL CL   . OMY A   1 6 ? 3.250   9.214  4.691   1.00 5.21  ? ? ? ? ? ? 6    OMY A   CL   1 
+HETATM 110 O  O    . OMY A   1 6 ? -0.998  2.532  5.187   1.00 4.67  ? ? ? ? ? ? 6    OMY A   O    1 
+HETATM 111 C  C    . OMY A   1 6 ? 0.071   3.128  5.320   1.00 3.55  ? ? ? ? ? ? 6    OMY A   C    1 
+HETATM 112 O  ODE  . OMY A   1 6 ? -1.150  5.269  7.029   1.00 4.48  ? ? ? ? ? ? 6    OMY A   ODE  1 
+HETATM 113 H  HN1  . OMY A   1 6 ? -1.648  5.066  4.453   1.00 4.94  ? ? ? ? ? ? 6    OMY A   HN1  1 
+HETATM 114 H  HA   . OMY A   1 6 ? 1.024   4.823  4.657   1.00 5.65  ? ? ? ? ? ? 6    OMY A   HA   1 
+HETATM 115 H  HE2  . OMY A   1 6 ? -1.493  9.483  4.859   1.00 5.54  ? ? ? ? ? ? 6    OMY A   HE2  1 
+HETATM 116 H  HD2  . OMY A   1 6 ? -1.747  7.477  5.961   1.00 5.59  ? ? ? ? ? ? 6    OMY A   HD2  1 
+HETATM 117 H  HD1  . OMY A   1 6 ? 2.240   6.923  5.867   1.00 5.54  ? ? ? ? ? ? 6    OMY A   HD1  1 
+HETATM 118 H  HB   . OMY A   1 6 ? 0.808   5.255  7.006   1.00 5.70  ? ? ? ? ? ? 6    OMY A   HB   1 
+HETATM 119 H  HDE  . OMY A   1 6 ? -1.198  4.483  7.258   1.00 6.72  ? ? ? ? ? ? 6    OMY A   HDE  1 
+HETATM 120 N  N    . 3FG A   1 7 ? 1.230   2.520  5.592   1.00 3.81  ? ? ? ? ? ? 7    3FG A   N    1 
+HETATM 121 O  OD1  . 3FG A   1 7 ? 4.706   1.291  1.808   1.00 4.00  ? ? ? ? ? ? 7    3FG A   OD1  1 
+HETATM 122 C  CD1  . 3FG A   1 7 ? 4.329   0.915  3.056   1.00 3.61  ? ? ? ? ? ? 7    3FG A   CD1  1 
+HETATM 123 C  CG1  . 3FG A   1 7 ? 3.042   1.139  3.548   1.00 3.76  ? ? ? ? ? ? 7    3FG A   CG1  1 
+HETATM 124 C  CZ   . 3FG A   1 7 ? 5.301   0.282  3.852   1.00 3.74  ? ? ? ? ? ? 7    3FG A   CZ   1 
+HETATM 125 C  CD2  . 3FG A   1 7 ? 5.003   -0.095 5.140   1.00 4.28  ? ? ? ? ? ? 7    3FG A   CD2  1 
+HETATM 126 O  OD2  . 3FG A   1 7 ? 5.881   -0.668 5.984   1.00 4.72  ? ? ? ? ? ? 7    3FG A   OD2  1 
+HETATM 127 C  CG2  . 3FG A   1 7 ? 3.708   0.139  5.646   1.00 4.51  ? ? ? ? ? ? 7    3FG A   CG2  1 
+HETATM 128 C  CB   . 3FG A   1 7 ? 2.747   0.764  4.868   1.00 4.06  ? ? ? ? ? ? 7    3FG A   CB   1 
+HETATM 129 C  CA   . 3FG A   1 7 ? 1.363   1.079  5.448   1.00 4.59  ? ? ? ? ? ? 7    3FG A   CA   1 
+HETATM 130 C  C    . 3FG A   1 7 ? 1.094   0.328  6.804   1.00 5.39  ? ? ? ? ? ? 7    3FG A   C    1 
+HETATM 131 O  O    . 3FG A   1 7 ? 0.845   -0.905 6.648   1.00 7.22  ? ? ? ? ? ? 7    3FG A   O    1 
+HETATM 132 O  OXT  . 3FG A   1 7 ? 1.168   0.946  7.841   1.00 6.41  ? ? ? ? ? ? 7    3FG A   OXT  1 
+HETATM 133 H  HN1  . 3FG A   1 7 ? 1.904   2.986  5.854   1.00 5.72  ? ? ? ? ? ? 7    3FG A   HN1  1 
+HETATM 134 H  HA   . 3FG A   1 7 ? 0.691   0.779  4.801   1.00 6.88  ? ? ? ? ? ? 7    3FG A   HA   1 
+HETATM 135 H  HD1  . 3FG A   1 7 ? 4.075   1.650  1.428   1.00 5.99  ? ? ? ? ? ? 7    3FG A   HD1  1 
+HETATM 136 H  HZ   . 3FG A   1 7 ? 6.148   0.117  3.505   1.00 5.61  ? ? ? ? ? ? 7    3FG A   HZ   1 
+HETATM 137 H  HD2  . 3FG A   1 7 ? 6.605   -0.752 5.609   1.00 7.09  ? ? ? ? ? ? 7    3FG A   HD2  1 
+HETATM 138 H  HG2  . 3FG A   1 7 ? 3.497   -0.129 6.511   1.00 6.76  ? ? ? ? ? ? 7    3FG A   HG2  1 
+HETATM 139 H  HOT  . 3FG A   1 7 ? 1.007   0.445  8.470   1.00 9.61  ? ? ? ? ? ? 7    3FG A   HOT  1 
+HETATM 140 N  N    . MLU B-2 1 1 ? 8.334   1.188  -10.607 1.00 5.04  ? ? ? ? ? ? 1    MLU B-2 N    1 
+HETATM 141 C  CN   . MLU B-2 1 1 ? 7.808   0.871  -9.246  1.00 6.38  ? ? ? ? ? ? 1    MLU B-2 CN   1 
+HETATM 142 C  CA   . MLU B-2 1 1 ? 7.998   2.557  -11.123 1.00 5.10  ? ? ? ? ? ? 1    MLU B-2 CA   1 
+HETATM 143 C  C    . MLU B-2 1 1 ? 8.568   3.545  -10.084 1.00 5.09  ? ? ? ? ? ? 1    MLU B-2 C    1 
+HETATM 144 O  O    . MLU B-2 1 1 ? 9.677   3.328  -9.597  1.00 6.24  ? ? ? ? ? ? 1    MLU B-2 O    1 
+HETATM 145 C  CB   . MLU B-2 1 1 ? 8.660   2.779  -12.449 1.00 5.91  ? ? ? ? ? ? 1    MLU B-2 CB   1 
+HETATM 146 C  CG   . MLU B-2 1 1 ? 8.211   1.832  -13.602 1.00 7.23  ? ? ? ? ? ? 1    MLU B-2 CG   1 
+HETATM 147 C  CD1  . MLU B-2 1 1 ? 6.744   1.999  -13.884 1.00 11.16 ? ? ? ? ? ? 1    MLU B-2 CD1  1 
+HETATM 148 C  CD2  . MLU B-2 1 1 ? 9.035   2.052  -14.793 1.00 8.76  ? ? ? ? ? ? 1    MLU B-2 CD2  1 
+HETATM 149 H  H    . MLU B-2 1 1 ? 7.973   0.506  -11.256 1.00 7.56  ? ? ? ? ? ? 1    MLU B-2 H    1 
+HETATM 150 H  HCN1 . MLU B-2 1 1 ? 8.072   -0.019 -9.001  1.00 9.57  ? ? ? ? ? ? 1    MLU B-2 HCN1 1 
+HETATM 151 H  HCN2 . MLU B-2 1 1 ? 6.850   0.931  -9.251  1.00 9.57  ? ? ? ? ? ? 1    MLU B-2 HCN2 1 
+HETATM 152 H  HCN3 . MLU B-2 1 1 ? 8.165   1.497  -8.611  1.00 9.57  ? ? ? ? ? ? 1    MLU B-2 HCN3 1 
+HETATM 153 H  HA   . MLU B-2 1 1 ? 7.028   2.665  -11.201 1.00 7.65  ? ? ? ? ? ? 1    MLU B-2 HA   1 
+HETATM 154 H  HB2  . MLU B-2 1 1 ? 9.618   2.683  -12.331 1.00 8.86  ? ? ? ? ? ? 1    MLU B-2 HB2  1 
+HETATM 155 H  HB3  . MLU B-2 1 1 ? 8.491   3.694  -12.724 1.00 8.86  ? ? ? ? ? ? 1    MLU B-2 HB3  1 
+HETATM 156 H  HG   . MLU B-2 1 1 ? 8.356   0.909  -13.304 1.00 10.84 ? ? ? ? ? ? 1    MLU B-2 HG   1 
+HETATM 157 H  HD11 . MLU B-2 1 1 ? 6.244   1.847  -13.079 1.00 16.75 ? ? ? ? ? ? 1    MLU B-2 HD11 1 
+HETATM 158 H  HD12 . MLU B-2 1 1 ? 6.473   1.368  -14.554 1.00 16.75 ? ? ? ? ? ? 1    MLU B-2 HD12 1 
+HETATM 159 H  HD13 . MLU B-2 1 1 ? 6.579   2.891  -14.199 1.00 16.75 ? ? ? ? ? ? 1    MLU B-2 HD13 1 
+HETATM 160 H  HD21 . MLU B-2 1 1 ? 9.961   1.938  -14.567 1.00 13.15 ? ? ? ? ? ? 1    MLU B-2 HD21 1 
+HETATM 161 H  HD22 . MLU B-2 1 1 ? 8.893   2.944  -15.120 1.00 13.15 ? ? ? ? ? ? 1    MLU B-2 HD22 1 
+HETATM 162 H  HD23 . MLU B-2 1 1 ? 8.791   1.420  -15.472 1.00 13.15 ? ? ? ? ? ? 1    MLU B-2 HD23 1 
+HETATM 163 H  HN22 . MLU B-2 1 1 ? 9.338   1.090  -10.592 1.00 7.56  ? ? ? ? ? ? 1    MLU B-2 HN22 1 
+HETATM 164 N  N    . OMZ B-2 1 2 ? 7.839   4.630  -9.854  1.00 5.26  ? ? ? ? ? ? 2    OMZ B-2 N    1 
+HETATM 165 C  CA   . OMZ B-2 1 2 ? 8.251   5.556  -8.817  1.00 5.29  ? ? ? ? ? ? 2    OMZ B-2 CA   1 
+HETATM 166 C  C    . OMZ B-2 1 2 ? 8.741   6.904  -9.347  1.00 4.79  ? ? ? ? ? ? 2    OMZ B-2 C    1 
+HETATM 167 O  O    . OMZ B-2 1 2 ? 9.193   7.720  -8.559  1.00 5.81  ? ? ? ? ? ? 2    OMZ B-2 O    1 
+HETATM 168 C  CB   . OMZ B-2 1 2 ? 7.171   5.734  -7.689  1.00 5.92  ? ? ? ? ? ? 2    OMZ B-2 CB   1 
+HETATM 169 O  OC   . OMZ B-2 1 2 ? 6.841   4.398  -7.345  1.00 8.05  ? ? ? ? ? ? 2    OMZ B-2 OC   1 
+HETATM 170 C  CG   . OMZ B-2 1 2 ? 5.986   6.538  -8.204  1.00 4.93  ? ? ? ? ? ? 2    OMZ B-2 CG   1 
+HETATM 171 C  CD1  . OMZ B-2 1 2 ? 5.994   7.920  -8.069  1.00 4.58  ? ? ? ? ? ? 2    OMZ B-2 CD1  1 
+HETATM 172 C  CD2  . OMZ B-2 1 2 ? 4.973   5.939  -8.945  1.00 5.99  ? ? ? ? ? ? 2    OMZ B-2 CD2  1 
+HETATM 173 C  CE1  . OMZ B-2 1 2 ? 5.040   8.685  -8.674  1.00 4.14  ? ? ? ? ? ? 2    OMZ B-2 CE1  1 
+HETATM 174 CL CL   . OMZ B-2 1 2 ? 5.069   10.433 -8.501  1.00 5.10  ? ? ? ? ? ? 2    OMZ B-2 CL   1 
+HETATM 175 C  CE2  . OMZ B-2 1 2 ? 4.021   6.724  -9.552  1.00 5.39  ? ? ? ? ? ? 2    OMZ B-2 CE2  1 
+HETATM 176 C  CZ   . OMZ B-2 1 2 ? 4.059   8.100  -9.461  1.00 4.63  ? ? ? ? ? ? 2    OMZ B-2 CZ   1 
+HETATM 177 O  OH   . OMZ B-2 1 2 ? 3.159   8.868  -10.163 1.00 5.00  ? ? ? ? ? ? 2    OMZ B-2 OH   1 
+HETATM 178 H  H    . OMZ B-2 1 2 ? 7.129   4.783  -10.315 1.00 7.88  ? ? ? ? ? ? 2    OMZ B-2 H    1 
+HETATM 179 H  HA   . OMZ B-2 1 2 ? 9.025   5.142  -8.382  1.00 7.93  ? ? ? ? ? ? 2    OMZ B-2 HA   1 
+HETATM 180 H  HB   . OMZ B-2 1 2 ? 7.569   6.188  -6.917  1.00 8.88  ? ? ? ? ? ? 2    OMZ B-2 HB   1 
+HETATM 181 H  HC   . OMZ B-2 1 2 ? 7.512   4.012  -7.075  1.00 12.07 ? ? ? ? ? ? 2    OMZ B-2 HC   1 
+HETATM 182 H  HD1  . OMZ B-2 1 2 ? 6.657   8.329  -7.561  1.00 6.87  ? ? ? ? ? ? 2    OMZ B-2 HD1  1 
+HETATM 183 H  HD2  . OMZ B-2 1 2 ? 4.939   5.013  -9.029  1.00 8.98  ? ? ? ? ? ? 2    OMZ B-2 HD2  1 
+HETATM 184 H  HE2  . OMZ B-2 1 2 ? 3.336   6.319  -10.034 1.00 8.08  ? ? ? ? ? ? 2    OMZ B-2 HE2  1 
+ATOM   185 N  N    . ASN B-2 1 3 ? 8.677   7.113  -10.645 1.00 4.70  ? ? ? ? ? ? 3    ASN B-2 N    1 
+ATOM   186 C  CA   . ASN B-2 1 3 ? 9.407   8.227  -11.308 1.00 4.69  ? ? ? ? ? ? 3    ASN B-2 CA   1 
+ATOM   187 C  C    . ASN B-2 1 3 ? 8.488   9.314  -11.866 1.00 3.75  ? ? ? ? ? ? 3    ASN B-2 C    1 
+ATOM   188 O  O    . ASN B-2 1 3 ? 8.635   10.477 -11.531 1.00 5.25  ? ? ? ? ? ? 3    ASN B-2 O    1 
+ATOM   189 C  CB   A ASN B-2 1 3 ? 10.252  7.607  -12.439 0.60 5.86  ? ? ? ? ? ? 3    ASN B-2 CB   1 
+ATOM   190 C  CB   B ASN B-2 1 3 ? 10.539  7.786  -12.221 0.40 6.85  ? ? ? ? ? ? 3    ASN B-2 CB   1 
+ATOM   191 C  CG   A ASN B-2 1 3 ? 11.090  6.440  -11.953 0.60 6.92  ? ? ? ? ? ? 3    ASN B-2 CG   1 
+ATOM   192 C  CG   B ASN B-2 1 3 ? 11.669  6.997  -11.540 0.40 7.29  ? ? ? ? ? ? 3    ASN B-2 CG   1 
+ATOM   193 O  OD1  A ASN B-2 1 3 ? 11.229  5.438  -12.753 0.60 11.27 ? ? ? ? ? ? 3    ASN B-2 OD1  1 
+ATOM   194 O  OD1  B ASN B-2 1 3 ? 12.054  5.969  -12.091 0.40 9.96  ? ? ? ? ? ? 3    ASN B-2 OD1  1 
+ATOM   195 N  ND2  A ASN B-2 1 3 ? 11.514  6.431  -10.738 0.60 9.13  ? ? ? ? ? ? 3    ASN B-2 ND2  1 
+ATOM   196 N  ND2  B ASN B-2 1 3 ? 12.078  7.519  -10.400 0.40 9.42  ? ? ? ? ? ? 3    ASN B-2 ND2  1 
+ATOM   197 H  H    . ASN B-2 1 3 ? 8.196   6.587  -11.126 1.00 7.05  ? ? ? ? ? ? 3    ASN B-2 H    1 
+ATOM   198 H  HA   . ASN B-2 1 3 ? 10.012  8.635  -10.655 1.00 7.03  ? ? ? ? ? ? 3    ASN B-2 HA   1 
+ATOM   199 H  HB2  A ASN B-2 1 3 ? 9.663   7.303  -13.147 0.60 8.79  ? ? ? ? ? ? 3    ASN B-2 HB2  1 
+ATOM   200 H  HB2  B ASN B-2 1 3 ? 10.167  7.237  -12.929 0.40 10.28 ? ? ? ? ? ? 3    ASN B-2 HB2  1 
+ATOM   201 H  HB3  A ASN B-2 1 3 ? 10.837  8.286  -12.809 0.60 8.79  ? ? ? ? ? ? 3    ASN B-2 HB3  1 
+ATOM   202 H  HB3  B ASN B-2 1 3 ? 10.923  8.574  -12.636 0.40 10.28 ? ? ? ? ? ? 3    ASN B-2 HB3  1 
+ATOM   203 H  HD21 A ASN B-2 1 3 ? 11.400  7.121  -10.238 0.60 13.69 ? ? ? ? ? ? 3    ASN B-2 HD21 1 
+ATOM   204 H  HD21 B ASN B-2 1 3 ? 11.730  8.251  -10.113 0.40 14.12 ? ? ? ? ? ? 3    ASN B-2 HD21 1 
+ATOM   205 H  HD22 A ASN B-2 1 3 ? 11.911  5.735  -10.426 0.60 13.69 ? ? ? ? ? ? 3    ASN B-2 HD22 1 
+ATOM   206 H  HD22 B ASN B-2 1 3 ? 12.693  7.126  -9.944  0.40 14.12 ? ? ? ? ? ? 3    ASN B-2 HD22 1 
+HETATM 207 N  N    . GHP B-2 1 4 ? 7.574   8.920  -12.764 1.00 3.84  ? ? ? ? ? ? 4    GHP B-2 N    1 
+HETATM 208 C  CA   . GHP B-2 1 4 ? 6.723   9.868  -13.481 1.00 3.48  ? ? ? ? ? ? 4    GHP B-2 CA   1 
+HETATM 209 C  C    . GHP B-2 1 4 ? 6.753   9.550  -14.971 1.00 3.52  ? ? ? ? ? ? 4    GHP B-2 C    1 
+HETATM 210 O  O    . GHP B-2 1 4 ? 6.531   8.424  -15.380 1.00 4.85  ? ? ? ? ? ? 4    GHP B-2 O    1 
+HETATM 211 C  C1   . GHP B-2 1 4 ? 5.269   9.869  -13.011 1.00 3.69  ? ? ? ? ? ? 4    GHP B-2 C1   1 
+HETATM 212 C  C2   . GHP B-2 1 4 ? 4.306   10.448 -13.797 1.00 4.55  ? ? ? ? ? ? 4    GHP B-2 C2   1 
+HETATM 213 C  C3   . GHP B-2 1 4 ? 2.978   10.428 -13.429 1.00 5.64  ? ? ? ? ? ? 4    GHP B-2 C3   1 
+HETATM 214 C  C4   . GHP B-2 1 4 ? 2.602   9.884  -12.188 1.00 5.87  ? ? ? ? ? ? 4    GHP B-2 C4   1 
+HETATM 215 O  O4   A GHP B-2 1 4 ? 1.324   9.765  -11.827 0.65 4.65  ? ? ? ? ? ? 4    GHP B-2 O4   1 
+HETATM 216 O  O4   B GHP B-2 1 4 ? 1.227   10.411 -11.735 0.35 4.47  ? ? ? ? ? ? 4    GHP B-2 O4   1 
+HETATM 217 C  C5   . GHP B-2 1 4 ? 3.588   9.348  -11.401 1.00 4.39  ? ? ? ? ? ? 4    GHP B-2 C5   1 
+HETATM 218 C  C6   . GHP B-2 1 4 ? 4.905   9.318  -11.799 1.00 4.12  ? ? ? ? ? ? 4    GHP B-2 C6   1 
+HETATM 219 H  H    . GHP B-2 1 4 ? 7.484   8.080  -12.923 1.00 5.76  ? ? ? ? ? ? 4    GHP B-2 H    1 
+HETATM 220 H  HA   . GHP B-2 1 4 ? 7.089   10.768 -13.351 1.00 5.23  ? ? ? ? ? ? 4    GHP B-2 HA   1 
+HETATM 221 H  HC2  . GHP B-2 1 4 ? 4.554   10.862 -14.592 1.00 6.82  ? ? ? ? ? ? 4    GHP B-2 HC2  1 
+HETATM 222 H  H6   . GHP B-2 1 4 ? 5.548   8.928  -11.253 1.00 6.17  ? ? ? ? ? ? 4    GHP B-2 H6   1 
+HETATM 223 N  N    . GHP B-2 1 5 ? 6.952   10.615 -15.761 1.00 3.52  ? ? ? ? ? ? 5    GHP B-2 N    1 
+HETATM 224 C  CA   . GHP B-2 1 5 ? 6.666   10.657 -17.182 1.00 3.83  ? ? ? ? ? ? 5    GHP B-2 CA   1 
+HETATM 225 C  C    . GHP B-2 1 5 ? 6.071   12.070 -17.442 1.00 3.65  ? ? ? ? ? ? 5    GHP B-2 C    1 
+HETATM 226 O  O    . GHP B-2 1 5 ? 6.265   12.951 -16.606 1.00 3.88  ? ? ? ? ? ? 5    GHP B-2 O    1 
+HETATM 227 C  C1   . GHP B-2 1 5 ? 7.873   10.540 -18.111 1.00 4.26  ? ? ? ? ? ? 5    GHP B-2 C1   1 
+HETATM 228 C  C2   . GHP B-2 1 5 ? 7.830   9.629  -19.143 1.00 4.68  ? ? ? ? ? ? 5    GHP B-2 C2   1 
+HETATM 229 C  C3   . GHP B-2 1 5 ? 8.794   9.650  -20.170 1.00 5.25  ? ? ? ? ? ? 5    GHP B-2 C3   1 
+HETATM 230 C  C4   . GHP B-2 1 5 ? 9.828   10.551 -20.062 1.00 5.55  ? ? ? ? ? ? 5    GHP B-2 C4   1 
+HETATM 231 O  O4   . GHP B-2 1 5 ? 10.779  10.569 -21.070 1.00 6.82  ? ? ? ? ? ? 5    GHP B-2 O4   1 
+HETATM 232 C  C5   . GHP B-2 1 5 ? 9.920   11.439 -19.008 1.00 5.11  ? ? ? ? ? ? 5    GHP B-2 C5   1 
+HETATM 233 C  C6   . GHP B-2 1 5 ? 8.929   11.421 -18.030 1.00 4.56  ? ? ? ? ? ? 5    GHP B-2 C6   1 
+HETATM 234 H  H    . GHP B-2 1 5 ? 7.272   11.326 -15.398 1.00 5.28  ? ? ? ? ? ? 5    GHP B-2 H    1 
+HETATM 235 H  HA   . GHP B-2 1 5 ? 6.005   9.971  -17.408 1.00 5.74  ? ? ? ? ? ? 5    GHP B-2 HA   1 
+HETATM 236 H  HC2  . GHP B-2 1 5 ? 7.154   8.990  -19.163 1.00 7.02  ? ? ? ? ? ? 5    GHP B-2 HC2  1 
+HETATM 237 H  HO4  . GHP B-2 1 5 ? 11.344  11.140 -20.903 1.00 10.23 ? ? ? ? ? ? 5    GHP B-2 HO4  1 
+HETATM 238 H  H5   . GHP B-2 1 5 ? 10.631  12.036 -18.951 1.00 7.67  ? ? ? ? ? ? 5    GHP B-2 H5   1 
+HETATM 239 H  H6   . GHP B-2 1 5 ? 8.980   12.012 -17.314 1.00 6.84  ? ? ? ? ? ? 5    GHP B-2 H6   1 
+HETATM 240 N  N    . OMY B-2 1 6 ? 5.473   12.323 -18.612 1.00 3.61  ? ? ? ? ? ? 6    OMY B-2 N    1 
+HETATM 241 C  CA   . OMY B-2 1 6 ? 4.960   11.366 -19.563 1.00 4.09  ? ? ? ? ? ? 6    OMY B-2 CA   1 
+HETATM 242 O  OCZ  . OMY B-2 1 6 ? 1.970   10.955 -14.215 1.00 6.82  ? ? ? ? ? ? 6    OMY B-2 OCZ  1 
+HETATM 243 C  CE2  . OMY B-2 1 6 ? 2.377   12.339 -16.138 1.00 5.30  ? ? ? ? ? ? 6    OMY B-2 CE2  1 
+HETATM 244 C  CE1  . OMY B-2 1 6 ? 2.403   9.963  -16.362 1.00 5.65  ? ? ? ? ? ? 6    OMY B-2 CE1  1 
+HETATM 245 C  CZ   . OMY B-2 1 6 ? 2.259   11.065 -15.568 1.00 5.35  ? ? ? ? ? ? 6    OMY B-2 CZ   1 
+HETATM 246 C  CG   . OMY B-2 1 6 ? 2.880   11.328 -18.269 1.00 4.60  ? ? ? ? ? ? 6    OMY B-2 CG   1 
+HETATM 247 C  CD2  . OMY B-2 1 6 ? 2.685   12.462 -17.451 1.00 4.49  ? ? ? ? ? ? 6    OMY B-2 CD2  1 
+HETATM 248 C  CD1  . OMY B-2 1 6 ? 2.704   10.083 -17.700 1.00 5.22  ? ? ? ? ? ? 6    OMY B-2 CD1  1 
+HETATM 249 C  CB   . OMY B-2 1 6 ? 3.406   11.476 -19.670 1.00 4.50  ? ? ? ? ? ? 6    OMY B-2 CB   1 
+HETATM 250 CL CL   . OMY B-2 1 6 ? 2.259   8.351  -15.684 1.00 8.09  ? ? ? ? ? ? 6    OMY B-2 CL   1 
+HETATM 251 O  O    . OMY B-2 1 6 ? 6.084   12.621 -21.274 1.00 3.95  ? ? ? ? ? ? 6    OMY B-2 O    1 
+HETATM 252 C  C    . OMY B-2 1 6 ? 5.721   11.500 -20.882 1.00 3.87  ? ? ? ? ? ? 6    OMY B-2 C    1 
+HETATM 253 O  ODE  . OMY B-2 1 6 ? 3.082   12.696 -20.287 1.00 4.63  ? ? ? ? ? ? 6    OMY B-2 ODE  1 
+HETATM 254 H  HN1  . OMY B-2 1 6 ? 5.385   13.152 -18.822 1.00 5.41  ? ? ? ? ? ? 6    OMY B-2 HN1  1 
+HETATM 255 H  HA   . OMY B-2 1 6 ? 5.160   10.475 -19.208 1.00 6.13  ? ? ? ? ? ? 6    OMY B-2 HA   1 
+HETATM 256 H  HE2  . OMY B-2 1 6 ? 2.245   13.097 -15.616 1.00 7.95  ? ? ? ? ? ? 6    OMY B-2 HE2  1 
+HETATM 257 H  HD2  . OMY B-2 1 6 ? 2.769   13.311 -17.822 1.00 6.73  ? ? ? ? ? ? 6    OMY B-2 HD2  1 
+HETATM 258 H  HD1  . OMY B-2 1 6 ? 2.790   9.320  -18.224 1.00 7.83  ? ? ? ? ? ? 6    OMY B-2 HD1  1 
+HETATM 259 H  HB   . OMY B-2 1 6 ? 3.068   10.738 -20.220 1.00 6.75  ? ? ? ? ? ? 6    OMY B-2 HB   1 
+HETATM 260 H  HDE  . OMY B-2 1 6 ? 2.642   13.155 -19.769 1.00 6.94  ? ? ? ? ? ? 6    OMY B-2 HDE  1 
+HETATM 261 N  N    . 3FG B-2 1 7 ? 6.035   10.368 -21.487 1.00 4.82  ? ? ? ? ? ? 7    3FG B-2 N    1 
+HETATM 262 O  OD1  . 3FG B-2 1 7 ? 10.176  7.278  -20.205 1.00 9.28  ? ? ? ? ? ? 7    3FG B-2 OD1  1 
+HETATM 263 C  CD1  . 3FG B-2 1 7 ? 9.325   7.463  -21.238 1.00 7.28  ? ? ? ? ? ? 7    3FG B-2 CD1  1 
+HETATM 264 C  CG1  . 3FG B-2 1 7 ? 8.645   8.688  -21.318 1.00 6.07  ? ? ? ? ? ? 7    3FG B-2 CG1  1 
+HETATM 265 C  CZ   . 3FG B-2 1 7 ? 9.213   6.528  -22.248 1.00 9.18  ? ? ? ? ? ? 7    3FG B-2 CZ   1 
+HETATM 266 C  CD2  . 3FG B-2 1 7 ? 8.362   6.769  -23.352 1.00 8.94  ? ? ? ? ? ? 7    3FG B-2 CD2  1 
+HETATM 267 O  OD2  . 3FG B-2 1 7 ? 8.224   5.865  -24.320 1.00 11.87 ? ? ? ? ? ? 7    3FG B-2 OD2  1 
+HETATM 268 C  CG2  . 3FG B-2 1 7 ? 7.685   7.990  -23.378 1.00 7.85  ? ? ? ? ? ? 7    3FG B-2 CG2  1 
+HETATM 269 C  CB   . 3FG B-2 1 7 ? 7.807   8.935  -22.388 1.00 6.28  ? ? ? ? ? ? 7    3FG B-2 CB   1 
+HETATM 270 C  CA   . 3FG B-2 1 7 ? 7.056   10.275 -22.538 1.00 6.39  ? ? ? ? ? ? 7    3FG B-2 CA   1 
+HETATM 271 C  C    . 3FG B-2 1 7 ? 6.422   10.517 -23.956 1.00 9.14  ? ? ? ? ? ? 7    3FG B-2 C    1 
+HETATM 272 O  O    . 3FG B-2 1 7 ? 7.192   10.866 -24.812 1.00 12.46 ? ? ? ? ? ? 7    3FG B-2 O    1 
+HETATM 273 O  OXT  . 3FG B-2 1 7 ? 5.262   10.268 -24.122 1.00 13.92 ? ? ? ? ? ? 7    3FG B-2 OXT  1 
+HETATM 274 H  HN1  . 3FG B-2 1 7 ? 5.622   9.651  -21.254 1.00 7.23  ? ? ? ? ? ? 7    3FG B-2 HN1  1 
+HETATM 275 H  HA   . 3FG B-2 1 7 ? 7.704   10.994 -22.380 1.00 9.58  ? ? ? ? ? ? 7    3FG B-2 HA   1 
+HETATM 276 H  HD1  . 3FG B-2 1 7 ? 10.568  6.564  -20.298 1.00 13.92 ? ? ? ? ? ? 7    3FG B-2 HD1  1 
+HETATM 277 H  HZ   . 3FG B-2 1 7 ? 9.700   5.737  -22.203 1.00 13.77 ? ? ? ? ? ? 7    3FG B-2 HZ   1 
+HETATM 278 H  HD2  . 3FG B-2 1 7 ? 8.688   5.211  -24.151 1.00 17.81 ? ? ? ? ? ? 7    3FG B-2 HD2  1 
+HETATM 279 H  HG2  . 3FG B-2 1 7 ? 7.125   8.171  -24.098 1.00 11.77 ? ? ? ? ? ? 7    3FG B-2 HG2  1 
+HETATM 280 H  HOT  . 3FG B-2 1 7 ? 5.055   10.436 -24.898 1.00 20.89 ? ? ? ? ? ? 7    3FG B-2 HOT  1 
+HETATM 281 C  C2   . BGC C   2 . ? 0.764   14.592 4.282   1.00 7.74  ? ? ? ? ? ? 1    BGC C   C2   1 
+HETATM 282 C  C3   . BGC C   2 . ? -0.486  15.382 4.561   1.00 9.84  ? ? ? ? ? ? 1    BGC C   C3   1 
+HETATM 283 C  C4   . BGC C   2 . ? -0.969  15.992 3.213   1.00 9.80  ? ? ? ? ? ? 1    BGC C   C4   1 
+HETATM 284 C  C5   . BGC C   2 . ? -1.043  14.883 2.149   1.00 9.23  ? ? ? ? ? ? 1    BGC C   C5   1 
+HETATM 285 C  C6   . BGC C   2 . ? -1.348  15.417 0.692   1.00 11.48 ? ? ? ? ? ? 1    BGC C   C6   1 
+HETATM 286 C  C1   . BGC C   2 . ? 0.571   13.575 3.231   1.00 6.08  ? ? ? ? ? ? 1    BGC C   C1   1 
+HETATM 287 O  O2   . BGC C   2 . ? 1.176   13.981 5.521   1.00 8.35  ? ? ? ? ? ? 1    BGC C   O2   1 
+HETATM 288 O  O3   . BGC C   2 . ? -0.274  16.407 5.506   1.00 14.77 ? ? ? ? ? ? 1    BGC C   O3   1 
+HETATM 289 O  O4   . BGC C   2 . ? -2.284  16.523 3.362   1.00 14.63 ? ? ? ? ? ? 1    BGC C   O4   1 
+HETATM 290 O  O5   . BGC C   2 . ? 0.194   14.213 2.047   1.00 6.86  ? ? ? ? ? ? 1    BGC C   O5   1 
+HETATM 291 O  O6   . BGC C   2 . ? -0.508  16.424 0.309   1.00 13.77 ? ? ? ? ? ? 1    BGC C   O6   1 
+HETATM 292 H  H2   . BGC C   2 . ? 1.466   15.211 3.992   1.00 11.61 ? ? ? ? ? ? 1    BGC C   H2   1 
+HETATM 293 H  H3   . BGC C   2 . ? -1.177  14.775 4.901   1.00 14.76 ? ? ? ? ? ? 1    BGC C   H3   1 
+HETATM 294 H  H4   . BGC C   2 . ? -0.353  16.696 2.922   1.00 14.70 ? ? ? ? ? ? 1    BGC C   H4   1 
+HETATM 295 H  H5   . BGC C   2 . ? -1.736  14.239 2.405   1.00 13.85 ? ? ? ? ? ? 1    BGC C   H5   1 
+HETATM 296 H  H61  . BGC C   2 . ? -1.267  14.682 0.063   1.00 17.22 ? ? ? ? ? ? 1    BGC C   H61  1 
+HETATM 297 H  H62  . BGC C   2 . ? -2.262  15.738 0.657   1.00 17.22 ? ? ? ? ? ? 1    BGC C   H62  1 
+HETATM 298 H  H1   . BGC C   2 . ? -0.119  12.935 3.504   1.00 9.12  ? ? ? ? ? ? 1    BGC C   H1   1 
+HETATM 299 H  HO3  . BGC C   2 . ? -0.976  16.814 5.630   1.00 22.15 ? ? ? ? ? ? 1    BGC C   HO3  1 
+HETATM 300 H  HO4  . BGC C   2 . ? -2.797  16.130 2.856   1.00 21.95 ? ? ? ? ? ? 1    BGC C   HO4  1 
+HETATM 301 H  HO6  . BGC C   2 . ? 0.266   16.153 0.320   1.00 20.66 ? ? ? ? ? ? 1    BGC C   HO6  1 
+HETATM 302 C  C1   . RER C   2 . ? 2.253   14.596 6.183   1.00 9.59  ? ? ? ? ? ? 2    RER C   C1   1 
+HETATM 303 C  C2   . RER C   2 . ? 2.244   14.030 7.577   1.00 9.69  ? ? ? ? ? ? 2    RER C   C2   1 
+HETATM 304 C  C3   . RER C   2 . ? 2.888   12.659 7.642   1.00 8.09  ? ? ? ? ? ? 2    RER C   C3   1 
+HETATM 305 N  N3   . RER C   2 . ? 3.219   12.389 9.093   1.00 10.96 ? ? ? ? ? ? 2    RER C   N3   1 
+HETATM 306 C  C3A  . RER C   2 . ? 1.970   11.543 7.234   1.00 7.94  ? ? ? ? ? ? 2    RER C   C3A  1 
+HETATM 307 C  C4   . RER C   2 . ? 4.193   12.609 6.834   1.00 10.01 ? ? ? ? ? ? 2    RER C   C4   1 
+HETATM 308 O  O4   A RER C   2 . ? 5.008   13.627 7.569   0.75 9.20  ? ? ? ? ? ? 2    RER C   O4   1 
+HETATM 309 O  O4   B RER C   2 . ? 5.783   12.692 6.936   0.25 6.43  ? ? ? ? ? ? 2    RER C   O4   1 
+HETATM 310 C  C5   . RER C   2 . ? 3.916   13.074 5.409   1.00 9.45  ? ? ? ? ? ? 2    RER C   C5   1 
+HETATM 311 O  O5   . RER C   2 . ? 3.432   14.412 5.431   1.00 11.21 ? ? ? ? ? ? 2    RER C   O5   1 
+HETATM 312 C  C5A  . RER C   2 . ? 5.169   13.066 4.519   1.00 12.46 ? ? ? ? ? ? 2    RER C   C5A  1 
+HETATM 313 H  H1   . RER C   2 . ? 2.071   15.557 6.240   1.00 14.39 ? ? ? ? ? ? 2    RER C   H1   1 
+HETATM 314 H  H21C . RER C   2 . ? 1.328   13.967 7.890   1.00 14.54 ? ? ? ? ? ? 2    RER C   H21C 1 
+HETATM 315 H  H22C . RER C   2 . ? 2.720   14.634 8.169   1.00 14.54 ? ? ? ? ? ? 2    RER C   H22C 1 
+HETATM 316 H  H31N . RER C   2 . ? 3.840   13.106 9.436   1.00 16.44 ? ? ? ? ? ? 2    RER C   H31N 1 
+HETATM 317 H  H32N . RER C   2 . ? 3.668   11.489 9.174   1.00 16.44 ? ? ? ? ? ? 2    RER C   H32N 1 
+HETATM 318 H  H3A1 . RER C   2 . ? 2.436   10.706 7.295   1.00 11.91 ? ? ? ? ? ? 2    RER C   H3A1 1 
+HETATM 319 H  H3A2 . RER C   2 . ? 1.679   11.683 6.330   1.00 11.91 ? ? ? ? ? ? 2    RER C   H3A2 1 
+HETATM 320 H  H3A3 . RER C   2 . ? 1.207   11.527 7.817   1.00 11.91 ? ? ? ? ? ? 2    RER C   H3A3 1 
+HETATM 321 H  H4   . RER C   2 . ? 4.606   11.720 6.857   1.00 15.01 ? ? ? ? ? ? 2    RER C   H4   1 
+HETATM 322 H  HO4  A RER C   2 . ? 5.165   14.261 7.073   0.75 13.80 ? ? ? ? ? ? 2    RER C   HO4  1 
+HETATM 323 H  H5   . RER C   2 . ? 3.236   12.493 5.009   1.00 14.17 ? ? ? ? ? ? 2    RER C   H5   1 
+HETATM 324 H  H5A1 . RER C   2 . ? 4.938   13.366 3.637   1.00 18.69 ? ? ? ? ? ? 2    RER C   H5A1 1 
+HETATM 325 H  H5A2 . RER C   2 . ? 5.522   12.174 4.471   1.00 18.69 ? ? ? ? ? ? 2    RER C   H5A2 1 
+HETATM 326 H  H5A3 . RER C   2 . ? 5.831   13.652 4.893   1.00 18.69 ? ? ? ? ? ? 2    RER C   H5A3 1 
+HETATM 327 H  H33N . RER C   2 . ? 2.369   12.391 9.638   1.00 16.44 ? ? ? ? ? ? 2    RER C   H33N 1 
+HETATM 328 C  C2   A BGC D-2 2 . ? -0.652  8.781  -11.019 0.65 5.75  ? ? ? ? ? ? 1    BGC D-2 C2   1 
+HETATM 329 C  C2   B BGC D-2 2 . ? -0.918  9.620  -11.014 0.35 4.66  ? ? ? ? ? ? 1    BGC D-2 C2   1 
+HETATM 330 C  C3   A BGC D-2 2 . ? -1.618  7.600  -11.116 0.65 6.50  ? ? ? ? ? ? 1    BGC D-2 C3   1 
+HETATM 331 C  C3   B BGC D-2 2 . ? -2.034  8.591  -11.146 0.35 6.06  ? ? ? ? ? ? 1    BGC D-2 C3   1 
+HETATM 332 C  C4   A BGC D-2 2 . ? -1.612  6.928  -12.514 0.65 7.51  ? ? ? ? ? ? 1    BGC D-2 C4   1 
+HETATM 333 C  C4   B BGC D-2 2 . ? -2.364  8.425  -12.655 0.35 6.67  ? ? ? ? ? ? 1    BGC D-2 C4   1 
+HETATM 334 C  C5   A BGC D-2 2 . ? -0.144  6.665  -12.912 0.65 7.16  ? ? ? ? ? ? 1    BGC D-2 C5   1 
+HETATM 335 C  C5   B BGC D-2 2 . ? -1.047  8.211  -13.422 0.35 7.02  ? ? ? ? ? ? 1    BGC D-2 C5   1 
+HETATM 336 C  C6   A BGC D-2 2 . ? 0.007   6.029  -14.289 0.65 8.25  ? ? ? ? ? ? 1    BGC D-2 C6   1 
+HETATM 337 C  C6   B BGC D-2 2 . ? -1.230  8.149  -14.970 0.35 8.31  ? ? ? ? ? ? 1    BGC D-2 C6   1 
+HETATM 338 C  C1   A BGC D-2 2 . ? 0.675   8.517  -11.688 0.65 5.31  ? ? ? ? ? ? 1    BGC D-2 C1   1 
+HETATM 339 C  C1   B BGC D-2 2 . ? 0.276   9.326  -11.831 0.35 4.64  ? ? ? ? ? ? 1    BGC D-2 C1   1 
+HETATM 340 O  O2   A BGC D-2 2 . ? -0.386  9.007  -9.576  0.65 5.73  ? ? ? ? ? ? 1    BGC D-2 O2   1 
+HETATM 341 O  O2   B BGC D-2 2 . ? -0.453  9.477  -9.612  0.35 6.88  ? ? ? ? ? ? 1    BGC D-2 O2   1 
+HETATM 342 O  O3   A BGC D-2 2 . ? -2.939  8.056  -10.769 0.65 7.80  ? ? ? ? ? ? 1    BGC D-2 O3   1 
+HETATM 343 O  O3   B BGC D-2 2 . ? -3.228  9.031  -10.488 0.35 5.44  ? ? ? ? ? ? 1    BGC D-2 O3   1 
+HETATM 344 O  O4   A BGC D-2 2 . ? -2.326  5.703  -12.482 0.65 8.67  ? ? ? ? ? ? 1    BGC D-2 O4   1 
+HETATM 345 O  O4   B BGC D-2 2 . ? -3.262  7.335  -12.845 0.35 8.05  ? ? ? ? ? ? 1    BGC D-2 O4   1 
+HETATM 346 O  O5   A BGC D-2 2 . ? 0.497   7.956  -12.983 0.65 6.21  ? ? ? ? ? ? 1    BGC D-2 O5   1 
+HETATM 347 O  O5   B BGC D-2 2 . ? -0.100  9.211  -13.174 0.35 5.89  ? ? ? ? ? ? 1    BGC D-2 O5   1 
+HETATM 348 O  O6   A BGC D-2 2 . ? 1.316   5.566  -14.575 0.65 9.56  ? ? ? ? ? ? 1    BGC D-2 O6   1 
+HETATM 349 O  O6   B BGC D-2 2 . ? -1.180  6.873  -15.462 0.35 11.56 ? ? ? ? ? ? 1    BGC D-2 O6   1 
+HETATM 350 H  H2   A BGC D-2 2 . ? -1.066  9.579  -11.409 0.65 8.63  ? ? ? ? ? ? 1    BGC D-2 H2   1 
+HETATM 351 H  H2   B BGC D-2 2 . ? -1.250  10.526 -11.185 0.35 6.99  ? ? ? ? ? ? 1    BGC D-2 H2   1 
+HETATM 352 H  H3   A BGC D-2 2 . ? -1.345  6.930  -10.455 0.65 9.75  ? ? ? ? ? ? 1    BGC D-2 H3   1 
+HETATM 353 H  H3   B BGC D-2 2 . ? -1.743  7.733  -10.772 0.35 9.09  ? ? ? ? ? ? 1    BGC D-2 H3   1 
+HETATM 354 H  H4   A BGC D-2 2 . ? -2.025  7.530  -13.167 0.65 11.27 ? ? ? ? ? ? 1    BGC D-2 H4   1 
+HETATM 355 H  H4   B BGC D-2 2 . ? -2.789  9.247  -12.979 0.35 10.01 ? ? ? ? ? ? 1    BGC D-2 H4   1 
+HETATM 356 H  H5   A BGC D-2 2 . ? 0.294   6.109  -12.235 0.65 10.73 ? ? ? ? ? ? 1    BGC D-2 H5   1 
+HETATM 357 H  H5   B BGC D-2 2 . ? -0.665  7.357  -13.130 0.35 10.54 ? ? ? ? ? ? 1    BGC D-2 H5   1 
+HETATM 358 H  H61  A BGC D-2 2 . ? -0.609  5.283  -14.356 0.65 12.37 ? ? ? ? ? ? 1    BGC D-2 H61  1 
+HETATM 359 H  H61  B BGC D-2 2 . ? -2.085  8.544  -15.203 0.35 12.47 ? ? ? ? ? ? 1    BGC D-2 H61  1 
+HETATM 360 H  H62  A BGC D-2 2 . ? -0.246  6.681  -14.962 0.65 12.37 ? ? ? ? ? ? 1    BGC D-2 H62  1 
+HETATM 361 H  H62  B BGC D-2 2 . ? -0.535  8.678  -15.392 0.35 12.47 ? ? ? ? ? ? 1    BGC D-2 H62  1 
+HETATM 362 H  H1   A BGC D-2 2 . ? 1.217   7.917  -11.134 0.65 7.97  ? ? ? ? ? ? 1    BGC D-2 H1   1 
+HETATM 363 H  H1   B BGC D-2 2 . ? 0.690   8.491  -11.528 0.35 6.96  ? ? ? ? ? ? 1    BGC D-2 H1   1 
+HETATM 364 H  HO3  A BGC D-2 2 . ? -2.914  8.856  -10.590 0.65 11.69 ? ? ? ? ? ? 1    BGC D-2 HO3  1 
+HETATM 365 H  HO3  B BGC D-2 2 . ? -3.099  9.769  -10.153 0.35 8.17  ? ? ? ? ? ? 1    BGC D-2 HO3  1 
+HETATM 366 H  HO4  A BGC D-2 2 . ? -3.104  5.846  -12.268 0.65 13.01 ? ? ? ? ? ? 1    BGC D-2 HO4  1 
+HETATM 367 H  HO4  B BGC D-2 2 . ? -2.915  6.776  -13.334 0.35 12.07 ? ? ? ? ? ? 1    BGC D-2 HO4  1 
+HETATM 368 H  HO6  A BGC D-2 2 . ? 1.533   5.002  -14.021 0.65 14.33 ? ? ? ? ? ? 1    BGC D-2 HO6  1 
+HETATM 369 H  HO6  B BGC D-2 2 . ? -0.453  6.538  -15.280 0.35 17.35 ? ? ? ? ? ? 1    BGC D-2 HO6  1 
+HETATM 370 C  C1   . RER D-2 2 . ? -0.858  10.232 -8.924  1.00 6.39  ? ? ? ? ? ? 2    RER D-2 C1   1 
+HETATM 371 C  C2   . RER D-2 2 . ? -0.773  10.000 -7.409  1.00 5.32  ? ? ? ? ? ? 2    RER D-2 C2   1 
+HETATM 372 C  C3   . RER D-2 2 . ? 0.671   10.023 -6.905  1.00 3.95  ? ? ? ? ? ? 2    RER D-2 C3   1 
+HETATM 373 N  N3   . RER D-2 2 . ? 0.640   10.094 -5.392  1.00 3.87  ? ? ? ? ? ? 2    RER D-2 N3   1 
+HETATM 374 C  C3A  . RER D-2 2 . ? 1.427   8.770  -7.248  1.00 4.08  ? ? ? ? ? ? 2    RER D-2 C3A  1 
+HETATM 375 C  C4   . RER D-2 2 . ? 1.360   11.304 -7.403  1.00 4.45  ? ? ? ? ? ? 2    RER D-2 C4   1 
+HETATM 376 O  O4   . RER D-2 2 . ? 0.702   12.414 -6.749  1.00 6.16  ? ? ? ? ? ? 2    RER D-2 O4   1 
+HETATM 377 C  C5   . RER D-2 2 . ? 1.235   11.374 -8.902  1.00 5.60  ? ? ? ? ? ? 2    RER D-2 C5   1 
+HETATM 378 O  O5   . RER D-2 2 . ? -0.153  11.437 -9.276  1.00 7.05  ? ? ? ? ? ? 2    RER D-2 O5   1 
+HETATM 379 C  C5A  . RER D-2 2 . ? 1.907   12.616 -9.512  1.00 7.02  ? ? ? ? ? ? 2    RER D-2 C5A  1 
+HETATM 380 H  H1   . RER D-2 2 . ? -1.802  10.355 -9.158  1.00 9.59  ? ? ? ? ? ? 2    RER D-2 H1   1 
+HETATM 381 H  H21C . RER D-2 2 . ? -1.281  10.688 -6.951  1.00 7.97  ? ? ? ? ? ? 2    RER D-2 H21C 1 
+HETATM 382 H  H22C . RER D-2 2 . ? -1.172  9.142  -7.195  1.00 7.97  ? ? ? ? ? ? 2    RER D-2 H22C 1 
+HETATM 383 H  H31N . RER D-2 2 . ? 0.140   10.922 -5.105  1.00 5.80  ? ? ? ? ? ? 2    RER D-2 H31N 1 
+HETATM 384 H  H32N . RER D-2 2 . ? 1.584   10.131 -5.038  1.00 5.80  ? ? ? ? ? ? 2    RER D-2 H32N 1 
+HETATM 385 H  H3A1 . RER D-2 2 . ? 2.324   8.835  -6.912  1.00 6.12  ? ? ? ? ? ? 2    RER D-2 H3A1 1 
+HETATM 386 H  H3A2 . RER D-2 2 . ? 1.450   8.662  -8.202  1.00 6.12  ? ? ? ? ? ? 2    RER D-2 H3A2 1 
+HETATM 387 H  H3A3 . RER D-2 2 . ? 0.990   8.014  -6.851  1.00 6.12  ? ? ? ? ? ? 2    RER D-2 H3A3 1 
+HETATM 388 H  H4   . RER D-2 2 . ? 2.307   11.288 -7.151  1.00 6.68  ? ? ? ? ? ? 2    RER D-2 H4   1 
+HETATM 389 H  HO4  . RER D-2 2 . ? 0.365   12.903 -7.315  1.00 9.23  ? ? ? ? ? ? 2    RER D-2 HO4  1 
+HETATM 390 H  H5   . RER D-2 2 . ? 1.636   10.570 -9.294  1.00 8.40  ? ? ? ? ? ? 2    RER D-2 H5   1 
+HETATM 391 H  H5A1 . RER D-2 2 . ? 1.793   12.605 -10.465 1.00 10.53 ? ? ? ? ? ? 2    RER D-2 H5A1 1 
+HETATM 392 H  H5A2 . RER D-2 2 . ? 2.843   12.610 -9.301  1.00 10.53 ? ? ? ? ? ? 2    RER D-2 H5A2 1 
+HETATM 393 H  H5A3 . RER D-2 2 . ? 1.503   13.408 -9.151  1.00 10.53 ? ? ? ? ? ? 2    RER D-2 H5A3 1 
+HETATM 394 H  H33N . RER D-2 2 . ? 0.175   9.277  -5.026  1.00 5.80  ? ? ? ? ? ? 2    RER D-2 H33N 1 
+HETATM 395 C  C    . ACY E   3 . ? -8.682  8.170  3.803   1.00 8.68  ? ? ? ? ? ? 11   ACY A   C    1 
+HETATM 396 O  O    . ACY E   3 . ? -9.467  8.524  4.783   1.00 8.11  ? ? ? ? ? ? 11   ACY A   O    1 
+HETATM 397 O  OXT  . ACY E   3 . ? -8.192  7.009  3.580   1.00 8.10  ? ? ? ? ? ? 11   ACY A   OXT  1 
+HETATM 398 C  CH3  . ACY E   3 . ? -8.402  9.294  2.821   1.00 10.76 ? ? ? ? ? ? 11   ACY A   CH3  1 
+HETATM 399 H  HXT  . ACY E   3 . ? -7.757  7.025  2.885   1.00 12.15 ? ? ? ? ? ? 11   ACY A   HXT  1 
+HETATM 400 H  H1   . ACY E   3 . ? -8.833  10.097 3.122   1.00 16.14 ? ? ? ? ? ? 11   ACY A   H1   1 
+HETATM 401 H  H2   . ACY E   3 . ? -8.742  9.054  1.955   1.00 16.14 ? ? ? ? ? ? 11   ACY A   H2   1 
+HETATM 402 H  H3   . ACY E   3 . ? -7.455  9.441  2.763   1.00 16.14 ? ? ? ? ? ? 11   ACY A   H3   1 
+HETATM 403 CL CL   . CL  F   4 . ? 3.772   4.414  5.678   1.00 4.90  ? ? ? ? ? ? 21   CL  A   CL   1 
+HETATM 404 CL CL   . CL  G   4 . ? 9.011   11.897 -1.620  1.00 15.43 ? ? ? ? ? ? 22   CL  A   CL   1 
+HETATM 405 CL CL   . CL  H-2 4 . ? 2.870   14.458 -6.028  1.00 8.59  ? ? ? ? ? ? 21   CL  B-2 CL   1 
+HETATM 406 CL CL   . CL  I-2 4 . ? 4.679   7.822  -20.050 1.00 10.91 ? ? ? ? ? ? 22   CL  B-2 CL   1 
+HETATM 407 O  O    . HOH J   5 . ? 10.417  7.090  -6.145  1.00 6.93  ? ? ? ? ? ? 2001 HOH A   O    1 
+HETATM 408 O  O    . HOH J   5 . ? 12.665  8.554  -2.847  1.00 15.18 ? ? ? ? ? ? 2002 HOH A   O    1 
+HETATM 409 O  O    . HOH J   5 . ? 11.451  10.734 -0.616  0.50 16.23 ? ? ? ? ? ? 2003 HOH A   O    1 
+HETATM 410 O  O    A HOH J   5 . ? 13.830  7.936  -0.582  0.60 14.38 ? ? ? ? ? ? 2004 HOH A   O    1 
+HETATM 411 O  O    . HOH J   5 . ? 10.346  13.790 -3.403  1.00 17.62 ? ? ? ? ? ? 2005 HOH A   O    1 
+HETATM 412 O  O    B HOH J   5 . ? 6.635   14.659 1.643   0.40 14.41 ? ? ? ? ? ? 2006 HOH A   O    1 
+HETATM 413 O  O    . HOH J   5 . ? 16.555  8.475  -0.761  1.00 19.31 ? ? ? ? ? ? 2007 HOH A   O    1 
+HETATM 414 O  O    A HOH J   5 . ? 15.524  10.561 -0.050  0.75 36.40 ? ? ? ? ? ? 2008 HOH A   O    1 
+HETATM 415 O  O    A HOH J   5 . ? 3.712   15.326 1.972   0.50 11.19 ? ? ? ? ? ? 2009 HOH A   O    1 
+HETATM 416 O  O    . HOH J   5 . ? 8.212   12.107 -6.577  1.00 11.27 ? ? ? ? ? ? 2010 HOH A   O    1 
+HETATM 417 O  O    . HOH J   5 . ? 9.456   14.922 -5.741  1.00 15.32 ? ? ? ? ? ? 2011 HOH A   O    1 
+HETATM 418 O  O    . HOH J   5 . ? 8.938   14.484 4.905   1.00 28.63 ? ? ? ? ? ? 2012 HOH A   O    1 
+HETATM 419 O  O    . HOH J   5 . ? 1.473   13.449 12.511  1.00 27.55 ? ? ? ? ? ? 2013 HOH A   O    1 
+HETATM 420 O  O    . HOH J   5 . ? -9.637  6.869  -0.805  1.00 22.19 ? ? ? ? ? ? 2014 HOH A   O    1 
+HETATM 421 O  O    . HOH J   5 . ? 3.654   3.654  0.000   0.50 5.50  ? ? ? ? ? ? 2015 HOH A   O    1 
+HETATM 422 O  O    . HOH J   5 . ? -0.877  -1.750 1.076   1.00 20.10 ? ? ? ? ? ? 2016 HOH A   O    1 
+HETATM 423 O  O    . HOH J   5 . ? -3.773  3.945  1.813   1.00 9.48  ? ? ? ? ? ? 2017 HOH A   O    1 
+HETATM 424 O  O    . HOH J   5 . ? -3.207  2.082  3.544   1.00 16.72 ? ? ? ? ? ? 2018 HOH A   O    1 
+HETATM 425 O  O    . HOH J   5 . ? -0.494  3.106  8.613   1.00 11.64 ? ? ? ? ? ? 2019 HOH A   O    1 
+HETATM 426 O  O    . HOH J   5 . ? -3.373  2.289  7.656   1.00 34.34 ? ? ? ? ? ? 2020 HOH A   O    1 
+HETATM 427 O  O    . HOH J   5 . ? 3.491   2.594  8.358   1.00 8.13  ? ? ? ? ? ? 2021 HOH A   O    1 
+HETATM 428 O  O    . HOH J   5 . ? 0.549   -0.228 10.244  1.00 29.25 ? ? ? ? ? ? 2022 HOH A   O    1 
+HETATM 429 O  O    . HOH J   5 . ? 1.540   -2.438 8.544   1.00 32.06 ? ? ? ? ? ? 2023 HOH A   O    1 
+HETATM 430 O  O    . HOH J   5 . ? 5.429   0.496  8.809   1.00 14.56 ? ? ? ? ? ? 2024 HOH A   O    1 
+HETATM 431 O  O    B HOH J   5 . ? 2.241   15.953 0.508   0.50 18.35 ? ? ? ? ? ? 2025 HOH A   O    1 
+HETATM 432 O  O    . HOH J   5 . ? -0.593  15.929 8.212   1.00 16.34 ? ? ? ? ? ? 2026 HOH A   O    1 
+HETATM 433 O  O    . HOH J   5 . ? 1.341   18.561 5.356   1.00 39.60 ? ? ? ? ? ? 2027 HOH A   O    1 
+HETATM 434 O  O    B HOH J   5 . ? -1.312  18.356 8.327   0.35 11.09 ? ? ? ? ? ? 2028 HOH A   O    1 
+HETATM 435 O  O    . HOH J   5 . ? 4.268   16.936 4.102   1.00 28.28 ? ? ? ? ? ? 2029 HOH A   O    1 
+HETATM 436 O  O    . HOH J   5 . ? 4.416   14.384 10.863  1.00 21.72 ? ? ? ? ? ? 2030 HOH A   O    1 
+HETATM 437 O  O    B HOH J   5 . ? 5.300   16.353 7.013   0.25 12.05 ? ? ? ? ? ? 2031 HOH A   O    1 
+HETATM 438 O  O    . HOH J   5 . ? 7.573   12.947 7.195   0.75 20.91 ? ? ? ? ? ? 2032 HOH A   O    1 
+HETATM 439 O  O    . HOH J   5 . ? -8.440  5.488  1.203   1.00 16.16 ? ? ? ? ? ? 2033 HOH A   O    1 
+HETATM 440 O  O    . HOH J   5 . ? -10.841 10.620 5.415   1.00 15.08 ? ? ? ? ? ? 2034 HOH A   O    1 
+HETATM 441 O  O    . HOH K-2 5 . ? 9.093   10.452 -8.461  1.00 9.00  ? ? ? ? ? ? 2001 HOH B-2 O    1 
+HETATM 442 O  O    . HOH K-2 5 . ? 12.890  8.663  -9.686  0.60 17.55 ? ? ? ? ? ? 2002 HOH B-2 O    1 
+HETATM 443 O  O    . HOH K-2 5 . ? 11.258  4.979  -14.777 0.40 11.71 ? ? ? ? ? ? 2003 HOH B-2 O    1 
+HETATM 444 O  O    B HOH K-2 5 . ? 3.519   1.528  -15.238 0.25 16.11 ? ? ? ? ? ? 2004 HOH B-2 O    1 
+HETATM 445 O  O    . HOH K-2 5 . ? 10.097  8.143  -15.895 1.00 19.13 ? ? ? ? ? ? 2005 HOH B-2 O    1 
+HETATM 446 O  O    . HOH K-2 5 . ? 5.480   6.763  -17.326 1.00 16.52 ? ? ? ? ? ? 2006 HOH B-2 O    1 
+HETATM 447 O  O    . HOH K-2 5 . ? 12.940  12.111 -20.709 1.00 7.58  ? ? ? ? ? ? 2007 HOH B-2 O    1 
+HETATM 448 O  O    . HOH K-2 5 . ? 10.522  10.585 -23.908 1.00 28.59 ? ? ? ? ? ? 2008 HOH B-2 O    1 
+HETATM 449 O  O    . HOH K-2 5 . ? 0.364   12.452 -20.503 1.00 14.47 ? ? ? ? ? ? 2009 HOH B-2 O    1 
+HETATM 450 O  O    . HOH K-2 5 . ? 11.411  4.877  -19.967 1.00 19.01 ? ? ? ? ? ? 2010 HOH B-2 O    1 
+HETATM 451 O  O    A HOH K-2 5 . ? 9.891   3.537  -23.857 0.75 23.81 ? ? ? ? ? ? 2011 HOH B-2 O    1 
+HETATM 452 O  O    . HOH K-2 5 . ? 1.881   3.152  -13.128 1.00 29.98 ? ? ? ? ? ? 2012 HOH B-2 O    1 
+HETATM 453 O  O    . HOH K-2 5 . ? 3.174   5.143  -16.783 1.00 23.36 ? ? ? ? ? ? 2013 HOH B-2 O    1 
+HETATM 454 O  O    . HOH K-2 5 . ? -1.555  9.250  -17.898 1.00 38.29 ? ? ? ? ? ? 2014 HOH B-2 O    1 
+HETATM 455 O  O    . HOH K-2 5 . ? -1.206  4.130  -10.481 1.00 26.81 ? ? ? ? ? ? 2015 HOH B-2 O    1 
+HETATM 456 O  O    A HOH K-2 5 . ? -4.130  11.766 -9.159  0.65 19.38 ? ? ? ? ? ? 2016 HOH B-2 O    1 
+HETATM 457 O  O    A HOH K-2 5 . ? -4.063  10.922 -11.600 0.65 18.57 ? ? ? ? ? ? 2017 HOH B-2 O    1 
+HETATM 458 O  O    B HOH K-2 5 . ? -4.223  11.710 -10.516 0.35 10.01 ? ? ? ? ? ? 2018 HOH B-2 O    1 
+HETATM 459 O  O    A HOH K-2 5 . ? -0.945  9.599  -14.867 0.32 6.41  ? ? ? ? ? ? 2019 HOH B-2 O    1 
+HETATM 460 O  O    B HOH K-2 5 . ? -1.665  9.218  -15.366 0.32 13.09 ? ? ? ? ? ? 2020 HOH B-2 O    1 
+HETATM 461 O  O    . HOH K-2 5 . ? -1.240  15.400 -6.052  1.00 30.89 ? ? ? ? ? ? 2021 HOH B-2 O    1 
+# 

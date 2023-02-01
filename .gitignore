@@ -1,4 +1,3 @@
-data/
 *intermediates*/
 *lib*/
 slurm-*.out
