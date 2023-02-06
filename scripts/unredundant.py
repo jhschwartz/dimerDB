@@ -154,7 +154,7 @@ class RedundantDimerStructures(RedundantThings):
         dimer1_pdb0, dimer1_pdb1 = dimer2pdbs(dimer1_name, self.config['paths']['lib'])
         with RedundantDimerStructures._tmp_assembly_file(dimer0_pdb0, dimer0_pdb1) as d0file, \
                 RedundantDimerStructures._tmp_assembly_file(dimer1_pdb0, dimer1_pdb1) as d1file:
-            cmd = f'{self.config["paths"]["mmalign_exe"]} {d0file} {d1file}'
+            cmd = f'{self.config["paths"]["usalign"]} -mm 1 -ter 1 {d0file} {d1file}'
             result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
             if result.stderr != '':
                 raise RuntimeError(result.stderr)

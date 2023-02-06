@@ -96,9 +96,11 @@ rule derive_all_homodimers:
     resources:
         time = "12:00:00",
         mem_mb = "10000"
+    params:
+        lib = config['paths']['lib']
     run:
         from scripts.derive_all_homodimers import homodimers
-        homodimers(input.uniparc2others, output.homodimers)
+        homodimers(input.uniparc2others, output.homodimers, params.lib)
 
 
 

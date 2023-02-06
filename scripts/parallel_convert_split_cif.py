@@ -1,3 +1,19 @@
+'''
+parallel_convert_split_cif.py - script to call cif2pdb (from USalign of the Pyle Lab)
+    upon mmcif protein assemblies to both 1) convert each to .pdb format and 2) split
+    each assembly into individual chains as defined by chainID and model number. 
+    Functions below perform this recursively on all .cif files in a given parent
+    directory and additionally rename the resulting .pdb files according to a standard
+    scheme for this pipeline.
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in Janurary/February 2023.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+These functions are unitested by test/test_parallel_convert_split_cif.py and are
+    passing as of 2/1/2023.
+This work requires python >= 3.8
+'''
 import os
 import glob
 import re
@@ -8,7 +24,7 @@ from multiprocessing import Pool
 
 def run_cif2pdb(target: str, outprefix: str, cif2pdb_exe: str) -> None:
     outdir = os.path.dirname(target)
-    with open(os.devnull, 'w') as NULL:
+    with open(os.devnull, 'w') as NULL: # NULL to silence stdout of cif2pdb
         subprocess.run(f'{cif2pdb_exe} -split 1 -mol 1 {target} {outdir}/{outprefix}', shell=True, check=True, stdout=NULL, stderr=subprocess.STDOUT)
 
 

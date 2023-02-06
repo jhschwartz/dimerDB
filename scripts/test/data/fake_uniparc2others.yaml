@@ -3,19 +3,18 @@ UPI00000C0390:
         - nothing
         - morenothing
     pdb:
-        - 1ON3_A
-        - 1ON3_B
-        - 1ON9_A
-        - 1ON9_B
-        - 1ON9_C
-        - ABCD_Z
-        - 1ZZZ_R
+        - 1on3_A
+        - 1on3_B
+        - 1on9_A
+        - 1on9_B
+        - 1on9_C
+        - abcd_Z
+        - 1zzz_B
 UPI00001BD6BE:
     uniprot:
         - whatver
         - notreal
     pdb:
-        - 1ZZZ_D
-        - 6K3G_B
-        - 6K3G_FAKE
+        - 1zzz_A
+        - 6k3g_B
 

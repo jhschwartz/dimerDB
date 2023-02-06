@@ -1,3 +1,12 @@
+'''
+simple_write.py - a function to write to a file in one line. Used throughout this
+    pipeline for information flow between parts of snakemake subworkflows.
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in November, 2022.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+'''
+
 def simple_write(filename, content=None):
     '''
     Writes a string to a file, handling opening and closing.

@@ -181,8 +181,8 @@ rule prefilter_by_length_homo:
     run:
         simple_write(output.info, 'no')
         download_fasta(wildcards.sample_homo, output.fasta)
-	maxlen = config['database_settings']['chain_max_seq_len']
-	write_yes_if_func(output.info, len_ok, output.fasta, maxlen)
+        maxlen = config['database_settings']['chain_max_seq_len']
+        write_yes_if_func(output.info, len_ok, output.fasta, maxlen)
 
 
 

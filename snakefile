@@ -18,11 +18,11 @@ subworkflow deduce_all_dimers:
 
 
 
-subworkflow filter_homodimers:
-    workdir:
-        config['paths']['basepath']
-    snakefile:
-        config['workflow']['snakefile2.1']
+#subworkflow filter_homodimers:
+#    workdir:
+#        config['paths']['basepath']
+#    snakefile:
+#        config['workflow']['snakefile2.1']
 
 
 
@@ -64,8 +64,8 @@ subworkflow filter_homodimers:
 rule all:
     input:
         download_pdb(config['snake_donefiles']['sub0_all_done']),
-        deduce_all_dimers(config['snake_donefiles']['sub1_all_done']),
-        filter_homodimers(config['snake_donefiles']['sub2_all_done'])
+        deduce_all_dimers(config['snake_donefiles']['sub1_all_done'])
+#        filter_homodimers(config['snake_donefiles']['sub2_all_done'])
         #prune_homodimers('intermediates/subflow2.done'),
         #prune_seqs('intermediates/subflow4.done'),
         #'intermediates/cleanup.done'

@@ -10,7 +10,7 @@ Written by Jacob Schwartz (jaschwa@umich.edu) in January 2023.
 Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
 https://freddolino-lab.med.umich.edu
 
-This function is unittested by test/test_name_pdb.py and passing as of 1/12/2023. NEEDS UPDATE 1/31/23!
+This function is unittested by test/test_name_pdb.py and passing as of 2/1/2023.
 This work requires python >= 3.8
 '''
 import os
@@ -40,4 +40,5 @@ def get_models_of_chain(pdb_base, chain, lib_path):
     model_files = glob.glob(globber)
     model_nums = [re.findall(r'-(\d+?).pdb', fn)[0] for fn in model_files]
     return model_nums
+
 
