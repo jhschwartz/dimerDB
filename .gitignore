@@ -7,3 +7,5 @@ benchmarks/scripts/test/data/
 .snakemake/
 **/__pycache__/
 logs/
+scripts/test/data/unred_seq_fakedata/fake_hetero_filter/.nfs*
+**.nfs**
