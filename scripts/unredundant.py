@@ -15,7 +15,7 @@ https://freddolino-lab.med.umich.edu
 This function is unittested by:
     - test/test_unredundant_generic.py - tests abstract class RedundantThings, passing as of 1/12/2023.
     - test/test_unredundant_dimer_structures.py - tests RedundantDimerStructures, passing as of 1/12/2023.
-    - test/test_unredundant_dimer_seqs.py - tests RedundantSeqsHomodimer and RedundantSeqsHeterodimer, all passing as of 1/25/2023.
+    - test/test_unredundant_dimer_seqs.py - tests RedundantSeqsHomodimer, passing as of 1/25/2023.
 This work requires python >= 3.8
 '''
 
@@ -36,7 +36,7 @@ import threading
 from multiprocessing import Pool
 from read_fasta import read_prot_from_fasta
 from name_pdb import dimer2pdbs
-from name_fasta import get_homodimer_fasta, get_heterodimer_fasta
+from name_fasta import get_homodimer_fasta
 
 
 class RedundantThings:
@@ -154,11 +154,7 @@ class RedundantDimerStructures(RedundantThings):
         dimer1_pdb0, dimer1_pdb1 = dimer2pdbs(dimer1_name, self.config['paths']['lib'])
         with RedundantDimerStructures._tmp_assembly_file(dimer0_pdb0, dimer0_pdb1) as d0file, \
                 RedundantDimerStructures._tmp_assembly_file(dimer1_pdb0, dimer1_pdb1) as d1file:
-<<<<<<< HEAD
-            cmd = f'{self.config["paths"]["mmalign_exe"]} {d0file} {d1file}'
-=======
             cmd = f'{self.config["paths"]["usalign"]} -mm 1 -ter 1 {d0file} {d1file}'
->>>>>>> addmodelsplittopdb
             result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
             if result.stderr != '':
                 raise RuntimeError(result.stderr)
@@ -312,45 +308,5 @@ class RedundantSeqsHomodimer(RedundantSeqs):
         fasta2 = get_homodimer_fasta(uniparc_id=dimer2name, filtering_dir=self.fd)
         nw_val = super().max_both_ways_nw(self.nw, fasta1, fasta2)
         return 1 - nw_val
-
-
-class RedundantSeqsHeterodimer(RedundantSeqs):
-    def __init__(self, dimer_names, yamlfile, threshold, config):
-        super().__init__(dimer_names, yamlfile, threshold, config)
-        self.fd = self.config['paths']['intermediates_heterodimer_filtering']
-  
-
-    def _count_dimer_length(self, dimer_name: str) -> int:
-        uniparc1, uniparc2 = dimer_name.split('-')
-        fasta1, fasta2 = get_heterodimer_fasta(dimer_name=dimer_name, filtering_dir=self.fd)
-        _, seq1 = next(read_prot_from_fasta(fasta1))
-        _, seq2 = next(read_prot_from_fasta(fasta2))
-        return len(seq1) + len(seq2)
-
-
-    def distance(self, dimer1name: str, dimer2name: str) -> float:
-        fasta1A, fasta1B = get_heterodimer_fasta(dimer_name=dimer1name, filtering_dir=self.fd)
-        fasta2A, fasta2B = get_heterodimer_fasta(dimer_name=dimer2name, filtering_dir=self.fd)
-
-        # must first figure out if the correspondance is 1A->2A or 1A->2B (and 1B->2B or 1B->2A)
-        #   we call the 1A->2A / 1B->2B case "forwards"
-        #   we call the 1A->2B / 1B->2A case "backwards"
-        nw_1A_2A = super().max_both_ways_nw(self.nw, fasta1A, fasta2A)
-        nw_1A_2B = super().max_both_ways_nw(self.nw, fasta1A, fasta2B)
-        nw_1B_2A = super().max_both_ways_nw(self.nw, fasta1B, fasta2A)
-        nw_1B_2B = super().max_both_ways_nw(self.nw, fasta1B, fasta2B)
-
-        forward_tot = nw_1A_2A + nw_1B_2B
-        backward_tot = nw_1A_2B + nw_1B_2A
-
-        if forward_tot > backward_tot:
-            nw_I = nw_1A_2A
-            nw_II = nw_1B_2B
-        else:
-            nw_I = nw_1A_2B
-            nw_II = nw_1B_2A
-
-        avg_nw = (nw_I + nw_II) / 2
-        return 1 - avg_nw
 
 

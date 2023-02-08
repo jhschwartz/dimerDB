@@ -31,45 +31,26 @@ class TestCheckChainsContact(unittest.TestCase):
         self.assertTrue(result)
         
     def test_neg_all(self):
-<<<<<<< HEAD
-        chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1H.pdb'
-        chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1C.pdb'
-=======
         chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-H-1.pdb'
         chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-C-1.pdb'
->>>>>>> addmodelsplittopdb
         result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
         self.assertFalse(result)
 
     def test_impossible_negcontact(self):
-<<<<<<< HEAD
-        chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1A.pdb'  
-        chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1Y.pdb'  
-=======
         chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-A-1.pdb'  
         chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-Y-1.pdb'  
->>>>>>> addmodelsplittopdb
         is_impossible = check_chains_contact._check_chains_contact_impossible(chain1_pdb, chain2_pdb, label_funcs, 8)
         self.assertTrue(is_impossible)
 
     def test_impossible_poscontact(self):
-<<<<<<< HEAD
-        chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1E.pdb'
-        chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4JK1D.pdb'
-=======
         chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-E-1.pdb'
         chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/jk/4jk1-D-1.pdb'
->>>>>>> addmodelsplittopdb
         is_impossible = check_chains_contact._check_chains_contact_impossible(chain1_pdb, chain2_pdb, label_funcs, 8)
         self.assertFalse(is_impossible)
 
     
     def test_check_many_neg(self):
-<<<<<<< HEAD
-        pairs = [('5u8t5.pdb', '5u8t6.pdb'), ('4xmnF.pdb', '4xmnH.pdb'), ('4ij2A.pdb', '4ij2H.pdb'), ('6qleK.pdb', '6qleY.pdb'), ('6sw9R.pdb', '6sw98.pdb')]
-=======
         pairs = [('5u8t-5-1.pdb', '5u8t-6-1.pdb'), ('4xmn-F-1.pdb', '4xmn-H-1.pdb'), ('4ij2-A-1.pdb', '4ij2-H-1.pdb'), ('6qle-K-1.pdb', '6qle-Y-1.pdb'), ('6sw9-R-1.pdb', '6sw9-8-1.pdb')]
->>>>>>> addmodelsplittopdb
         for p in pairs:
             chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/' + p[0][1:3] + '/' + p[0]
             chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/' + p[1][1:3] + '/' + p[1]
@@ -78,11 +59,7 @@ class TestCheckChainsContact(unittest.TestCase):
 
 
     def test_check_many_pos(self):
-<<<<<<< HEAD
-        pairs = [('4uttA.pdb', '4uttD.pdb'), ('4fb8A.pdb', '4fb8B.pdb'), ('5aa5A.pdb', '5aa5B.pdb'), ('3rhtA.pdb', '3rhtD.pdb')]
-=======
         pairs = [('4utt-A-1.pdb', '4utt-D-1.pdb'), ('4fb8-A-1.pdb', '4fb8-B-1.pdb'), ('5aa5-A-1.pdb', '5aa5-B-1.pdb'), ('3rht-A-1.pdb', '3rht-D-1.pdb')]
->>>>>>> addmodelsplittopdb
         for p in pairs:
             chain1_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/' + p[0][1:3] + '/' + p[0]
             chain2_pdb = f'{test_dir}/data/fake_lib/rcsb_pdb/' + p[1][1:3] + '/' + p[1]
