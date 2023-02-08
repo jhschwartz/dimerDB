@@ -18,7 +18,7 @@ import glob
 import re
 
 
-def name_pdb_file(pdb_base, chain, lib_path):
+def name_pdb_file(pdb_base, chain, model, lib_path, allow_nonexist=False):
     div = pdb_base[1:3]
     path = f'{lib_path}/rcsb_pdb/{div}/{pdb_base}-{chain}-{model}.pdb'
     if not allow_nonexist and not os.path.exists(path):
