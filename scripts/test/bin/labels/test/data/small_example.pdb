@@ -1,0 +1,700 @@
+HEADER    TRANSCRIPTION                           21-APR-06   2GQQ              
+TITLE     CRYSTAL STRUCTURE OF E. COLI LEUCINE-RESPONSIVE REGULATORY PROTEIN    
+TITLE    2 (LRP)                                                                
+COMPND    MOL_ID: 1;                                                            
+COMPND   2 MOLECULE: LEUCINE-RESPONSIVE REGULATORY PROTEIN;                     
+COMPND   3 CHAIN: A, B, C, D;                                                   
+COMPND   4 ENGINEERED: YES                                                      
+SOURCE    MOL_ID: 1;                                                            
+SOURCE   2 ORGANISM_SCIENTIFIC: ESCHERICHIA COLI;                               
+SOURCE   3 ORGANISM_TAXID: 562;                                                 
+SOURCE   4 GENE: LRP, ALSB, IHB, LIVR, OPPI;                                    
+SOURCE   5 EXPRESSION_SYSTEM: ESCHERICHIA COLI;                                 
+SOURCE   6 EXPRESSION_SYSTEM_TAXID: 562;                                        
+SOURCE   7 EXPRESSION_SYSTEM_STRAIN: JM105;                                     
+SOURCE   8 EXPRESSION_SYSTEM_VECTOR_TYPE: PLASMID;                              
+SOURCE   9 EXPRESSION_SYSTEM_PLASMID: PJWD1                                     
+KEYWDS    HELIX-TURN-HELIX, TRANSCRIPTION                                       
+EXPDTA    X-RAY DIFFRACTION                                                     
+AUTHOR    S.DE LOS RIOS,J.J.PERONA                                              
+REVDAT   3   13-JUL-11 2GQQ    1       VERSN                                    
+REVDAT   2   24-FEB-09 2GQQ    1       VERSN                                    
+REVDAT   1   06-MAR-07 2GQQ    0                                                
+JRNL        AUTH   S.DE LOS RIOS,J.J.PERONA                                     
+JRNL        TITL   STRUCTURE OF THE ESCHERICHIA COLI LEUCINE-RESPONSIVE         
+JRNL        TITL 2 REGULATORY PROTEIN LRP REVEALS A NOVEL OCTAMERIC ASSEMBLY.   
+JRNL        REF    J.MOL.BIOL.                   V. 366  1589 2007              
+JRNL        REFN                   ISSN 0022-2836                               
+JRNL        PMID   17223133                                                     
+JRNL        DOI    10.1016/J.JMB.2006.12.032                                    
+REMARK   2                                                                      
+REMARK   2 RESOLUTION.    3.20 ANGSTROMS.                                       
+REMARK   3                                                                      
+REMARK   3 REFINEMENT.                                                          
+REMARK   3   PROGRAM     : CNS 1.1                                              
+REMARK   3   AUTHORS     : BRUNGER,ADAMS,CLORE,DELANO,GROS,GROSSE-              
+REMARK   3               : KUNSTLEVE,JIANG,KUSZEWSKI,NILGES,PANNU,              
+REMARK   3               : READ,RICE,SIMONSON,WARREN                            
+REMARK   3                                                                      
+REMARK   3  REFINEMENT TARGET : ENGH & HUBER                                    
+REMARK   3                                                                      
+REMARK   3  DATA USED IN REFINEMENT.                                            
+REMARK   3   RESOLUTION RANGE HIGH (ANGSTROMS) : 3.20                           
+REMARK   3   RESOLUTION RANGE LOW  (ANGSTROMS) : 20.00                          
+REMARK   3   DATA CUTOFF            (SIGMA(F)) : 0.000                          
+REMARK   3   DATA CUTOFF HIGH         (ABS(F)) : NULL                           
+REMARK   3   DATA CUTOFF LOW          (ABS(F)) : NULL                           
+REMARK   3   COMPLETENESS (WORKING+TEST)   (%) : NULL                           
+REMARK   3   NUMBER OF REFLECTIONS             : 13800                          
+REMARK   3                                                                      
+REMARK   3  FIT TO DATA USED IN REFINEMENT.                                     
+REMARK   3   CROSS-VALIDATION METHOD          : THROUGHOUT                      
+REMARK   3   FREE R VALUE TEST SET SELECTION  : RANDOM                          
+REMARK   3   R VALUE            (WORKING SET) : 0.267                           
+REMARK   3   FREE R VALUE                     : 0.322                           
+REMARK   3   FREE R VALUE TEST SET SIZE   (%) : NULL                            
+REMARK   3   FREE R VALUE TEST SET COUNT      : 1406                            
+REMARK   3   ESTIMATED ERROR OF FREE R VALUE  : NULL                            
+REMARK   3                                                                      
+REMARK   3  FIT IN THE HIGHEST RESOLUTION BIN.                                  
+REMARK   3   TOTAL NUMBER OF BINS USED           : NULL                         
+REMARK   3   BIN RESOLUTION RANGE HIGH       (A) : NULL                         
+REMARK   3   BIN RESOLUTION RANGE LOW        (A) : NULL                         
+REMARK   3   BIN COMPLETENESS (WORKING+TEST) (%) : NULL                         
+REMARK   3   REFLECTIONS IN BIN    (WORKING SET) : NULL                         
+REMARK   3   BIN R VALUE           (WORKING SET) : NULL                         
+REMARK   3   BIN FREE R VALUE                    : NULL                         
+REMARK   3   BIN FREE R VALUE TEST SET SIZE  (%) : NULL                         
+REMARK   3   BIN FREE R VALUE TEST SET COUNT     : NULL                         
+REMARK   3   ESTIMATED ERROR OF BIN FREE R VALUE : NULL                         
+REMARK   3                                                                      
+REMARK   3  NUMBER OF NON-HYDROGEN ATOMS USED IN REFINEMENT.                    
+REMARK   3   PROTEIN ATOMS            : 4342                                    
+REMARK   3   NUCLEIC ACID ATOMS       : 0                                       
+REMARK   3   HETEROGEN ATOMS          : 0                                       
+REMARK   3   SOLVENT ATOMS            : 0                                       
+REMARK   3                                                                      
+REMARK   3  B VALUES.                                                           
+REMARK   3   FROM WILSON PLOT           (A**2) : NULL                           
+REMARK   3   MEAN B VALUE      (OVERALL, A**2) : NULL                           
+REMARK   3   OVERALL ANISOTROPIC B VALUE.                                       
+REMARK   3    B11 (A**2) : NULL                                                 
+REMARK   3    B22 (A**2) : NULL                                                 
+REMARK   3    B33 (A**2) : NULL                                                 
+REMARK   3    B12 (A**2) : NULL                                                 
+REMARK   3    B13 (A**2) : NULL                                                 
+REMARK   3    B23 (A**2) : NULL                                                 
+REMARK   3                                                                      
+REMARK   3  ESTIMATED COORDINATE ERROR.                                         
+REMARK   3   ESD FROM LUZZATI PLOT        (A) : NULL                            
+REMARK   3   ESD FROM SIGMAA              (A) : NULL                            
+REMARK   3   LOW RESOLUTION CUTOFF        (A) : NULL                            
+REMARK   3                                                                      
+REMARK   3  CROSS-VALIDATED ESTIMATED COORDINATE ERROR.                         
+REMARK   3   ESD FROM C-V LUZZATI PLOT    (A) : NULL                            
+REMARK   3   ESD FROM C-V SIGMAA          (A) : NULL                            
+REMARK   3                                                                      
+REMARK   3  RMS DEVIATIONS FROM IDEAL VALUES.                                   
+REMARK   3   BOND LENGTHS                 (A) : 0.006                           
+REMARK   3   BOND ANGLES            (DEGREES) : 1.10                            
+REMARK   3   DIHEDRAL ANGLES        (DEGREES) : NULL                            
+REMARK   3   IMPROPER ANGLES        (DEGREES) : NULL                            
+REMARK   3                                                                      
+REMARK   3  ISOTROPIC THERMAL MODEL : ANISOTROPIC                               
+REMARK   3                                                                      
+REMARK   3  ISOTROPIC THERMAL FACTOR RESTRAINTS.    RMS    SIGMA                
+REMARK   3   MAIN-CHAIN BOND              (A**2) : NULL  ; NULL                 
+REMARK   3   MAIN-CHAIN ANGLE             (A**2) : NULL  ; NULL                 
+REMARK   3   SIDE-CHAIN BOND              (A**2) : NULL  ; NULL                 
+REMARK   3   SIDE-CHAIN ANGLE             (A**2) : NULL  ; NULL                 
+REMARK   3                                                                      
+REMARK   3  BULK SOLVENT MODELING.                                              
+REMARK   3   METHOD USED : NULL                                                 
+REMARK   3   KSOL        : NULL                                                 
+REMARK   3   BSOL        : NULL                                                 
+REMARK   3                                                                      
+REMARK   3  NCS MODEL : NULL                                                    
+REMARK   3                                                                      
+REMARK   3  NCS RESTRAINTS.                         RMS   SIGMA/WEIGHT          
+REMARK   3   GROUP  1  POSITIONAL            (A) : NULL  ; NULL                 
+REMARK   3   GROUP  1  B-FACTOR           (A**2) : NULL  ; NULL                 
+REMARK   3                                                                      
+REMARK   3  PARAMETER FILE  1  : PROTEIN_REP.PARAM                              
+REMARK   3  PARAMETER FILE  2  : DNA-RNA_REP.PARAM                              
+REMARK   3  PARAMETER FILE  3  : WATER_REP.PARAM                                
+REMARK   3  PARAMETER FILE  4  : ION.PARAM                                      
+REMARK   3  PARAMETER FILE  5  : NULL                                           
+REMARK   3  TOPOLOGY FILE  1   : NULL                                           
+REMARK   3  TOPOLOGY FILE  2   : NULL                                           
+REMARK   3  TOPOLOGY FILE  3   : NULL                                           
+REMARK   3  TOPOLOGY FILE  4   : NULL                                           
+REMARK   3  TOPOLOGY FILE  5   : NULL                                           
+REMARK   3                                                                      
+REMARK   3  OTHER REFINEMENT REMARKS: NULL                                      
+REMARK   4                                                                      
+REMARK   4 2GQQ COMPLIES WITH FORMAT V. 3.30, 13-JUL-11                         
+REMARK 100                                                                      
+REMARK 100 THIS ENTRY HAS BEEN PROCESSED BY RCSB ON 25-APR-06.                  
+REMARK 100 THE RCSB ID CODE IS RCSB037438.                                      
+REMARK 200                                                                      
+REMARK 200 EXPERIMENTAL DETAILS                                                 
+REMARK 200  EXPERIMENT TYPE                : X-RAY DIFFRACTION                  
+REMARK 200  DATE OF DATA COLLECTION        : 01-JUN-01; 02-JUL-04               
+REMARK 200  TEMPERATURE           (KELVIN) : 100; 100                           
+REMARK 200  PH                             : 5.6                                
+REMARK 200  NUMBER OF CRYSTALS USED        : 3                                  
+REMARK 200                                                                      
+REMARK 200  SYNCHROTRON              (Y/N) : Y; Y                               
+REMARK 200  RADIATION SOURCE               : SSRL; SSRL                         
+REMARK 200  BEAMLINE                       : BL7-1; BL11-3                      
+REMARK 200  X-RAY GENERATOR MODEL          : NULL; NULL                         
+REMARK 200  MONOCHROMATIC OR LAUE    (M/L) : M; NULL                            
+REMARK 200  WAVELENGTH OR RANGE        (A) : 1.08; 0.975                        
+REMARK 200  MONOCHROMATOR                  : NULL; NULL                         
+REMARK 200  OPTICS                         : NULL; NULL                         
+REMARK 200                                                                      
+REMARK 200  DETECTOR TYPE                  : IMAGE PLATE; CCD                   
+REMARK 200  DETECTOR MANUFACTURER          : MARRESEARCH; ADSC QUANTUM 4        
+REMARK 200  INTENSITY-INTEGRATION SOFTWARE : MOSFLM                             
+REMARK 200  DATA SCALING SOFTWARE          : CCP4 (SCALA)                       
+REMARK 200                                                                      
+REMARK 200  NUMBER OF UNIQUE REFLECTIONS   : 15185                              
+REMARK 200  RESOLUTION RANGE HIGH      (A) : 3.200                              
+REMARK 200  RESOLUTION RANGE LOW       (A) : 30.000                             
+REMARK 200  REJECTION CRITERIA  (SIGMA(I)) : 6.700                              
+REMARK 200                                                                      
+REMARK 200 OVERALL.                                                             
+REMARK 200  COMPLETENESS FOR RANGE     (%) : 99.9                               
+REMARK 200  DATA REDUNDANCY                : 4.000                              
+REMARK 200  R MERGE                    (I) : NULL                               
+REMARK 200  R SYM                      (I) : NULL                               
+REMARK 200  <I/SIGMA(I)> FOR THE DATA SET  : NULL                               
+REMARK 200                                                                      
+REMARK 200 IN THE HIGHEST RESOLUTION SHELL.                                     
+REMARK 200  HIGHEST RESOLUTION SHELL, RANGE HIGH (A) : 3.20                     
+REMARK 200  HIGHEST RESOLUTION SHELL, RANGE LOW  (A) : 3.27                     
+REMARK 200  COMPLETENESS FOR SHELL     (%) : 99.9                               
+REMARK 200  DATA REDUNDANCY IN SHELL       : NULL                               
+REMARK 200  R MERGE FOR SHELL          (I) : NULL                               
+REMARK 200  R SYM FOR SHELL            (I) : NULL                               
+REMARK 200  <I/SIGMA(I)> FOR SHELL         : NULL                               
+REMARK 200                                                                      
+REMARK 200 DIFFRACTION PROTOCOL: SINGLE WAVELENGTH; NULL                        
+REMARK 200 METHOD USED TO DETERMINE THE STRUCTURE: MIR                          
+REMARK 200 SOFTWARE USED: SOLVE                                                 
+REMARK 200 STARTING MODEL: NULL                                                 
+REMARK 200                                                                      
+REMARK 200 REMARK: NULL                                                         
+REMARK 280                                                                      
+REMARK 280 CRYSTAL                                                              
+REMARK 280 SOLVENT CONTENT, VS   (%): 58.76                                     
+REMARK 280 MATTHEWS COEFFICIENT, VM (ANGSTROMS**3/DA): 2.98                     
+REMARK 280                                                                      
+REMARK 280 CRYSTALLIZATION CONDITIONS: 0.05M MES PH 5.6, 0.01M MAGNESIUM        
+REMARK 280  CHLORIDE, 0.4M POTASSIUM CHLORIDE, 9% PEG 8000, VAPOR DIFFUSION,    
+REMARK 280  HANGING DROP, TEMPERATURE 290K                                      
+REMARK 290                                                                      
+REMARK 290 CRYSTALLOGRAPHIC SYMMETRY                                            
+REMARK 290 SYMMETRY OPERATORS FOR SPACE GROUP: C 2 2 21                         
+REMARK 290                                                                      
+REMARK 290      SYMOP   SYMMETRY                                                
+REMARK 290     NNNMMM   OPERATOR                                                
+REMARK 290       1555   X,Y,Z                                                   
+REMARK 290       2555   -X,-Y,Z+1/2                                             
+REMARK 290       3555   -X,Y,-Z+1/2                                             
+REMARK 290       4555   X,-Y,-Z                                                 
+REMARK 290       5555   X+1/2,Y+1/2,Z                                           
+REMARK 290       6555   -X+1/2,-Y+1/2,Z+1/2                                     
+REMARK 290       7555   -X+1/2,Y+1/2,-Z+1/2                                     
+REMARK 290       8555   X+1/2,-Y+1/2,-Z                                         
+REMARK 290                                                                      
+REMARK 290     WHERE NNN -> OPERATOR NUMBER                                     
+REMARK 290           MMM -> TRANSLATION VECTOR                                  
+REMARK 290                                                                      
+REMARK 290 CRYSTALLOGRAPHIC SYMMETRY TRANSFORMATIONS                            
+REMARK 290 THE FOLLOWING TRANSFORMATIONS OPERATE ON THE ATOM/HETATM             
+REMARK 290 RECORDS IN THIS ENTRY TO PRODUCE CRYSTALLOGRAPHICALLY                
+REMARK 290 RELATED MOLECULES.                                                   
+REMARK 290   SMTRY1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 290   SMTRY1   2 -1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   2  0.000000 -1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   2  0.000000  0.000000  1.000000       37.80000            
+REMARK 290   SMTRY1   3 -1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   3  0.000000  1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   3  0.000000  0.000000 -1.000000       37.80000            
+REMARK 290   SMTRY1   4  1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   4  0.000000 -1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   4  0.000000  0.000000 -1.000000        0.00000            
+REMARK 290   SMTRY1   5  1.000000  0.000000  0.000000       50.05000            
+REMARK 290   SMTRY2   5  0.000000  1.000000  0.000000      118.50000            
+REMARK 290   SMTRY3   5  0.000000  0.000000  1.000000        0.00000            
+REMARK 290   SMTRY1   6 -1.000000  0.000000  0.000000       50.05000            
+REMARK 290   SMTRY2   6  0.000000 -1.000000  0.000000      118.50000            
+REMARK 290   SMTRY3   6  0.000000  0.000000  1.000000       37.80000            
+REMARK 290   SMTRY1   7 -1.000000  0.000000  0.000000       50.05000            
+REMARK 290   SMTRY2   7  0.000000  1.000000  0.000000      118.50000            
+REMARK 290   SMTRY3   7  0.000000  0.000000 -1.000000       37.80000            
+REMARK 290   SMTRY1   8  1.000000  0.000000  0.000000       50.05000            
+REMARK 290   SMTRY2   8  0.000000 -1.000000  0.000000      118.50000            
+REMARK 290   SMTRY3   8  0.000000  0.000000 -1.000000        0.00000            
+REMARK 290                                                                      
+REMARK 290 REMARK: NULL                                                         
+REMARK 300                                                                      
+REMARK 300 BIOMOLECULE: 1                                                       
+REMARK 300 SEE REMARK 350 FOR THE AUTHOR PROVIDED AND/OR PROGRAM                
+REMARK 300 GENERATED ASSEMBLY INFORMATION FOR THE STRUCTURE IN                  
+REMARK 300 THIS ENTRY. THE REMARK MAY ALSO PROVIDE INFORMATION ON               
+REMARK 300 BURIED SURFACE AREA.                                                 
+REMARK 300 REMARK: THE OCTAMER IS GENERATED FROM THE TETRAMER ALONG THE 2-FOLD  
+REMARK 300 AXIS:                                                                
+REMARK 350                                                                      
+REMARK 350 COORDINATES FOR A COMPLETE MULTIMER REPRESENTING THE KNOWN           
+REMARK 350 BIOLOGICALLY SIGNIFICANT OLIGOMERIZATION STATE OF THE                
+REMARK 350 MOLECULE CAN BE GENERATED BY APPLYING BIOMT TRANSFORMATIONS          
+REMARK 350 GIVEN BELOW.  BOTH NON-CRYSTALLOGRAPHIC AND                          
+REMARK 350 CRYSTALLOGRAPHIC OPERATIONS ARE GIVEN.                               
+REMARK 350                                                                      
+REMARK 350 BIOMOLECULE: 1                                                       
+REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: OCTAMERIC                         
+REMARK 350 SOFTWARE DETERMINED QUATERNARY STRUCTURE: OCTAMERIC                  
+REMARK 350 SOFTWARE USED: PISA,PQS                                              
+REMARK 350 TOTAL BURIED SURFACE AREA: 26870 ANGSTROM**2                         
+REMARK 350 SURFACE AREA OF THE COMPLEX: 54080 ANGSTROM**2                       
+REMARK 350 CHANGE IN SOLVENT FREE ENERGY: -189.0 KCAL/MOL                       
+REMARK 350 APPLY THE FOLLOWING TO CHAINS: A, B, C, D                            
+REMARK 350   BIOMT1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 350   BIOMT2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 350   BIOMT1   2 -1.000000  0.000000  0.000000      100.10000            
+REMARK 350   BIOMT2   2  0.000000  1.000000  0.000000        0.00000            
+REMARK 350   BIOMT3   2  0.000000  0.000000 -1.000000       37.80000            
+REMARK 465                                                                      
+REMARK 465 MISSING RESIDUES                                                     
+REMARK 465 THE FOLLOWING RESIDUES WERE NOT LOCATED IN THE                       
+REMARK 465 EXPERIMENT. (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN               
+REMARK 465 IDENTIFIER; SSSEQ=SEQUENCE NUMBER; I=INSERTION CODE.)                
+REMARK 465                                                                      
+REMARK 465   M RES C SSSEQI                                                     
+REMARK 465     VAL A     2                                                      
+REMARK 465     ASP A     3                                                      
+REMARK 465     SER A     4                                                      
+REMARK 465     LYS A     5                                                      
+REMARK 465     LYS A     6                                                      
+REMARK 465     ARG A     7                                                      
+REMARK 465     PRO A     8                                                      
+REMARK 465     GLY A     9                                                      
+REMARK 465     LYS A    10                                                      
+REMARK 465     ASP A    11                                                      
+REMARK 465     VAL B     2                                                      
+REMARK 465     ASP B     3                                                      
+REMARK 465     SER B     4                                                      
+REMARK 465     LYS B     5                                                      
+REMARK 465     LYS B     6                                                      
+REMARK 465     ARG B     7                                                      
+REMARK 465     PRO B     8                                                      
+REMARK 465     GLY B     9                                                      
+REMARK 465     LYS B    10                                                      
+REMARK 465     ASP B    11                                                      
+REMARK 465     THR B   163                                                      
+REMARK 465     ARG B   164                                                      
+REMARK 465     VAL C     2                                                      
+REMARK 465     ASP C     3                                                      
+REMARK 465     SER C     4                                                      
+REMARK 465     LYS C     5                                                      
+REMARK 465     LYS C     6                                                      
+REMARK 465     ARG C     7                                                      
+REMARK 465     VAL D     2                                                      
+REMARK 465     ASP D     3                                                      
+REMARK 465     SER D     4                                                      
+REMARK 465     LYS D     5                                                      
+REMARK 465     LYS D     6                                                      
+REMARK 465     ARG D     7                                                      
+REMARK 465     PRO D     8                                                      
+REMARK 465     GLY D     9                                                      
+REMARK 465     LYS D    10                                                      
+REMARK 465     ASP D    11                                                      
+REMARK 470                                                                      
+REMARK 470 MISSING ATOM                                                         
+REMARK 470 THE FOLLOWING RESIDUES HAVE MISSING ATOMS (M=MODEL NUMBER;           
+REMARK 470 RES=RESIDUE NAME; C=CHAIN IDENTIFIER; SSEQ=SEQUENCE NUMBER;          
+REMARK 470 I=INSERTION CODE):                                                   
+REMARK 470   M RES CSSEQI  ATOMS                                                
+REMARK 470     ARG A  14    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS A  25    CG   CD   CE   NZ                                   
+REMARK 470     ARG A  28    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ILE A  29    CG1  CG2  CD1                                       
+REMARK 470     LEU A  34    CG   CD1  CD2                                       
+REMARK 470     LYS A  36    CG   CD   CE   NZ                                   
+REMARK 470     ARG A  37    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU A  40    CG   CD1  CD2                                       
+REMARK 470     SER A  41    OG                                                  
+REMARK 470     THR A  43    OG1  CG2                                            
+REMARK 470     GLU A  47    CG   CD   OE1  OE2                                  
+REMARK 470     ARG A  48    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG A  50    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG A  54    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     GLN A  55    CG   CD   OE1  NE2                                  
+REMARK 470     ILE A  58    CG1  CG2  CD1                                       
+REMARK 470     GLN A  59    CG   CD   OE1  NE2                                  
+REMARK 470     LEU A  64    CG   CD1  CD2                                       
+REMARK 470     LEU A  65    CG   CD1  CD2                                       
+REMARK 470     ASN A  66    CG   OD1                                            
+REMARK 470     HIS A  68    CG   ND1  CD2  CE1  NE2                             
+REMARK 470     SER A  73    OG                                                  
+REMARK 470     LEU A  82    CG   CD1  CD2                                       
+REMARK 470     ARG A  84    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ASP A  88    CG   OD1  OD2                                       
+REMARK 470     VAL A  89    CG1  CG2                                            
+REMARK 470     GLU A  91    CG   CD   OE1  OE2                                  
+REMARK 470     GLN A  92    CG   CD   OE1  NE2                                  
+REMARK 470     GLN A  98    CG   CD   OE1  NE2                                  
+REMARK 470     LYS A  99    CG   CD   CE   NZ                                   
+REMARK 470     GLU A 101    CG   CD   OE1  OE2                                  
+REMARK 470     LYS A 118    CG   CD   CE   NZ                                   
+REMARK 470     VAL A 121    CG1  CG2                                            
+REMARK 470     ARG A 128    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS A 129    CG   CD   CE   NZ                                   
+REMARK 470     THR A 134    OG1  CG2                                            
+REMARK 470     ARG A 137    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG A 145    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS A 154    CG   CD   CE   NZ                                   
+REMARK 470     GLN A 155    CG   CD   OE1  NE2                                  
+REMARK 470     SER A 156    OG                                                  
+REMARK 470     ASN A 157    CG   OD1                                            
+REMARK 470     ARG A 158    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU A 159    CG   CD1  CD2                                       
+REMARK 470     VAL A 160    CG1  CG2                                            
+REMARK 470     ILE A 161    CG1  CG2  CD1                                       
+REMARK 470     LYS A 162    CG   CD   CE   NZ                                   
+REMARK 470     THR A 163    OG1  CG2                                            
+REMARK 470     ARG A 164    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU B  12    CG   CD1  CD2                                       
+REMARK 470     ILE B  15    CG1  CG2  CD1                                       
+REMARK 470     ASN B  18    CG   OD1                                            
+REMARK 470     ILE B  19    CG1  CG2  CD1                                       
+REMARK 470     LEU B  23    CG   CD1  CD2                                       
+REMARK 470     LYS B  25    CG   CD   CE   NZ                                   
+REMARK 470     ASP B  26    CG   OD1  OD2                                       
+REMARK 470     ARG B  28    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ILE B  29    CG1  CG2  CD1                                       
+REMARK 470     SER B  30    OG                                                  
+REMARK 470     ASN B  31    CG   OD1                                            
+REMARK 470     LEU B  34    CG   CD1  CD2                                       
+REMARK 470     SER B  35    OG                                                  
+REMARK 470     LYS B  36    CG   CD   CE   NZ                                   
+REMARK 470     LEU B  40    CG   CD1  CD2                                       
+REMARK 470     SER B  41    OG                                                  
+REMARK 470     THR B  43    OG1  CG2                                            
+REMARK 470     GLU B  47    CG   CD   OE1  OE2                                  
+REMARK 470     ARG B  48    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG B  50    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG B  51    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG B  54    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ILE B  58    CG1  CG2  CD1                                       
+REMARK 470     HIS B  68    CG   ND1  CD2  CE1  NE2                             
+REMARK 470     SER B  73    OG                                                  
+REMARK 470     ARG B  84    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ASP B  88    CG   OD1  OD2                                       
+REMARK 470     VAL B  89    CG1  CG2                                            
+REMARK 470     GLU B  91    CG   CD   OE1  OE2                                  
+REMARK 470     LYS B  99    CG   CD   CE   NZ                                   
+REMARK 470     GLU B 101    CG   CD   OE1  OE2                                  
+REMARK 470     LYS B 118    CG   CD   CE   NZ                                   
+REMARK 470     ASP B 123    CG   OD1  OD2                                       
+REMARK 470     ARG B 128    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS B 129    CG   CD   CE   NZ                                   
+REMARK 470     LEU B 131    CG   CD1  CD2                                       
+REMARK 470     GLU B 133    CG   CD   OE1  OE2                                  
+REMARK 470     LEU B 136    CG   CD1  CD2                                       
+REMARK 470     ARG B 137    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS B 154    CG   CD   CE   NZ                                   
+REMARK 470     GLN B 155    CG   CD   OE1  NE2                                  
+REMARK 470     SER B 156    OG                                                  
+REMARK 470     ASN B 157    CG   OD1                                            
+REMARK 470     ARG B 158    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU B 159    CG   CD1  CD2                                       
+REMARK 470     VAL B 160    CG1  CG2                                            
+REMARK 470     ILE B 161    CG1  CG2  CD1                                       
+REMARK 470     LYS B 162    CG   CD   CE   NZ                                   
+REMARK 470     PRO C   8    CG   CD                                             
+REMARK 470     ASP C  11    CG   OD1  OD2                                       
+REMARK 470     ARG C  14    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     GLN C  59    CG   CD   OE1  NE2                                  
+REMARK 470     ASN C  66    CG   OD1                                            
+REMARK 470     SER C  73    OG                                                  
+REMARK 470     ARG C  84    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ASP C  88    CG   OD1  OD2                                       
+REMARK 470     GLU C  91    CG   CD   OE1  OE2                                  
+REMARK 470     GLN C  92    CG   CD   OE1  NE2                                  
+REMARK 470     ASN C  94    CG   OD1                                            
+REMARK 470     THR C  95    OG1  CG2                                            
+REMARK 470     VAL C  97    CG1  CG2                                            
+REMARK 470     LYS C  99    CG   CD   CE   NZ                                   
+REMARK 470     GLU C 101    CG   CD   OE1  OE2                                  
+REMARK 470     LYS C 118    CG   CD   CE   NZ                                   
+REMARK 470     ARG C 128    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS C 129    CG   CD   CE   NZ                                   
+REMARK 470     ARG C 137    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     GLU C 152    CG   CD   OE1  OE2                                  
+REMARK 470     LYS C 154    CG   CD   CE   NZ                                   
+REMARK 470     GLN C 155    CG   CD   OE1  NE2                                  
+REMARK 470     SER C 156    OG                                                  
+REMARK 470     ASN C 157    CG   OD1                                            
+REMARK 470     ARG C 158    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU C 159    CG   CD1  CD2                                       
+REMARK 470     VAL C 160    CG1  CG2                                            
+REMARK 470     ILE C 161    CG1  CG2  CD1                                       
+REMARK 470     LYS C 162    CG   CD   CE   NZ                                   
+REMARK 470     THR C 163    OG1  CG2                                            
+REMARK 470     ARG C 164    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG D  14    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ILE D  15    CG1  CG2  CD1                                       
+REMARK 470     ARG D  17    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ASN D  18    CG   OD1                                            
+REMARK 470     ILE D  19    CG1  CG2  CD1                                       
+REMARK 470     LYS D  25    CG   CD   CE   NZ                                   
+REMARK 470     LEU D  34    CG   CD1  CD2                                       
+REMARK 470     LYS D  36    CG   CD   CE   NZ                                   
+REMARK 470     GLU D  47    CG   CD   OE1  OE2                                  
+REMARK 470     ARG D  48    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG D  50    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG D  54    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     GLN D  59    CG   CD   OE1  NE2                                  
+REMARK 470     ASN D  66    CG   OD1                                            
+REMARK 470     HIS D  68    CG   ND1  CD2  CE1  NE2                             
+REMARK 470     LEU D  74    CG   CD1  CD2                                       
+REMARK 470     ASN D  83    CG   OD1                                            
+REMARK 470     ARG D  84    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS D  99    CG   CD   CE   NZ                                   
+REMARK 470     GLU D 101    CG   CD   OE1  OE2                                  
+REMARK 470     GLN D 104    CG   CD   OE1  NE2                                  
+REMARK 470     LYS D 118    CG   CD   CE   NZ                                   
+REMARK 470     ARG D 128    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LYS D 129    CG   CD   CE   NZ                                   
+REMARK 470     ARG D 137    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     ARG D 145    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     GLU D 151    CG   CD   OE1  OE2                                  
+REMARK 470     LYS D 154    CG   CD   CE   NZ                                   
+REMARK 470     GLN D 155    CG   CD   OE1  NE2                                  
+REMARK 470     SER D 156    OG                                                  
+REMARK 470     ASN D 157    CG   OD1                                            
+REMARK 470     ARG D 158    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 470     LEU D 159    CG   CD1  CD2                                       
+REMARK 470     VAL D 160    CG1  CG2                                            
+REMARK 470     ILE D 161    CG1  CG2  CD1                                       
+REMARK 470     LYS D 162    CG   CD   CE   NZ                                   
+REMARK 470     THR D 163    OG1  CG2                                            
+REMARK 470     ARG D 164    CG   CD   NE   CZ   NH1  NH2                        
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: COVALENT BOND ANGLES                                       
+REMARK 500                                                                      
+REMARK 500 THE STEREOCHEMICAL PARAMETERS OF THE FOLLOWING RESIDUES              
+REMARK 500 HAVE VALUES WHICH DEVIATE FROM EXPECTED VALUES BY MORE               
+REMARK 500 THAN 6*RMSD (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN               
+REMARK 500 IDENTIFIER; SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                 
+REMARK 500                                                                      
+REMARK 500 STANDARD TABLE:                                                      
+REMARK 500 FORMAT: (10X,I3,1X,A3,1X,A1,I4,A1,3(1X,A4,2X),12X,F5.1)              
+REMARK 500                                                                      
+REMARK 500 EXPECTED VALUES PROTEIN: ENGH AND HUBER, 1999                        
+REMARK 500 EXPECTED VALUES NUCLEIC ACID: CLOWNEY ET AL 1996                     
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI ATM1   ATM2   ATM3                                     
+REMARK 500    ARG A  17   NE  -  CZ  -  NH1 ANGL. DEV. =   3.3 DEGREES          
+REMARK 500    ARG A  17   NE  -  CZ  -  NH2 ANGL. DEV. =  -3.6 DEGREES          
+REMARK 500    ARG C  17   NE  -  CZ  -  NH1 ANGL. DEV. =  -3.4 DEGREES          
+REMARK 500    ARG C  17   NE  -  CZ  -  NH2 ANGL. DEV. =   3.2 DEGREES          
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: TORSION ANGLES                                             
+REMARK 500                                                                      
+REMARK 500 TORSION ANGLES OUTSIDE THE EXPECTED RAMACHANDRAN REGIONS:            
+REMARK 500 (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN IDENTIFIER;               
+REMARK 500 SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                             
+REMARK 500                                                                      
+REMARK 500 STANDARD TABLE:                                                      
+REMARK 500 FORMAT:(10X,I3,1X,A3,1X,A1,I4,A1,4X,F7.2,3X,F7.2)                    
+REMARK 500                                                                      
+REMARK 500 EXPECTED VALUES: GJ KLEYWEGT AND TA JONES (1996). PHI/PSI-           
+REMARK 500 CHOLOGY: RAMACHANDRAN REVISITED. STRUCTURE 4, 1395 - 1400            
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI        PSI       PHI                                   
+REMARK 500    ARG A  14      -69.20   -104.37                                   
+REMARK 500    ASP A  26       96.04   -173.98                                   
+REMARK 500    LYS A  36      -62.06   -104.67                                   
+REMARK 500    PRO A  42      -89.52    -35.49                                   
+REMARK 500    LEU A  46      -19.61   -157.68                                   
+REMARK 500    GLN A  55      -79.52    -66.69                                   
+REMARK 500    ALA A  72       46.98   -161.90                                   
+REMARK 500    THR A  95       44.38    -77.55                                   
+REMARK 500    ALA A  96      -20.92   -157.42                                   
+REMARK 500    GLN A 104      -78.56    -76.86                                   
+REMARK 500    ASP A 112      -84.85    -61.46                                   
+REMARK 500    GLU A 133       -8.19   -159.08                                   
+REMARK 500    THR A 134       -2.18   -173.36                                   
+REMARK 500    LEU A 135      -68.11   -109.88                                   
+REMARK 500    PRO A 139       97.67    -46.91                                   
+REMARK 500    VAL A 141      128.19   -177.58                                   
+REMARK 500    GLU A 151      101.73   -160.81                                   
+REMARK 500    GLN A 155       95.96   -161.15                                   
+REMARK 500    THR A 163      -79.18    -20.64                                   
+REMARK 500    ARG B  28       45.16    -88.19                                   
+REMARK 500    SER B  35       45.53    -80.57                                   
+REMARK 500    LYS B  36      -59.78   -141.83                                   
+REMARK 500    PRO B  42       -4.70    -55.11                                   
+REMARK 500    THR B  43      -52.54   -122.28                                   
+REMARK 500    PRO B  44      -70.14    -38.07                                   
+REMARK 500    PHE B  57      -73.12    -45.93                                   
+REMARK 500    PRO B  67      -17.81    -46.92                                   
+REMARK 500    TYR B  69      -71.17   -100.05                                   
+REMARK 500    ASP B  71       95.65    -46.54                                   
+REMARK 500    ALA B  72       29.72    173.25                                   
+REMARK 500    PRO B  87      -31.97    -34.95                                   
+REMARK 500    ALA B  96      -38.14   -166.14                                   
+REMARK 500    LYS B  99        5.25    -67.71                                   
+REMARK 500    GLU B 102       22.81    -71.26                                   
+REMARK 500    CYS B 106      123.29   -174.82                                   
+REMARK 500    PRO B 122      -71.43    -72.38                                   
+REMARK 500    THR B 134      -52.27   -139.02                                   
+REMARK 500    ASN B 142      -32.48   -130.06                                   
+REMARK 500    GLU B 151      119.34   -165.73                                   
+REMARK 500    GLN B 155       96.51   -161.35                                   
+REMARK 500    LYS C  10      -51.63     70.35                                   
+REMARK 500    ASP C  13      132.12    -39.13                                   
+REMARK 500    GLN C  55      -71.34    -40.10                                   
+REMARK 500    PRO C  67        0.62    -61.00                                   
+REMARK 500    ASP C  71       91.23    -46.99                                   
+REMARK 500    ALA C  72       16.07   -179.20                                   
+REMARK 500    ALA C  86       55.50   -146.95                                   
+REMARK 500    PRO C  87       64.86     -7.94                                   
+REMARK 500    ASP C  88       -8.58    173.52                                   
+REMARK 500    THR C  95       44.77    -75.56                                   
+REMARK 500                                                                      
+REMARK 500 THIS ENTRY HAS      70 RAMACHANDRAN OUTLIERS.                        
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+DBREF  2GQQ A    2   164  UNP    P0ACJ0   LRP_ECOLI        1    163             
+DBREF  2GQQ B    2   164  UNP    P0ACJ0   LRP_ECOLI        1    163             
+DBREF  2GQQ C    2   164  UNP    P0ACJ0   LRP_ECOLI        1    163             
+DBREF  2GQQ D    2   164  UNP    P0ACJ0   LRP_ECOLI        1    163             
+SEQRES   1 A  163  VAL ASP SER LYS LYS ARG PRO GLY LYS ASP LEU ASP ARG          
+SEQRES   2 A  163  ILE ASP ARG ASN ILE LEU ASN GLU LEU GLN LYS ASP GLY          
+SEQRES   3 A  163  ARG ILE SER ASN VAL GLU LEU SER LYS ARG VAL GLY LEU          
+SEQRES   4 A  163  SER PRO THR PRO CYS LEU GLU ARG VAL ARG ARG LEU GLU          
+SEQRES   5 A  163  ARG GLN GLY PHE ILE GLN GLY TYR THR ALA LEU LEU ASN          
+SEQRES   6 A  163  PRO HIS TYR LEU ASP ALA SER LEU LEU VAL PHE VAL GLU          
+SEQRES   7 A  163  ILE THR LEU ASN ARG GLY ALA PRO ASP VAL PHE GLU GLN          
+SEQRES   8 A  163  PHE ASN THR ALA VAL GLN LYS LEU GLU GLU ILE GLN GLU          
+SEQRES   9 A  163  CYS HIS LEU VAL SER GLY ASP PHE ASP TYR LEU LEU LYS          
+SEQRES  10 A  163  THR ARG VAL PRO ASP MET SER ALA TYR ARG LYS LEU LEU          
+SEQRES  11 A  163  GLY GLU THR LEU LEU ARG LEU PRO GLY VAL ASN ASP THR          
+SEQRES  12 A  163  ARG THR TYR VAL VAL MET GLU GLU VAL LYS GLN SER ASN          
+SEQRES  13 A  163  ARG LEU VAL ILE LYS THR ARG                                  
+SEQRES   1 B  163  VAL ASP SER LYS LYS ARG PRO GLY LYS ASP LEU ASP ARG          
+SEQRES   2 B  163  ILE ASP ARG ASN ILE LEU ASN GLU LEU GLN LYS ASP GLY          
+SEQRES   3 B  163  ARG ILE SER ASN VAL GLU LEU SER LYS ARG VAL GLY LEU          
+SEQRES   4 B  163  SER PRO THR PRO CYS LEU GLU ARG VAL ARG ARG LEU GLU          
+SEQRES   5 B  163  ARG GLN GLY PHE ILE GLN GLY TYR THR ALA LEU LEU ASN          
+SEQRES   6 B  163  PRO HIS TYR LEU ASP ALA SER LEU LEU VAL PHE VAL GLU          
+SEQRES   7 B  163  ILE THR LEU ASN ARG GLY ALA PRO ASP VAL PHE GLU GLN          
+SEQRES   8 B  163  PHE ASN THR ALA VAL GLN LYS LEU GLU GLU ILE GLN GLU          
+SEQRES   9 B  163  CYS HIS LEU VAL SER GLY ASP PHE ASP TYR LEU LEU LYS          
+SEQRES  10 B  163  THR ARG VAL PRO ASP MET SER ALA TYR ARG LYS LEU LEU          
+SEQRES  11 B  163  GLY GLU THR LEU LEU ARG LEU PRO GLY VAL ASN ASP THR          
+SEQRES  12 B  163  ARG THR TYR VAL VAL MET GLU GLU VAL LYS GLN SER ASN          
+SEQRES  13 B  163  ARG LEU VAL ILE LYS THR ARG                                  
+SEQRES   1 C  163  VAL ASP SER LYS LYS ARG PRO GLY LYS ASP LEU ASP ARG          
+SEQRES   2 C  163  ILE ASP ARG ASN ILE LEU ASN GLU LEU GLN LYS ASP GLY          
+SEQRES   3 C  163  ARG ILE SER ASN VAL GLU LEU SER LYS ARG VAL GLY LEU          
+SEQRES   4 C  163  SER PRO THR PRO CYS LEU GLU ARG VAL ARG ARG LEU GLU          
+SEQRES   5 C  163  ARG GLN GLY PHE ILE GLN GLY TYR THR ALA LEU LEU ASN          
+SEQRES   6 C  163  PRO HIS TYR LEU ASP ALA SER LEU LEU VAL PHE VAL GLU          
+SEQRES   7 C  163  ILE THR LEU ASN ARG GLY ALA PRO ASP VAL PHE GLU GLN          
+SEQRES   8 C  163  PHE ASN THR ALA VAL GLN LYS LEU GLU GLU ILE GLN GLU          
+SEQRES   9 C  163  CYS HIS LEU VAL SER GLY ASP PHE ASP TYR LEU LEU LYS          
+SEQRES  10 C  163  THR ARG VAL PRO ASP MET SER ALA TYR ARG LYS LEU LEU          
+SEQRES  11 C  163  GLY GLU THR LEU LEU ARG LEU PRO GLY VAL ASN ASP THR          
+SEQRES  12 C  163  ARG THR TYR VAL VAL MET GLU GLU VAL LYS GLN SER ASN          
+SEQRES  13 C  163  ARG LEU VAL ILE LYS THR ARG                                  
+SEQRES   1 D  163  VAL ASP SER LYS LYS ARG PRO GLY LYS ASP LEU ASP ARG          
+SEQRES   2 D  163  ILE ASP ARG ASN ILE LEU ASN GLU LEU GLN LYS ASP GLY          
+SEQRES   3 D  163  ARG ILE SER ASN VAL GLU LEU SER LYS ARG VAL GLY LEU          
+SEQRES   4 D  163  SER PRO THR PRO CYS LEU GLU ARG VAL ARG ARG LEU GLU          
+SEQRES   5 D  163  ARG GLN GLY PHE ILE GLN GLY TYR THR ALA LEU LEU ASN          
+SEQRES   6 D  163  PRO HIS TYR LEU ASP ALA SER LEU LEU VAL PHE VAL GLU          
+SEQRES   7 D  163  ILE THR LEU ASN ARG GLY ALA PRO ASP VAL PHE GLU GLN          
+SEQRES   8 D  163  PHE ASN THR ALA VAL GLN LYS LEU GLU GLU ILE GLN GLU          
+SEQRES   9 D  163  CYS HIS LEU VAL SER GLY ASP PHE ASP TYR LEU LEU LYS          
+SEQRES  10 D  163  THR ARG VAL PRO ASP MET SER ALA TYR ARG LYS LEU LEU          
+SEQRES  11 D  163  GLY GLU THR LEU LEU ARG LEU PRO GLY VAL ASN ASP THR          
+SEQRES  12 D  163  ARG THR TYR VAL VAL MET GLU GLU VAL LYS GLN SER ASN          
+SEQRES  13 D  163  ARG LEU VAL ILE LYS THR ARG                                  
+HELIX    1   1 ARG A   14  ASP A   26  1                                  13    
+HELIX    2   2 VAL A   32  LYS A   36  5                                   5    
+HELIX    3   3 ARG A   48  GLY A   56  1                                   9    
+HELIX    4   4 ASP A   88  GLN A   98  1                                  11    
+HELIX    5   5 ASP A  123  LEU A  131  1                                   9    
+HELIX    6   6 ILE B   15  ASP B   26  1                                  12    
+HELIX    7   7 SER B   30  VAL B   38  1                                   9    
+HELIX    8   8 GLU B   47  GLY B   56  1                                  10    
+HELIX    9   9 ASP B   88  GLN B   98  1                                  11    
+HELIX   10  10 ASP B  123  LEU B  131  1                                   9    
+HELIX   11  11 THR B  134  LEU B  138  5                                   5    
+HELIX   12  12 ASP C   13  ASP C   26  1                                  14    
+HELIX   13  13 SER C   30  GLY C   39  1                                  10    
+HELIX   14  14 SER C   41  GLY C   56  1                                  16    
+HELIX   15  15 ASP C   88  THR C   95  1                                   8    
+HELIX   16  16 ASP C  123  THR C  134  1                                  12    
+HELIX   17  17 ASP D   13  ASP D   26  1                                  14    
+HELIX   18  18 SER D   30  GLY D   39  1                                  10    
+HELIX   19  19 SER D   41  GLU D   47  1                                   7    
+HELIX   20  20 GLU D   47  GLN D   55  1                                   9    
+HELIX   21  21 ASP D   88  THR D   95  1                                   8    
+HELIX   22  22 ASP D  123  THR D  134  1                                  12    
+SHEET    1   A 2 ILE A  58  LEU A  65  0                                        
+SHEET    2   A 2 ILE B  58  LEU B  65 -1  O  LEU B  64   N  GLY A  60           
+SHEET    1   B 9 LEU A  75  THR A  81  0                                        
+SHEET    2   B 9 TYR A 115  ARG A 120 -1  O  THR A 119   N  VAL A  76           
+SHEET    3   B 9 ILE A 103  VAL A 109 -1  N  GLU A 105   O  LYS A 118           
+SHEET    4   B 9 VAL B 141  LYS B 154 -1  O  LYS B 154   N  CYS A 106           
+SHEET    5   B 9 LEU B  74  LEU B  82 -1  N  GLU B  79   O  ARG B 145           
+SHEET    6   B 9 TYR B 115  VAL B 121 -1  O  VAL B 121   N  LEU B  74           
+SHEET    7   B 9 ILE B 103  VAL B 109 -1  N  GLU B 105   O  LYS B 118           
+SHEET    8   B 9 ASP A 143  GLN A 155 -1  N  MET A 150   O  LEU B 108           
+SHEET    9   B 9 LEU A  75  THR A  81 -1  N  GLU A  79   O  ARG A 145           
+SHEET    1   C 2 ILE C  58  LEU C  65  0                                        
+SHEET    2   C 2 ILE D  58  LEU D  65 -1  O  LEU D  64   N  GLY C  60           
+SHEET    1   D 9 LEU C  74  THR C  81  0                                        
+SHEET    2   D 9 TYR C 115  VAL C 121 -1  O  TYR C 115   N  ILE C  80           
+SHEET    3   D 9 ILE C 103  VAL C 109 -1  N  GLU C 105   O  LYS C 118           
+SHEET    4   D 9 VAL D 141  GLN D 155 -1  O  MET D 150   N  LEU C 108           
+SHEET    5   D 9 LEU D  74  LEU D  82 -1  N  GLU D  79   O  ARG D 145           
+SHEET    6   D 9 TYR D 115  VAL D 121 -1  O  THR D 119   N  VAL D  76           
+SHEET    7   D 9 ILE D 103  VAL D 109 -1  N  GLU D 105   O  LYS D 118           
+SHEET    8   D 9 ASP C 143  GLN C 155 -1  N  MET C 150   O  LEU D 108           
+SHEET    9   D 9 LEU C  74  THR C  81 -1  N  PHE C  77   O  TYR C 147           
+CRYST1  100.100  237.000   75.600  90.00  90.00  90.00 C 2 2 21     32          
+ORIGX1      1.000000  0.000000  0.000000        0.00000                         
+ORIGX2      0.000000  1.000000  0.000000        0.00000                         
+ORIGX3      0.000000  0.000000  1.000000        0.00000                         
+SCALE1      0.009990  0.000000  0.000000        0.00000                         
+SCALE2      0.000000  0.004219  0.000000        0.00000                         
+SCALE3      0.000000  0.000000  0.013228        0.00000                         
+ATOM      1  N   LEU A  12      39.822 125.897  22.200  1.00 82.35           N  
+ATOM      2  CA  LEU A  12      40.423 125.448  23.495  1.00 81.77           C  
+ATOM      3  C   LEU A  12      40.211 126.555  24.528  1.00 78.62           C  
+ATOM      4  O   LEU A  12      41.112 127.348  24.785  1.00 79.49           O  
+ATOM      5  CB  LEU A  12      41.928 125.188  23.299  1.00 79.58           C  
+ATOM      6  CG  LEU A  12      42.637 124.139  24.174  1.00 72.32           C  
+ATOM      7  CD1 LEU A  12      42.527 124.511  25.642  1.00 68.68           C  
+ATOM      8  CD2 LEU A  12      42.028 122.766  23.922  1.00 67.13           C  
+ATOM      9  N   ASP A  13      39.017 126.605  25.114  1.00 79.09           N  
+ATOM     10  CA  ASP A  13      38.688 127.621  26.119  1.00 83.10           C  
+ATOM     11  C   ASP A  13      38.823 127.066  27.536  1.00 78.10           C  
+ATOM     12  O   ASP A  13      39.293 125.948  27.723  1.00 81.87           O  
+ATOM     13  CB  ASP A  13      37.254 128.143  25.914  1.00 87.23           C  

@@ -4,16 +4,41 @@ derive_all_possible_homodimers.py - from a preprocessed yaml file that matches u
                              Does not check that chains are in contact. Merely checks that two chains of
                              the same sequence sequence are in the same overall pdb assembly.
 
-Written by Jacob Schwartz (jaschwa@umich.edu) in December 2022.
+Written by Jacob Schwartz (jaschwa@umich.edu) in Winter 2022-23.
 Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
 https://freddolino-lab.med.umich.edu
 
-These functions are unittested by test/test_derive_all_possible_homodimers.py and passing as of 1/12/2023.
+These functions are unittested by test/test_derive_all_possible_homodimers.py and passing as of 1/12/2023. NNED UPDATE 2/5/23
 This work requires python >= 3.8
 '''
 
 import yaml
 import itertools
+from name_pdb import get_models_of_chain
+
+
+def expand_chains_across_models(chains, lib_path):
+    '''
+    Given a list of chains, each a string of the form "<pdb code>_<chain id>",
+    returns a list of those chains with model numbers, duplicating chains which 
+    occur across several models.
+
+    So if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C'] we might get
+    something like ['1abc_A_1', '1abc_B_1', '7cba_B_1', '7cba_B_2', '1abc_C_1', '1abc_C_2']
+    
+    :param chains: list[str], a list of chains in pdb assemblies that correspond to a uniprot sequence
+    :param lib_path: str, the path to a library that contains the rcsb pdb split according to the
+                        needs of this pipeline
+    '''
+
+    all_chains = []
+    for chain in chains:
+        pdb_base, chain_ID = chain.split('_')
+        models = get_models_of_chain(pdb_base, chain_ID, lib_path)
+        for model in models:
+            name = f'{chain}_{model}'
+            all_chains.append(name)
+    return all_chains
 
 
 def group_chains(chains):
@@ -37,7 +62,7 @@ def group_chains(chains):
 
 def derive_homodimers_from_groups(grouped_chains):
     '''
-    Given a list of grouped chains (grouped by group_chains(..) above), returns an unnested list
+    Given a list of grouped chains (grouped by gSo if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C']roup_chains(..) above), returns an unnested list
     of combinations limited to combinations within individual groups.
 
     So if we have [['1abc_A', '1abc_B', '1abc_C'], ['7cba_B']]
@@ -70,7 +95,7 @@ def derive_homodimers_from_groups(grouped_chains):
 
 
 
-def homodimers(infile, outfile):
+def homodimers(infile, outfile, lib_path):
     '''
     This function makes a dict, which is later saved in a yaml file, of 
     uniparc IDs matched to their mutliple homodimers. For example, if I 
@@ -101,9 +126,12 @@ def homodimers(infile, outfile):
 
     # for each uniparc sequence and its matching chains
     for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
-        
+
+        # expand list of chains to include all models
+        all_chains = expand_chains_across_models(chains, lib_path)
+
         # group the chains by uniprot code, making a nested list
-        grouped_chains = group_chains(chains)
+        grouped_chains = group_chains(all_chains)
 
         # make an unnested list of tuples which describe intra-assembly (same pdb code)
         # combinations of chains, e.g. ('1abc_A', '1abc_C')

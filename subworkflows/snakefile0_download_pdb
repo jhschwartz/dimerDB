@@ -1,9 +1,16 @@
 import os
+import sys 
+
+configfile: 'config.yaml'
+
+sys.path.append(config['paths']['scripts'])
+from simple_write import simple_write
 
 configfile: 'config.yaml'
 
 
 # force pdb update
+<<<<<<< HEAD
 pdb_main_updated = config['snake_donefiles']['sub0_pdb_main_download_done']
 pdb_oversized_updated = config['snake_donefiles']['sub0_pdb_oversized_download_done']
 if config['database_settings']['force_update_pdb'] and os.path.exists(pdb_main_updated):
@@ -21,12 +28,25 @@ rule all:
         config['snake_donefiles']['sub0_split_pdb_main_done'],
         config['snake_donefiles']['sub0_split_pdb_oversized_done'],
         config['snake_donefiles']['sub0_rename_oversized_done']
+=======
+pdb_updated = config['snake_donefiles']['sub0_pdb_download_done']
+if config['database_settings']['force_update_pdb'] and os.path.exists(pdb_updated):
+    os.remove(pdb_updated)
+
+
+localrules: all, download_pdb
+
+rule all:
+    input:
+        config['snake_donefiles']['sub0_split_pdb_done']
+>>>>>>> addmodelsplittopdb
     output:
         done =  config['snake_donefiles']['sub0_all_done'] 
     shell:
         "touch {output.done}"
 
 
+<<<<<<< HEAD
 rule download_main_pdb:
     output:
         done =  config['snake_donefiles']['sub0_pdb_main_download_done'] 
@@ -36,10 +56,24 @@ rule download_main_pdb:
         cd lib 
         rsync -rlpt -v -z -q --delete --port=33444 \
         rsync.rcsb.org::ftp_data/biounit/PDB/divided/ ./rcsb_pdb
+=======
+rule download_pdb:
+    output:
+        done =  config['snake_donefiles']['sub0_pdb_download_done']
+    params:
+        lib = config['paths']['lib']
+    shell:
+        """
+        mkdir -p {params.lib}
+        cd {params.lib} 
+        rsync -rlpt -v -z -q --delete --port=33444 \
+        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ ./rcsb_pdb
+>>>>>>> addmodelsplittopdb
         touch ../{output.done}
         """
 
 
+<<<<<<< HEAD
 rule download_oversized_pdb:
     output:
         done = config['snake_donefiles']['sub0_pdb_oversized_download_done'],
@@ -131,18 +165,43 @@ rule split_pdb_main:
         """
         {params.scripts}/parallel_split_pdb.pl {params.rcsb} {threads} {params.split_chain}
         touch {output.done}
+=======
+rule ungzip_pdb:
+    input:
+        config['snake_donefiles']['sub0_pdb_download_done'],
+    output:
+        done =  config['snake_donefiles']['sub0_ungzip_done'] 
+    threads: config['runtime']['max_threads']
+    resources:
+        time = "12:00:00",
+        mem_mb = "1000000" 
+    params:
+        scripts = config['paths']['scripts'],
+        lib = config['paths']['lib']
+    shell:
+        """
+        {params.scripts}/parallel_ungzip_all.sh {params.lib}/rcsb_pdb {threads} 1000
+        touch {output.done};
+>>>>>>> addmodelsplittopdb
         """
 
 
 rule split_pdb_oversized:
     input:
+<<<<<<< HEAD
         config['snake_donefiles']['sub0_unarchive_oversized_done'] 
     output:
         done =  config['snake_donefiles']['sub0_split_pdb_oversized_done'] 
+=======
+        config['snake_donefiles']['sub0_ungzip_done'] 
+    output:
+        done =  config['snake_donefiles']['sub0_split_pdb_done'] 
+>>>>>>> addmodelsplittopdb
     threads: config['runtime']['max_threads']
     resources:
         time = "12:00:00",
         mem_mb = "1000000"
+<<<<<<< HEAD
     params:
         scripts = config['paths']['scripts'],
         rcsb_oversized = config['paths']['rcsb_oversized'],
@@ -184,6 +243,14 @@ rule rename_oversized_chains:
 
 
 
+=======
+    run:
+        from parallel_convert_split_cif import parallel_convert_split_rename_cifs
+        rcsb = config['paths']['lib'] + '/rcsb_pdb'
+        exe = config['paths']['cif2pdb']
+        parallel_convert_split_rename_cifs(rcsb, exe, threads)
+        simple_write(output.done)
+>>>>>>> addmodelsplittopdb
 
 
 

@@ -11,8 +11,8 @@ import labels as label_funcs
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--uniparc') 
-parser.add_argument('-o', '--outfile') 
+parser.add_argument('-u', '--uniparc', required=True) 
+parser.add_argument('-o', '--outfile', required=True) 
 args = parser.parse_args()
 
 name = args.uniparc

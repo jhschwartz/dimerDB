@@ -21,11 +21,8 @@ workflow:
     snakefile0: subworkflows/snakefile0_download_pdb
     snakefile1: subworkflows/snakefile1_deduce_all_dimers
     snakefile2: subworkflows/snakefile2_prefilter
-    snakefile3.1: subworkflows/snakefile3.1_prune_homo_structures
-    snakefile4.1: subworkflows/snakefile4.1_prune_homo_seqs
-    snakefile2.2: subworkflows/snakefile2.2_prefilter_heterodimers
-    snakefile3.2: subworkflows/snakefile3.2_prune_hetero_structures
-    snakefile4.2: subworkflows/snakefile4.2_prune_hetero_seqs
+    snakefile3: subworkflows/snakefile3_prune_structures
+    snakefile4: subworkflows/snakefile4_prune_seqs
 
 paths:
     basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
@@ -34,44 +31,34 @@ paths:
     scripts_tests: scripts/tests
     scripts_tests_data: scripts/tests/data
 
-    mmalign: bin/MMalign
-    split_chain: bin/PDBParser/split_chain
+    usalign: bin/USalign/USalign
+    cif2pdb: bin/USalign/cif2pdb
     nwalign: bin/NWalign/align
     labels_loc: /scratch/sigbio_project_root/sigbio_project1/jaschwa/HDpred_working/preprocessing/bin/labels
     afdb_fasta: /nfs/turbo/umms-zhng/jaschwa/upec-fxn-pred/DB/afdb_v4.fasta
 
     intermediates: intermediates
     intermediates_homodimer_filtering: intermediates/homodimer_filtering
-    intermediates_heterodimer_filtering: intermediates/heterodimer_filtering
     lib: lib
-    rcsb: lib/rcsb_pdb
-    rcsb_oversized: lib/rcsb_oversized
-    pdb_oversized_listfile: lib/oversized_index.txt
 
 snake_donefiles:
     sub0_all_done: intermediates/subflow0.done
-    sub0_pdb_main_download_done: intermediates/pdb_updated.done
-    sub0_pdb_oversized_download_done: intermediates/pdb_oversized_download.done
-    sub0_ungzip_main_done: intermediates/pdb_ungzip.done
-    sub0_unarchive_oversized_done: intermediates/oversized_unarchive.done
-    sub0_split_pdb_main_done: intermediates/pdb_split.done
-    sub0_split_pdb_oversized_done: intermediates/oversized_split.done
-    sub0_rename_oversized_done: intermediates/rename_oversized.done
+    sub0_pdb_download_done: intermediates/pdb_updated.done
+    sub0_ungzip_done: intermediates/pdb_ungzip.done
+    sub0_split_pdb_done: intermediates/pdb_split.done
 
     sub1_all_done: intermediates/subflow1.done
     sub1_uniparc2others_checked_done: intermediates/uniparc2others_checked.done
     sub1_homodimers_checked_done: intermediates/homodimers_checked.done
-    sub1_heterodimers_checked_done: intermediates/heterodimers_checked.done
 
     sub2_all_done: intermediates/subflow2.done
 
 snake_data_yaml_files:
     sub1_uniparc2others_yaml: intermediates/uniparc2others.yaml
-    sub1_all_homodimers_yaml: intermediates/all_possible_homodimers.yaml
-    sub1_all_heterodimers_yaml: intermediates/all_possible_heterodimers.yaml
+    sub1_all_homodimers_yaml: intermediates/possible_homodimers.yaml
     sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
     
-    sub2_homo_prefiltered_yaml: intermediates/all_homodimers_prefiltered.yaml
+    sub2_homo_prefiltered_yaml: intermediates/true_homodimers.yaml
     sub2_uniparc2af_yaml: intermediates/homodimers_uniparc2af.yaml
 
-    sub3.1_nonredundant_homodimers: nonredundant_homodimers.yaml
+    sub3_nonredundant_homodimers: nonredundant_true_homodimers.yaml

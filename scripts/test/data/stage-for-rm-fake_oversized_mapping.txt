@@ -1,0 +1,43 @@
+    New chain ID            Original chain ID
+
+7w5z-pdb-bundle1.pdb:
+           A                        U1
+           B                        U2
+           C                        U3
+           D                        U4
+           E                        U5
+           F                        U6
+           G                        C1
+           H                        C2
+           I                        C3
+           J                        5B
+           K                        6A
+           L                        6B
+           M                        6L
+           N                        6C
+           O                        7A
+           P                        7C
+           Q                        7L
+
+7w5z-pdb-bundle2.pdb:
+           A                        u5
+           B                        u6
+           C                        c1
+           D                        c2
+           E                        c3
+           F                        5b
+           G                        6a
+           H                        6b
+           I                        6l
+           J                        6c
+           K                        7a
+           L                        7c
+           M                        7l
+           N                        m1
+           O                        m2
+           P                        m3
+           Q                        t1
+           R                        t2
+           S                        t3
+           T                        t4
+
