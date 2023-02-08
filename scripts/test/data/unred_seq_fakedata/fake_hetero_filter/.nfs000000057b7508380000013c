@@ -1,11 +1,0 @@
---2023-01-24 16:42:24--  https://rest.uniprot.org/uniparc/UPI0000135942.fasta
-Resolving rest.uniprot.org (rest.uniprot.org)... 193.62.193.81
-Connecting to rest.uniprot.org (rest.uniprot.org)|193.62.193.81|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 499 [text/plain]
-Saving to: ‘2-2/UPI000013D4D2-UPI0000135942/seq2.fasta’
-
-                2-2/UPI000013D4   0%[                                                      ]       0  --.-KB/s               2-2/UPI000013D4D2-UPI0000135942 100%[=====================================================>]     499  --.-KB/s    in 0.002s  
-
-2023-01-24 16:42:25 (207 KB/s) - ‘2-2/UPI000013D4D2-UPI0000135942/seq2.fasta’ saved [499/499]
-

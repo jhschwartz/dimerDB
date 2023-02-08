@@ -6,3 +6,4 @@ benchmarks/scripts/test/data/
 .snakemake/
 **/__pycache__/
 logs/
+**/.nfs*

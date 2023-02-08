@@ -1,11 +1,0 @@
---2023-01-24 16:30:50--  https://rest.uniprot.org/uniparc/UPI0003C96339.fasta
-Resolving ‘wget-log.7’... 193.62.193.81
-Connecting to rest.uniprot.org (rest.uniprot.org)|193.62.193.81|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 258 [text/plain]
-Saving to: ‘6-9/seq2.fasta’
-
-6-9/seq2.fasta                    0%[                                                      ]       0  --.-KB/s               6-9/seq2.fasta                  100%[=====================================================>]     258  --.-KB/s    in 0.002s  
-
-2023-01-24 16:30:50 (127 KB/s) - ‘6-9/seq2.fasta’ saved [258/258]
-
