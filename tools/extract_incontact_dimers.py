@@ -9,8 +9,15 @@ labels_loc = '../bin/labels'
 sys.path.append(labels_loc)
 import labels as label_funcs
 
-inyaml = '/nfs/turbo/umms-petefred/jaschwa/dimerDB/intermediates/homodimer_filtering/9B/UPI000013389B/initial.yaml'
-name = 'UPI000013389B'
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', '--uniparc') 
+parser.add_argument('-o', '--outfile') 
+args = parser.parse_args()
+
+name = args.uniparc
+div = name[-2:]
+inyaml = f'/nfs/turbo/umms-petefred/jaschwa/dimerDB/intermediates/homodimer_filtering/{div}/{name}/initial.yaml'
 
 lib = '../lib'
 dist_thresh = 8
@@ -23,12 +30,21 @@ structure_pairs = data[name]
 
 print('total chain pairing possibilities:', len(structure_pairs))
 
-count = 0
+good = []
 for sp in structure_pairs:
     pdb1, pdb2 = dimer2pdbs(sp, lib)
+    print(sp, end='    ')
     if check_chains_contact(pdb1, pdb2, label_funcs, dist_thresh, count_thresh):
-        print(sp) 
-        count += 1
+        good.append(sp)
+        print('O')
+    else:
+        print('X')
 
-print('resulting pairs in contact:', count)
+print('-----')
+
+with open(args.outfile, 'w') as f:
+    for g in good:
+        f.write(f'{g}\n')
+
+print('resulting pairs in contact:', len(good))
 
