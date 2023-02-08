@@ -31,15 +31,12 @@ def get_id_mapping():
         shell(''' touch {id_mapping_fn} ''')
 
 
-localrules: all, retrieve_id_mapping_file, spotcheck_uniparc2others, spotcheck_homodimers, spotcheck_heterodimers
+localrules: all, retrieve_id_mapping_file, spotcheck_uniparc2others, spotcheck_homodimers 
 
 rule all:
     input: 
         config['snake_data_yaml_files']['sub1_all_homodimers_yaml'],
-        config['snake_data_yaml_files']['sub1_all_heterodimers_yaml'],
-        config['snake_donefiles']['sub1_homodimers_checked_done'],
-        config['snake_donefiles']['sub1_heterodimers_checked_done']
-        
+        config['snake_donefiles']['sub1_homodimers_checked_done']
     output:
         done = config['snake_donefiles']['sub1_all_done']
     run:
@@ -115,36 +112,5 @@ rule spotcheck_homodimers:
         from spotcheck_subflow1_yamls import check_homodimers
         check_homodimers(input.yamlfile)
         simple_write(output.passed, 'success')
-
-
-
-rule derive_all_heterodimers:
-    input:
-        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
-        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done']
-    output:
-        heterodimers = config['snake_data_yaml_files']['sub1_all_heterodimers_yaml']
-    threads: 1
-    resources:
-        time = "12:00:00",
-        mem_mb = "10000"
-    run:
-        from scripts.derive_all_heterodimers import heterodimers
-        heterodimers(input.uniparc2others, output.heterodimers)
-    
-
-
-rule spotcheck_heterodimers:
-    input:
-        yamlfile = config['snake_data_yaml_files']['sub1_all_heterodimers_yaml']
-    output:
-        passed = config['snake_donefiles']['sub1_heterodimers_checked_done']
-    threads: 1
-    run:
-        from spotcheck_subflow1_yamls import check_heterodimers
-        check_heterodimers(input.yamlfile)
-        simple_write(output.passed, 'success')
-
-
 
 

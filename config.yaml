@@ -21,11 +21,8 @@ workflow:
     snakefile0: subworkflows/snakefile0_download_pdb
     snakefile1: subworkflows/snakefile1_deduce_all_dimers
     snakefile2: subworkflows/snakefile2_prefilter
-    snakefile3.1: subworkflows/snakefile3.1_prune_homo_structures
-    snakefile4.1: subworkflows/snakefile4.1_prune_homo_seqs
-    snakefile2.2: subworkflows/snakefile2.2_prefilter_heterodimers
-    snakefile3.2: subworkflows/snakefile3.2_prune_hetero_structures
-    snakefile4.2: subworkflows/snakefile4.2_prune_hetero_seqs
+    snakefile3: subworkflows/snakefile3_prune_structures
+    snakefile4: subworkflows/snakefile4_prune_seqs
 
 paths:
     basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
@@ -42,7 +39,6 @@ paths:
 
     intermediates: intermediates
     intermediates_homodimer_filtering: intermediates/homodimer_filtering
-    intermediates_heterodimer_filtering: intermediates/heterodimer_filtering
     lib: lib
 
 snake_donefiles:
@@ -54,17 +50,15 @@ snake_donefiles:
     sub1_all_done: intermediates/subflow1.done
     sub1_uniparc2others_checked_done: intermediates/uniparc2others_checked.done
     sub1_homodimers_checked_done: intermediates/homodimers_checked.done
-    sub1_heterodimers_checked_done: intermediates/heterodimers_checked.done
 
     sub2_all_done: intermediates/subflow2.done
 
 snake_data_yaml_files:
     sub1_uniparc2others_yaml: intermediates/uniparc2others.yaml
     sub1_all_homodimers_yaml: intermediates/possible_homodimers.yaml
-    sub1_all_heterodimers_yaml: intermediates/possible_heterodimers.yaml
     sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
     
     sub2_homo_prefiltered_yaml: intermediates/true_homodimers.yaml
     sub2_uniparc2af_yaml: intermediates/homodimers_uniparc2af.yaml
 
-    sub3.1_nonredundant_homodimers: nonredundant_true_homodimers.yaml
+    sub3_nonredundant_homodimers: nonredundant_true_homodimers.yaml

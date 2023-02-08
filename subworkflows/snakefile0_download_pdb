@@ -1,6 +1,10 @@
 import os
+import sys 
 
 configfile: 'config.yaml'
+
+sys.path.append(config['paths']['scripts'])
+from simple_write import simple_write
 
 
 # force pdb update
@@ -46,7 +50,7 @@ rule ungzip_pdb:
         mem_mb = "1000000" 
     params:
         scripts = config['paths']['scripts'],
-        lib= config['paths']['rcsb']
+        lib = config['paths']['lib']
     shell:
         """
         {params.scripts}/parallel_ungzip_all.sh {params.lib}/rcsb_pdb {threads} 1000
@@ -63,15 +67,12 @@ rule split_pdb:
     resources:
         time = "12:00:00",
         mem_mb = "1000000"
-    params:
-        scripts = config['paths']['scripts'],
-        rcsb = config['paths']['rcsb'],
-        split_chain = config['paths']['split_chain']
-    shell:
-        """
-        {params.scripts}/parallel_split_pdb.pl {params.rcsb} {threads} {params.split_chain}
-        touch {output.done}
-        """
+    run:
+        from parallel_convert_split_cif import parallel_convert_split_rename_cifs
+        rcsb = config['paths']['lib'] + '/rcsb_pdb'
+        exe = config['paths']['cif2pdb']
+        parallel_convert_split_rename_cifs(rcsb, exe, threads)
+        simple_write(output.done)
 
 
 

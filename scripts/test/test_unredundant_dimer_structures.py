@@ -106,45 +106,45 @@ class TestRedundantDimerStructures(unittest.TestCase):
         self.assertEqual(results, expected)
 
 
-    def test_prune_redundancy_heterodimers_mono(self):
-        rg = RedundantDimerStructures(['3lue_B_1-3lue_M_1', '3lue_C_1-3lue_K_1', '3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'], 0.2, config)
-        results = set(rg.prune_redundancy())
-        expected = set(['3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'])
-        self.assertEqual(results, expected)
-
-
-    def test_prune_redundancy_heterodimers_multi(self):
-        rg = RedundantDimerStructures(['3lue_B_1-3lue_M_1', '3lue_C_1-3lue_K_1', '3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'], 0.2, config)
-        results = set(rg.prune_redundancy(num_workers=4))
-        expected = set(['3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'])
-        self.assertEqual(results, expected)
-
-
-    def test_prune_redundancy_heterodimers_alternate(self):
-        rg = RedundantDimerStructures(['3o8o_A_1-3o8o_B_1', '3o8o_C_1-3o8o_D_1', '3o8o_A_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'], 0.2, config)
-        results = set(rg.prune_redundancy(num_workers=2))
-        expected = set(['3o8o_C_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'])
-        self.assertEqual(results, expected)
-
-
-    def test_prune_redundancy_heterodimers_parallel_spedup(self):
-        rg = RedundantDimerStructures(['3o8o_A_1-3o8o_B_1', '3o8o_C_1-3o8o_D_1', '3o8o_A_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'], 0.2, config)
-
-        t = time.time()
-        results1 = set(rg.prune_redundancy(num_workers=1))
-        elapsed1 = time.time() - t
-        
-        t = time.time()
-        results2 = set(rg.prune_redundancy(num_workers=4))
-        elapsed2 = time.time() - t
-        
-        expected = set(['3o8o_C_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'])
-        self.assertEqual(results1, expected)
-        self.assertEqual(results2, expected)
-
-        # check speedup
-        print(elapsed1, elapsed2)
-        self.assertTrue(elapsed2 < elapsed1)
+#    def test_prune_redundancy_heterodimers_mono(self):
+#        rg = RedundantDimerStructures(['3lue_B_1-3lue_M_1', '3lue_C_1-3lue_K_1', '3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'], 0.2, config)
+#        results = set(rg.prune_redundancy())
+#        expected = set(['3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'])
+#        self.assertEqual(results, expected)
+#
+#
+#    def test_prune_redundancy_heterodimers_multi(self):
+#        rg = RedundantDimerStructures(['3lue_B_1-3lue_M_1', '3lue_C_1-3lue_K_1', '3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'], 0.2, config)
+#        results = set(rg.prune_redundancy(num_workers=4))
+#        expected = set(['3lue_D_1-3lue_M_1', '3lue_A_1-3lue_K_1'])
+#        self.assertEqual(results, expected)
+#
+#
+#    def test_prune_redundancy_heterodimers_alternate(self):
+#        rg = RedundantDimerStructures(['3o8o_A_1-3o8o_B_1', '3o8o_C_1-3o8o_D_1', '3o8o_A_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'], 0.2, config)
+#        results = set(rg.prune_redundancy(num_workers=2))
+#        expected = set(['3o8o_C_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'])
+#        self.assertEqual(results, expected)
+#
+#
+#    def test_prune_redundancy_heterodimers_parallel_spedup(self):
+#        rg = RedundantDimerStructures(['3o8o_A_1-3o8o_B_1', '3o8o_C_1-3o8o_D_1', '3o8o_A_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'], 0.2, config)
+#
+#        t = time.time()
+#        results1 = set(rg.prune_redundancy(num_workers=1))
+#        elapsed1 = time.time() - t
+#        
+#        t = time.time()
+#        results2 = set(rg.prune_redundancy(num_workers=4))
+#        elapsed2 = time.time() - t
+#        
+#        expected = set(['3o8o_C_1-3o8o_D_1', '3o8o_B_1-3o8o_C_1'])
+#        self.assertEqual(results1, expected)
+#        self.assertEqual(results2, expected)
+#
+#        # check speedup
+#        print(elapsed1, elapsed2)
+#        self.assertTrue(elapsed2 < elapsed1)
 
 
 if __name__ == '__main__':

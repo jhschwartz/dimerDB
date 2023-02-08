@@ -12,6 +12,7 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
 
 cif2pdb_exe = f'{test_dir}/../../bin/USalign/cif2pdb'
+python = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python'
 
 
 class TestConvertSplitCif(unittest.TestCase):
@@ -99,7 +100,7 @@ class TestConvertSplitCif(unittest.TestCase):
                 shutil.copy(cif, td)
             cifs_in_td = glob.glob(f'{td}/*.cif')
             self.assertEqual(len(cifs_in_td), 24)
-            subprocess.run(f'python ../parallel_convert_split_cif.py -p {td} -e {cif2pdb_exe} -t 7', shell=True, check=True)
+            subprocess.run(f'{python} ../parallel_convert_split_cif.py -p {td} -e {cif2pdb_exe} -t 7', shell=True, check=True)
             all_files = glob.glob(f'{td}/*')
             self.assertEqual(len(all_files), 73)
             pdbs = glob.glob(f'{td}/*-*-*.pdb')
