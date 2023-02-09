@@ -46,7 +46,7 @@ class TestRedundantDimerStructures(unittest.TestCase):
 
 
     def test_num_residues(self):
-        pdbfile = f'{test_data}/lib/rcsb/xd/1xdl/1xdl-a1-m1-cA.pdb'
+        pdbfile = f'{test_data}/lib/rcsb/xd/1xdl-a1-m1-cA.pdb'
         expected = 303
         result = RedundantDimerStructures._num_residues(pdbfile)
         self.assertEqual(result, expected)
@@ -88,7 +88,7 @@ class TestRedundantDimerStructures(unittest.TestCase):
 
     def test_tmp_assembly_file(self):
         rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
-        with rg._tmp_assembly_file(f'{test_data}/lib/rcsb/xd/1xdl/1xdl-a1-m1-cA.pdb', f'{test_data}/lib/rcsb/xd/1xdl/1xdl-a1-m0-cD.pdb') as f:
+        with rg._tmp_assembly_file(f'{test_data}/lib/rcsb/xd/1xdl-a1-m1-cA.pdb', f'{test_data}/lib/rcsb/xd/1xdl-a1-m0-cD.pdb') as f:
             self.assertTrue(os.path.exists(f))
             self.assertEqual(RedundantDimerStructures._num_residues(f), 303+297)
 

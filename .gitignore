@@ -1,5 +1,5 @@
 *intermediates*/
-*lib*/
+lib*/
 slurm-*.out
 benchmarks/data/
 benchmarks/scripts/test/data/

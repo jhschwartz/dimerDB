@@ -36,7 +36,7 @@ rule download_pdb:
         mkdir -p {params.lib}
         cd {params.lib} 
         rsync -rlpt -v -z -q --delete --port=33444 \
-        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ ./rcsb_pdb
+        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ ./rcsb
         touch ../{output.done}
         """
 
@@ -55,12 +55,12 @@ rule ungzip_pdb:
         lib = config['paths']['lib']
     shell:
         """
-        {params.scripts}/parallel_ungzip_all.sh {params.lib}/rcsb_pdb {threads} 1000
+        {params.scripts}/parallel_ungzip_all.sh {params.lib}/rcsb {threads} 1000
         touch {output.done};
         """
 
 
-rule split_pdb_oversized:
+rule split_pdb:
     input:
         config['snake_donefiles']['sub0_ungzip_done'] 
     output:
@@ -71,9 +71,9 @@ rule split_pdb_oversized:
         mem_mb = "1000000"
     run:
         from parallel_convert_split_cif import parallel_convert_split_rename_cifs
-        rcsb = config['paths']['lib'] + '/rcsb_pdb'
+        rcsb = config['paths']['lib'] + '/rcsb'
         exe = config['paths']['cif2pdb']
-        parallel_convert_split_rename_cifs(rcsb, exe, threads)
+        parallel_convert_split_rename_cifs(parent_dir=rcsb, cif2pdb_exe=exe, threads=threads)
         simple_write(output.done)
 
 

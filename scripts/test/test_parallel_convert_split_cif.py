@@ -18,7 +18,7 @@ python = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python'
 
 class TestConvertSplitCif(unittest.TestCase):
     def test_run_cif2pdb(self):
-        cif = f'{test_lib}/rcsb/aa/1aa0/1aa0-assembly1.cif'
+        cif = f'{test_lib}/rcsb/aa/1aa0-assembly1.cif'
         with tempfile.TemporaryDirectory() as td1, tempfile.TemporaryDirectory() as td2:
             shutil.copy(cif, td1)
             tmpcif = f'{td1}/{os.path.basename(cif)}'
@@ -33,7 +33,7 @@ class TestConvertSplitCif(unittest.TestCase):
     
 
     def test_rename_resulting_pdbs_1(self):
-        cif = f'{test_lib}/rcsb/aa/1aa1/1aa1-assembly1.cif'
+        cif = f'{test_lib}/rcsb/aa/1aa1-assembly1.cif'
         with tempfile.TemporaryDirectory() as td:
             shutil.copy(cif, td)
             tmpcif = f'{td}/{os.path.basename(cif)}'
@@ -48,7 +48,7 @@ class TestConvertSplitCif(unittest.TestCase):
 
 
     def test_rename_resulting_pdbs_2(self):
-        cif = f'{test_lib}/rcsb/aa/1aa1/1aa1-assembly1.cif'
+        cif = f'{test_lib}/rcsb/aa/1aa1-assembly1.cif'
         with tempfile.TemporaryDirectory() as td:
             shutil.copy(cif, td)
             tmpcif = f'{td}/{os.path.basename(cif)}'
@@ -63,7 +63,7 @@ class TestConvertSplitCif(unittest.TestCase):
 
 
     def test_parallel_process_helper(self):
-        cif = f'{test_lib}/rcsb/aa/1aa7/1aa7-assembly96.cif'
+        cif = f'{test_lib}/rcsb/aa/1aa7-assembly96.cif'
         with tempfile.TemporaryDirectory() as td:
             shutil.copy(cif, td)
             tmpcif = f'{td}/{os.path.basename(cif)}'

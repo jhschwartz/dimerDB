@@ -50,7 +50,7 @@ def name_pdb_file(pdb_base, assembly, model, chain, lib_path=None, allow_nonexis
     div = pdb_base[1:3]
     basename = f'{pdb_base}-a{assembly}-m{model}-c{chain}.pdb'
     if lib_path:
-        path = os.path.join(lib_path, 'rcsb', div, pdb_base, basename)
+        path = os.path.join(lib_path, 'rcsb', div, basename)
         if not allow_nonexist and not os.path.exists(path):
             raise FileNotFoundError(f'was unable to find pdb file {path} for pdb:{pdb_base}, assembly:{assembly}, model:{model}, chain:{chain}') 
         return path

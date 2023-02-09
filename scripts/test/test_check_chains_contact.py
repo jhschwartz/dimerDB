@@ -15,38 +15,38 @@ import check_chains_contact
 
 class TestCheckChainsContact(unittest.TestCase):
     def test_pos_pairwise(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cE.pdb'
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cD.pdb'
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cE.pdb'
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cD.pdb'
         result = check_chains_contact._check_chains_contact_pairwise(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
         self.assertTrue(result)
 
     def test_neg_pairwise(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cH.pdb'
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cC.pdb'
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cH.pdb'
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cC.pdb'
         result = check_chains_contact._check_chains_contact_pairwise(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
         self.assertFalse(result)
 
     def test_pos_all(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cE.pdb'
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cD.pdb'
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cE.pdb'
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cD.pdb'
         result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
         self.assertTrue(result)
         
     def test_neg_all(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cH.pdb'
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cC.pdb'
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cH.pdb'
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cC.pdb'
         result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
         self.assertFalse(result)
 
     def test_impossible_negcontact(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cA.pdb'  
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cY.pdb'  
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cA.pdb'  
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cY.pdb'  
         is_impossible = check_chains_contact._check_chains_contact_impossible(chain1_pdb, chain2_pdb, label_funcs, 8)
         self.assertTrue(is_impossible)
 
     def test_impossible_poscontact(self):
-        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cE.pdb'
-        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1/4jk1-a1-m1-cD.pdb'
+        chain1_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cE.pdb'
+        chain2_pdb = f'{test_data}/lib/rcsb/jk/4jk1-a1-m1-cD.pdb'
         is_impossible = check_chains_contact._check_chains_contact_impossible(chain1_pdb, chain2_pdb, label_funcs, 8)
         self.assertFalse(is_impossible)
 
@@ -58,8 +58,8 @@ class TestCheckChainsContact(unittest.TestCase):
             pdb2 = p[1].split('-')[0]
             div1 = pdb1[1:3]
             div2 = pdb2[1:3]
-            chain1_pdb = f'{test_data}/lib/rcsb/{div1}/{pdb1}/{p[0]}' 
-            chain2_pdb = f'{test_data}/lib/rcsb/{div2}/{pdb2}/{p[1]}'
+            chain1_pdb = f'{test_data}/lib/rcsb/{div1}/{p[0]}' 
+            chain2_pdb = f'{test_data}/lib/rcsb/{div2}/{p[1]}'
             result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
             self.assertFalse(result)
 
@@ -71,8 +71,8 @@ class TestCheckChainsContact(unittest.TestCase):
             pdb2 = p[1].split('-')[0]
             div1 = pdb1[1:3]
             div2 = pdb2[1:3]
-            chain1_pdb = f'{test_data}/lib/rcsb/{div1}/{pdb1}/{p[0]}' 
-            chain2_pdb = f'{test_data}/lib/rcsb/{div2}/{pdb2}/{p[1]}'
+            chain1_pdb = f'{test_data}/lib/rcsb/{div1}/{p[0]}' 
+            chain2_pdb = f'{test_data}/lib/rcsb/{div2}/{p[1]}'
             result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
             self.assertTrue(result)
 

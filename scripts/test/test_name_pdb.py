@@ -17,7 +17,7 @@ class TestNamePDB(unittest.TestCase):
         model = '1'
         assembly = '1'
         result = name_pdb_file(pdb, assembly, model, chain, lib)
-        self.assertEqual(result, f'{lib}/rcsb/ql/6qle/6qle-a1-m1-cN.pdb')
+        self.assertEqual(result, f'{lib}/rcsb/ql/6qle-a1-m1-cN.pdb')
 
     
     def test_name_pdb_2(self):
@@ -26,7 +26,7 @@ class TestNamePDB(unittest.TestCase):
         model = '2'
         assembly = '4'
         result = name_pdb_file(pdb, assembly, model, chain, lib)
-        self.assertEqual(result, f'{lib}/rcsb/ql/6qle/6qle-a4-m2-cN.pdb')
+        self.assertEqual(result, f'{lib}/rcsb/ql/6qle-a4-m2-cN.pdb')
 
     
     def test_name_pdb_nonexist_allowFalse(self):
@@ -44,7 +44,7 @@ class TestNamePDB(unittest.TestCase):
         model = '4'
         assembly = '19'
         result = name_pdb_file(pdb, assembly, model, chain, lib, True)
-        self.assertEqual(result, f'{lib}/rcsb/xy/0xyz/0xyz-a19-m4-cM.pdb')
+        self.assertEqual(result, f'{lib}/rcsb/xy/0xyz-a19-m4-cM.pdb')
 
 
     def test_name_pdb_noLib(self):
@@ -65,8 +65,8 @@ class TestNamePDB(unittest.TestCase):
     def test_dimer2pdbs(self):
         dimer_name = '6qle_a1_m1_cN-7a6w_a1_m42_cAAA' 
         result1, result2 = dimer2pdbs(dimer_name, lib)
-        self.assertEqual(result1, f'{lib}/rcsb/ql/6qle/6qle-a1-m1-cN.pdb')
-        self.assertEqual(result2, f'{lib}/rcsb/a6/7a6w/7a6w-a1-m42-cAAA.pdb')
+        self.assertEqual(result1, f'{lib}/rcsb/ql/6qle-a1-m1-cN.pdb')
+        self.assertEqual(result2, f'{lib}/rcsb/a6/7a6w-a1-m42-cAAA.pdb')
 
 
     def test_read_chain_name_filename_fullpath_1(self):
