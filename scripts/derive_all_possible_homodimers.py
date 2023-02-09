@@ -14,17 +14,17 @@ This work requires python >= 3.8
 
 import yaml
 import itertools
-from name_pdb import get_models_of_chain
+from name_pdb import get_instances_of_chain, name_chain
 
 
-def expand_chains_across_models(chains, lib_path):
+def expand_chains_across_assemblies_models(chains, lib_path):
     '''
     Given a list of chains, each a string of the form "<pdb code>_<chain id>",
-    returns a list of those chains with model numbers, duplicating chains which 
-    occur across several models.
+    returns a list of those chains with model numbers and assembly identifies, 
+    duplicating chain names that occur across different models and/or assemblies.
 
     So if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C'] we might get
-    something like ['1abc_A_1', '1abc_B_1', '7cba_B_1', '7cba_B_2', '1abc_C_1', '1abc_C_2']
+    something like ['1abc_a1_m1_cA', '1abc_a1_m2_cB', ...] 
     
     :param chains: list[str], a list of chains in pdb assemblies that correspond to a uniprot sequence
     :param lib_path: str, the path to a library that contains the rcsb pdb split according to the
@@ -34,9 +34,9 @@ def expand_chains_across_models(chains, lib_path):
     all_chains = []
     for chain in chains:
         pdb_base, chain_ID = chain.split('_')
-        models = get_models_of_chain(pdb_base, chain_ID, lib_path)
-        for model in models:
-            name = f'{chain}_{model}'
+        instances = get_instances_of_chain(pdb_base, chain_ID, lib_path)
+        for (_, assembly, model, _) in instances:
+            name = name_chain(pdb_base, assembly, model, chain_ID)
             all_chains.append(name)
     return all_chains
 
@@ -128,7 +128,7 @@ def homodimers(infile, outfile, lib_path):
     for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
 
         # expand list of chains to include all models
-        all_chains = expand_chains_across_models(chains, lib_path)
+        all_chains = expand_chains_across_assemblies_models(chains, lib_path)
 
         # group the chains by uniprot code, making a nested list
         grouped_chains = group_chains(all_chains)

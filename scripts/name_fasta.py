@@ -18,7 +18,7 @@ import os
 
 def get_homodimer_fasta(uniparc_id, filtering_dir):
     div = uniparc_id[-2:]
-    path = f'{filtering_dir}/{div}/{uniparc_id}/seq.fasta'
+    path = os.path.join(filtering_dir, div, uniparc_id, 'seq.fasta')
     if not os.path.exists(path):
         raise FileNotFoundError(f'unable to find fasta for homodimer with uniparc id {uniparc_id} at path {path}')
     return os.path.realpath(path)

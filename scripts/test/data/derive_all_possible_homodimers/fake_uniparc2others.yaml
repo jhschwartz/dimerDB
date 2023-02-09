@@ -1,0 +1,20 @@
+UPI00000C0390:
+    uniprot:
+        - nothing
+        - morenothing
+    pdb:
+        - 1on3_A
+        - 1on3_B
+        - 1on9_A
+        - 1on9_B
+        - 1on9_C
+        - abcd_Z
+        - 1zzz_B
+UPI00001BD6BE:
+    uniprot:
+        - whatver
+        - notreal
+    pdb:
+        - 1zzz_A
+        - 6k3g_B
+

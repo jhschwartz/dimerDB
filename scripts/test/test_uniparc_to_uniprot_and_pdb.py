@@ -4,37 +4,39 @@ import uniparc_to_uniprot_and_pdb
 import os
 import yaml
 import unittest
+import tempfile
 
 import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
+test_data = f'{test_dir}/data/uniparc_to_uniprot_and_pdb'
 
 class Uniparc2othersTestCase(unittest.TestCase):
     def test_uniparc2others(self):
-        infile = f'{test_dir}/data/idmapping_selected.tab.fake.gz'
-        outfile = f'{test_dir}/testout.yaml.tmp'
-        uniparc_to_uniprot_and_pdb.make_uniparc2others(infile, outfile)
+        infile = f'{test_data}/idmapping_selected.tab.fake.gz'
+        with tempfile.TemporaryDirectory() as td:
+            outfile = f'{td}/out.yaml'
+            uniparc_to_uniprot_and_pdb.make_uniparc2others(infile, outfile)
 
-        expected = {
-            'UPI00000C0390': {
-                'uniprot': ['Q8GBW6'],
-                'pdb': ['1on3_A', '1on3_B', '1on3_C', '1on3_D', '1on3_E', '1on3_F', '1on9_A', '1on9_B', '1on9_C', '1on9_D', '1on9_E', '1on9_F']
-            },
-            'UPI0000124DBC': {
-                'pdb': ['2e9q_A', '2evx_A'],
-                'uniprot': ['ABC123', 'P13744']
-            },
-            'UPI00001BD6BE': {
-                'pdb': ['1234_Z', '5555_R', '6k3g_B', '6kj5_A'],
-                'uniprot': ['Q6V4H0', 'XYZ987']
+            expected = {
+                'UPI00000C0390': {
+                    'uniprot': ['Q8GBW6'],
+                    'pdb': ['1on3_A', '1on3_B', '1on3_C', '1on3_D', '1on3_E', '1on3_F', '1on9_A', '1on9_B', '1on9_C', '1on9_D', '1on9_E', '1on9_F']
+                },
+                'UPI0000124DBC': {
+                    'pdb': ['2e9q_A', '2evx_A'],
+                    'uniprot': ['ABC123', 'P13744']
+                },
+                'UPI00001BD6BE': {
+                    'pdb': ['1234_Z', '5555_R', '6k3g_B', '6kj5_A'],
+                    'uniprot': ['Q6V4H0', 'XYZ987']
+                }
             }
-        }
 
-        with open(outfile, 'r') as f:
-            result = yaml.safe_load(f)
-        os.remove(outfile)
+            with open(outfile, 'r') as f:
+                result = yaml.safe_load(f)
 
-        for k, v in expected.items():
-            self.assertTrue(v == result[k])
+            for k, v in expected.items():
+                self.assertTrue(v == result[k])
 
 
     def test_extract_chains_many(self):

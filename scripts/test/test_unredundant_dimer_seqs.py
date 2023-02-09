@@ -10,14 +10,14 @@ from read_fasta import read_prot_from_fasta
 
 import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
+test_data = f'{test_dir}/data/unredundant_dimer_seqs'
 
 
 nw = f'{test_dir}/../../bin/NWalign/align'
 config = {
     'paths': {
-        'lib': f'{test_dir}/data/fake_lib',
         'nwalign': nw,
-        'intermediates_homodimer_filtering': f'{test_dir}/data/unred_seq_fakedata/fake_homo_filter'
+        'intermediates_homodimer_filtering': f'{test_data}/homodimer_filtering'
     }
 }
 
@@ -29,12 +29,12 @@ class ConcreteRedundantSeqs(RedundantSeqs):
     @staticmethod
     def __get_fasta_for_test(name_not_dimer):
         fastas_for_testing = {
-            'O15205':  f'{test_dir}/data/redundant_monomer_fastas/O15205.fasta', 
-            'P63072':  f'{test_dir}/data/redundant_monomer_fastas/P63072.fasta', 
-            'Q921A3':  f'{test_dir}/data/redundant_monomer_fastas/Q921A3.fasta', 
-            'P0DTC2':  f'{test_dir}/data/redundant_monomer_fastas/P0DTC2.fasta', 
-            'P11223':  f'{test_dir}/data/redundant_monomer_fastas/P11223.fasta', 
-            'P59594':  f'{test_dir}/data/redundant_monomer_fastas/P59594.fasta'  
+            'O15205':  f'{test_data}/redundant_monomer_fastas/O15205.fasta', 
+            'P63072':  f'{test_data}/redundant_monomer_fastas/P63072.fasta', 
+            'Q921A3':  f'{test_data}/redundant_monomer_fastas/Q921A3.fasta', 
+            'P0DTC2':  f'{test_data}/redundant_monomer_fastas/P0DTC2.fasta', 
+            'P11223':  f'{test_data}/redundant_monomer_fastas/P11223.fasta', 
+            'P59594':  f'{test_data}/redundant_monomer_fastas/P59594.fasta'  
         }
         return fastas_for_testing[name_not_dimer]
         
@@ -47,7 +47,7 @@ class ConcreteRedundantSeqs(RedundantSeqs):
 class TestRedundantSeqsSubclass(unittest.TestCase):
     def test_redundant_seqs_subclass(self):
         names = ['O15205', 'P63072', 'Q921A3', 'P0DTC2', 'P11223', 'P59594']
-        yamlfile = f'{test_dir}/data/redundant_monomer_fastas/fake_seqs.yaml'
+        yamlfile = f'{test_data}/redundant_monomer_fastas/fake_seqs.yaml'
         threshold = 0.5 
         redundant_seqs = ConcreteRedundantSeqs(names, yamlfile, threshold, config)
         result = redundant_seqs.prune_redundancy(num_workers=2)
@@ -55,8 +55,8 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
 
 
     def test_calc_nw(self):
-        fasta1 = f'{test_dir}/data/redundant_monomer_fastas/O15205.fasta'
-        fasta2 = f'{test_dir}/data/redundant_monomer_fastas/P63072.fasta'
+        fasta1 = f'{test_data}/redundant_monomer_fastas/O15205.fasta'
+        fasta2 = f'{test_data}/redundant_monomer_fastas/P63072.fasta'
         expected1 = 0.71
         expected2 = 0.697
         result1 = ConcreteRedundantSeqs._calc_nw(nw, fasta1, fasta2)
@@ -66,8 +66,8 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
 
     
     def test_max_both_ways_nw(self):
-        fasta1 = f'{test_dir}/data/redundant_monomer_fastas/O15205.fasta'
-        fasta2 = f'{test_dir}/data/redundant_monomer_fastas/P63072.fasta'
+        fasta1 = f'{test_data}/redundant_monomer_fastas/O15205.fasta'
+        fasta2 = f'{test_data}/redundant_monomer_fastas/P63072.fasta'
         expected = 0.71
         result1 = ConcreteRedundantSeqs.max_both_ways_nw(nw, fasta1, fasta2)
         result2 = ConcreteRedundantSeqs.max_both_ways_nw(nw, fasta2, fasta1)
@@ -76,7 +76,7 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
 
 
 
-homoyaml = f'{test_dir}/data/unred_seq_fakedata/homodimers.yaml'
+homoyaml = f'{test_data}/homodimers.yaml'
 homodimers = {
     'UPI00001653E1': ['2gqq_A-2gqq-B', '2gqq_A-2gqq-C', '2gqq_A-2gqq-D', '2gqq_B-2gqq-C', '2gqq_B-2gqq-D', '2gqq_C-2gqq-D'],    
     'UPI000016225C': ['fake', 'yet', 'another', 'fake'],
@@ -93,7 +93,6 @@ class TestRedundantSeqsHomo(unittest.TestCase):
         self.assertEqual(rg.things[0], 'placeholder')
         self.assertEqual(rg.things[1], 'nothing')
         self.assertEqual(rg.threshold, 10)
-        self.assertEqual(rg.config['paths']['lib'], os.path.realpath(f'{test_dir}/data/fake_lib'))
         self.assertEqual(rg.dimers, homodimers)
          
 

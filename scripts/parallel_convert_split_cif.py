@@ -15,21 +15,24 @@ These functions are unitested by test/test_parallel_convert_split_cif.py and are
 This work requires python >= 3.8
 '''
 import os
+import shutil
 import glob
 import re
 import argparse
 import subprocess
 from multiprocessing import Pool
+import tempfile
+from name_pdb import name_pdb_file
 
 
-def run_cif2pdb(target: str, outprefix: str, cif2pdb_exe: str) -> None:
-    outdir = os.path.dirname(target)
+def run_cif2pdb(cif: str, outdir: str, prefix: str, cif2pdb_exe: str) -> None:
     with open(os.devnull, 'w') as NULL: # NULL to silence stdout of cif2pdb
-        subprocess.run(f'{cif2pdb_exe} -split 1 -mol 1 {target} {outdir}/{outprefix}', shell=True, check=True, stdout=NULL, stderr=subprocess.STDOUT)
+        subprocess.run(f'{cif2pdb_exe} -split 1 -mol 1 {cif} {outdir}/{prefix}', shell=True, check=True, stdout=NULL, stderr=subprocess.STDOUT)
 
 
-def rename_resulting_pdbs(dir_: str, prefix: str) -> None:
+def rename_resulting_pdbs(dir_: str, assembly_ID: str, prefix: str) -> None:
     pdbfiles = glob.glob(f'{dir_}/{prefix}*.pdb')
+    new_paths = []
     if len(pdbfiles) < 1:
         raise RuntimeError(f'was not able to find the resulting files of cif2pdb in {dir_} with prefix {prefix}.')
     pattern_model1 = fr'{prefix}.+?\.pdb'
@@ -37,24 +40,30 @@ def rename_resulting_pdbs(dir_: str, prefix: str) -> None:
     for fn in pdbfiles:
         base_fn = os.path.basename(fn)
         if re.search(pattern_model_other, fn):
-            chain = re.findall(fr'{prefix}(.+?)-\d+?\.pdb', base_fn)[0]
             model = re.findall(fr'{prefix}.+?-(\d+?)\.pdb', base_fn)[0]
-            new_fn = f'{dir_}/{prefix}-{chain}-{model}.pdb'
-            os.rename(fn, new_fn)
+            chain = re.findall(fr'{prefix}(.+?)-\d+?\.pdb', base_fn)[0]
         elif re.search(pattern_model1, fn):
+            model = 1
             chain = re.findall(fr'{prefix}(.+?)\.pdb', base_fn)[0]   
-            new_fn = f'{dir_}/{prefix}-{chain}-1.pdb'
-            os.rename(fn, new_fn)
         else:
             raise ValueError(f'the encountered pdb file, {fn}, which is supposed to be a cif2pdb result of prefix {prefix} in dir {dir_}, does not search match expected pattern.')
         
+        new_fn = os.path.join(dir_, name_pdb_file(pdb_base=prefix, assembly=assembly_ID, model=model, chain=chain))
+        os.rename(fn, new_fn)
+        new_paths.append(new_fn)
+    return new_paths
 
 
 def process_helper(cif_fn: str, cif2pdb_exe: str) -> None:
-    prefix = os.path.basename(cif_fn)[:4]
-    dir_ = os.path.dirname(os.path.realpath(cif_fn))
-    run_cif2pdb(cif_fn, prefix, cif2pdb_exe)
-    rename_resulting_pdbs(dir_, prefix)
+    pdb_base = os.path.basename(cif_fn)[:4]
+    assembly_ID = re.findall(r'assembly(\d+)\.cif', cif_fn)[0]
+    dir_target = os.path.dirname(os.path.realpath(cif_fn))
+    with tempfile.TemporaryDirectory() as td:
+        run_cif2pdb(cif=cif_fn, outdir=td, prefix=pdb_base, cif2pdb_exe=cif2pdb_exe)
+        named_pdbs = rename_resulting_pdbs(dir_=td, assembly_ID=assembly_ID, prefix=pdb_base)
+        for f in named_pdbs:
+            shutil.move(f, dir_target)
+
 
 
 def parallel_convert_split_rename_cifs(parent_dir: str, cif2pdb_exe: str, threads: int) -> None:
