@@ -18,56 +18,27 @@ subworkflow deduce_all_dimers:
 
 
 
-#subworkflow filter_homodimers:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile2.1']
+subworkflow filter_prune_homodimers:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile2']
 
 
+subworkflow prune_seqs:
+    workdir:
+        config['paths']['basepath']
+    snakefile:
+        config['workflow']['snakefile3']
 
-#subworkflow prune_homo_structures:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile3.1']
-#
-#
-#subworkflow prune_homo_seqs:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile4.1']
-#
-#
-#subworkflow filter_homodimers:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile2.2']
-#
-#
-#subworkflow prune_hetero_structures:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile3.2']
-#
-#
-#subworkflow prune_hetero_seqs:
-#    workdir:
-#        config['paths']['basepath']
-#    snakefile:
-#        config['workflow']['snakefile4.2']
 
 
 rule all:
     input:
         download_pdb(config['snake_donefiles']['sub0_all_done']),
-        deduce_all_dimers(config['snake_donefiles']['sub1_all_done'])
-#        filter_homodimers(config['snake_donefiles']['sub2_all_done'])
-        #prune_homodimers('intermediates/subflow2.done'),
-        #prune_seqs('intermediates/subflow4.done'),
+        deduce_all_dimers(config['snake_donefiles']['sub1_all_done']),
+        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done']),
+        prune_seqs(config['snake_donefiles']['sub3_all_done']),
         #'intermediates/cleanup.done'
 
 

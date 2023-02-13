@@ -2,9 +2,9 @@ database_settings:
     dimer_redundancy_representative_criterion_1_min_coverage_divider_versus_max: 2
     dimer_define_contact_min_total_contacting_pairs: 10
     dimer_define_contact_distance_threshold_angstroms: 8
-    dimer_cluster_distance_threshold: 0.5
+    dimer_cluster_distance_threshold: 0.3
     chain_max_seq_len: 1024
-    seq_cluster_distance_threshold: 0.7
+    seq_cluster_distance_threshold: 0.1
     force_update_pdb: False
     force_update_id_mapping: False
     require_seq_in_afdb: True
@@ -20,9 +20,8 @@ runtime:
 workflow:
     snakefile0: subworkflows/snakefile0_download_pdb
     snakefile1: subworkflows/snakefile1_deduce_all_dimers
-    snakefile2: subworkflows/snakefile2_prefilter
-    snakefile3: subworkflows/snakefile3_prune_structures
-    snakefile4: subworkflows/snakefile4_prune_seqs
+    snakefile2: subworkflows/snakefile2_filter_prune_structures
+    snakefile3: subworkflows/snakefile3_prune_seqs
 
 paths:
     basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
@@ -52,6 +51,7 @@ snake_donefiles:
     sub1_homodimers_checked_done: intermediates/homodimers_checked.done
 
     sub2_all_done: intermediates/subflow2.done
+    sub3_all_done: intermediates/subflow3.done
 
 snake_data_yaml_files:
     sub1_uniparc2others_yaml: intermediates/uniparc2others.yaml

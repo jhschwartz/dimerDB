@@ -123,7 +123,7 @@ def homodimers(infile, outfile, lib_path):
 
     # the homodimers dict we are going to output
     homodimers = {}
-
+    
     # for each uniparc sequence and its matching chains
     for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
 

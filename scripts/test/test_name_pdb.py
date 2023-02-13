@@ -29,6 +29,15 @@ class TestNamePDB(unittest.TestCase):
         self.assertEqual(result, f'{lib}/rcsb/ql/6qle-a4-m2-cN.pdb')
 
     
+    def test_name_pdb_dashedChain(self):
+        pdb = '6qle'
+        chain = 'N-42'
+        model = '1'
+        assembly = '1'
+        result = name_pdb_file(pdb, assembly, model, chain, lib)
+        self.assertEqual(result, f'{lib}/rcsb/ql/6qle-a1-m1-cN-42.pdb')
+
+    
     def test_name_pdb_nonexist_allowFalse(self):
         pdb = '0xyz'
         chain = 'M'
@@ -59,6 +68,12 @@ class TestNamePDB(unittest.TestCase):
     def test_name_chain(self):
         result = name_chain('abcd', '3', '22', 'G')
         expected = 'abcd_a3_m22_cG'
+        self.assertEqual(result, expected)
+
+
+    def test_name_chain_dashedChain(self):
+        result = name_chain('abcd', '3', '22', 'G-42')
+        expected = 'abcd_a3_m22_cG-42'
         self.assertEqual(result, expected)
 
 
@@ -97,6 +112,13 @@ class TestNamePDB(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+    def test_read_chain_name_filename_dashedChain(self):
+        name = '4zbw-a1-m2-cZ-42.pdb'
+        result = read_chain_names(name)
+        expected = ('4zbw', '1', '2', 'Z-42')
+        self.assertEqual(result, expected)
+
+
     def test_read_chain_name_nameonly_1(self):
         name = '7a6w_a155_m42_cA2fA'
         result = read_chain_names(name)
@@ -108,6 +130,13 @@ class TestNamePDB(unittest.TestCase):
         name = '4zbw_a1_m2_cZ'
         result = read_chain_names(name)
         expected = ('4zbw', '1', '2', 'Z')
+        self.assertEqual(result, expected)
+
+
+    def test_read_chain_name_nameonly_dashedChain(self):
+        name = '4zbw_a1_m2_cZ-42'
+        result = read_chain_names(name)
+        expected = ('4zbw', '1', '2', 'Z-42')
         self.assertEqual(result, expected)
 
 

@@ -22,7 +22,7 @@ import argparse
 import subprocess
 from multiprocessing import Pool
 import tempfile
-from name_pdb import name_pdb_file
+from name_pdb import name_pdb_file, read_chain_names
 
 
 def run_cif2pdb(cif: str, outdir: str, prefix: str, cif2pdb_exe: str) -> None:
@@ -33,8 +33,8 @@ def run_cif2pdb(cif: str, outdir: str, prefix: str, cif2pdb_exe: str) -> None:
 def rename_resulting_pdbs(dir_: str, assembly_ID: str, prefix: str) -> None:
     pdbfiles = glob.glob(f'{dir_}/{prefix}*.pdb')
     new_paths = []
-    if len(pdbfiles) < 1:
-        raise RuntimeError(f'was not able to find the resulting files of cif2pdb in {dir_} with prefix {prefix}.')
+    if len(pdbfiles) == 0:
+        print(f'Note: no pdb files found for {prefix}, assembly {assembly_ID} in {dir_}. Either something bad happened or this assembly has no peptide components') 
     pattern_model1 = fr'{prefix}.+?\.pdb'
     pattern_model_other = fr'{prefix}.+?-\d+?\.pdb'
     for fn in pdbfiles:
@@ -55,14 +55,27 @@ def rename_resulting_pdbs(dir_: str, assembly_ID: str, prefix: str) -> None:
 
 
 def process_helper(cif_fn: str, cif2pdb_exe: str) -> None:
+    # setup
     pdb_base = os.path.basename(cif_fn)[:4]
     assembly_ID = re.findall(r'assembly(\d+)\.cif', cif_fn)[0]
     dir_target = os.path.dirname(os.path.realpath(cif_fn))
+    
+    # confirm this assembly hasn't already been taken care of
+    pdbs_already_generated = glob.iglob(f'{dir_target}/{pdb_base}*.pdb')
+    for pdb in pdbs_already_generated:
+        _, assembly, _, _ = read_chain_names(pdb)
+        if assembly == assembly_ID:
+            print(f'pdb files for {cif_fn} (assembly {assembly}) already exist. Skipping...')
+            return
+
+    # perform the split and rename
     with tempfile.TemporaryDirectory() as td:
         run_cif2pdb(cif=cif_fn, outdir=td, prefix=pdb_base, cif2pdb_exe=cif2pdb_exe)
         named_pdbs = rename_resulting_pdbs(dir_=td, assembly_ID=assembly_ID, prefix=pdb_base)
         for f in named_pdbs:
-            shutil.move(f, dir_target)
+            newpath = os.path.join(dir_target, os.path.basename(f))
+            if not os.path.exists(newpath):
+                shutil.move(f, dir_target)
 
 
 
