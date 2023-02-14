@@ -14,10 +14,11 @@ This work requires python >= 3.8
 
 import yaml
 import itertools
-from name_pdb import get_instances_of_chain, name_chain
+import pickle
+from name_pdb import name_chain_from_filename
 
 
-def expand_chains_across_assemblies_models(chains, lib_path):
+def expand_chains_across_assemblies_models(chains, pdb_index):
     '''
     Given a list of chains, each a string of the form "<pdb code>_<chain id>",
     returns a list of those chains with model numbers and assembly identifies, 
@@ -27,17 +28,27 @@ def expand_chains_across_assemblies_models(chains, lib_path):
     something like ['1abc_a1_m1_cA', '1abc_a1_m2_cB', ...] 
     
     :param chains: list[str], a list of chains in pdb assemblies that correspond to a uniprot sequence
-    :param lib_path: str, the path to a library that contains the rcsb pdb split according to the
-                        needs of this pipeline
+    :param pdb_index: dict, wherein keys are pdb entry codes, second-depth keys are chain names, and
+                        third-depth members are lists of which each member is a pdb filename.
+                            E.g.:
+                                {
+                                    '1abc': {
+                                        'A': ['1abc-a1-m1-cA.pdb', ...'],
+                                        ...
+                                    },
+                                    ...
+                                }
     '''
-
     all_chains = []
     for chain in chains:
         pdb_base, chain_ID = chain.split('_')
-        instances = get_instances_of_chain(pdb_base, chain_ID, lib_path)
-        for (_, assembly, model, _) in instances:
-            name = name_chain(pdb_base, assembly, model, chain_ID)
-            all_chains.append(name)
+        try:
+            chain_files = pdb_index[pdb_base][chain_ID]
+        except KeyError:
+            print(f'Warning: the chain {pdb_base}:{chain_ID} does not exist in the local pdb and has been skipped while creating possible homodimers list') 
+            continue
+        for cf in chain_files:
+            all_chains.append(name_chain_from_filename(cf))
     return all_chains
 
 
@@ -121,6 +132,11 @@ def homodimers(infile, outfile, lib_path):
     with open(infile, 'r') as f:
         uniparc2others = yaml.safe_load(f)
 
+    # open the pdb index
+    indexfile = f'{lib_path}/rcsb_index.pkl'
+    with open(indexfile, 'rb') as f:
+        pdb_index = pickle.load(f)
+
     # the homodimers dict we are going to output
     homodimers = {}
     
@@ -128,7 +144,7 @@ def homodimers(infile, outfile, lib_path):
     for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
 
         # expand list of chains to include all models
-        all_chains = expand_chains_across_assemblies_models(chains, lib_path)
+        all_chains = expand_chains_across_assemblies_models(chains, pdb_index)
 
         # group the chains by uniprot code, making a nested list
         grouped_chains = group_chains(all_chains)

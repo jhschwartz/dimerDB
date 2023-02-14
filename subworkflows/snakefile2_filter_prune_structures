@@ -59,7 +59,7 @@ rule all:
     input:
         merged_yamlfile_homo = config['snake_data_yaml_files']['sub2_homo_prefiltered_yaml'],
 #        merged_yamlfile_hetero = config['snake_data_yaml_files']['sub2_hetero_prefiltered_yaml'],
-        merged_uniparc2af_homo = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo'],
+        merged_uniparc2af_homo = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo']
 #        merged_uniparc2af_hetero = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_hetero']
     output:
         done = config['snake_donefiles']['sub2_all_done']
@@ -77,7 +77,7 @@ def merge_yamlfiles(infiles, outfile):
     data = {}
     for yamlfile in infiles:    
         with open(yamlfile, 'r') as f:
-	    data = {**data, **yaml.safe_load(f)} # merge dicts data and the read dict from yaml
+            data = {**data, **yaml.safe_load(f)} # merge dicts data and the read dict from yaml
     with open(outfile, 'w') as f:
         yaml.dump(data, f, default_flow_style=None)
 
@@ -86,10 +86,10 @@ def make_uniparc2afinfo(afinfo_files, names, outfile):
     uniparc2af = {}
     for afinfo, uniparc in zip(afinfo_files, names):
         with open(afinfo, 'r') as f:
-	    info = f.read()
-	    if 'yes' in info:
-	        afname = info.split()[1]
-	        uniparc2af[uniparc] = afname
+            info = f.read()
+        if 'yes' in info:
+            afname = info.split()[1]
+            uniparc2af[uniparc] = afname
     with open(outfile, 'w') as f:
         yaml.dump(uniparc2af, f, default_flow_style=None)
 
@@ -130,7 +130,7 @@ def match_seq_to_afdb(query_fasta, afdb_fasta):
     return None
 
 
-def filter_only_contacting_structures(uniparc, inyaml, outyaml)
+def filter_only_contacting_structures(uniparc, inyaml, outyaml):
     with open(inyaml, 'r') as f:
         data = yaml.safe_load(f)
     dimers = data[uniparc]
@@ -301,11 +301,11 @@ rule merge_homo_data:
 #        mem_mb = "8000"
 #    run:
 #        simple_write(output.info, 'no')
-#	uniparc1, uniparc2 = wildcards.sample_hetero.split('-')
+#   uniparc1, uniparc2 = wildcards.sample_hetero.split('-')
 #        download_fasta(uniparc1, output.fasta1)
 #        download_fasta(uniparc2, output.fasta2)
-#	maxlen = config['database_settings']['chain_max_seq_len']
-#	both_len_ok = lambda fasta1, fasta2: len_ok(fasta1, maxlen) and len_ok(fasta2, maxlen)
+#   maxlen = config['database_settings']['chain_max_seq_len']
+#   both_len_ok = lambda fasta1, fasta2: len_ok(fasta1, maxlen) and len_ok(fasta2, maxlen)
 #        write_yes_if_func(output.info, both_len_ok, output.fasta1, output.fasta2)
 #
 #

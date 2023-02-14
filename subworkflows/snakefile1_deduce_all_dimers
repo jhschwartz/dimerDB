@@ -91,8 +91,8 @@ rule derive_all_homodimers:
         homodimers = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
     threads: 1
     resources:
-        time = "48:00:00",
-        mem_mb = "50000"
+        time = "4:00:00",
+        mem_mb = "5000"
     params:
         lib = config['paths']['lib']
     run:

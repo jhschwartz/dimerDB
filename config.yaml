@@ -2,7 +2,7 @@ database_settings:
     dimer_redundancy_representative_criterion_1_min_coverage_divider_versus_max: 2
     dimer_define_contact_min_total_contacting_pairs: 10
     dimer_define_contact_distance_threshold_angstroms: 8
-    dimer_cluster_distance_threshold: 0.3
+    dimer_cluster_distance_threshold: 0.25
     chain_max_seq_len: 1024
     seq_cluster_distance_threshold: 0.1
     force_update_pdb: False

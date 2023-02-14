@@ -5,6 +5,7 @@ import os
 import unittest
 import yaml
 import tempfile
+import pickle
 from derive_all_possible_homodimers import *
 
 import pathlib
@@ -71,7 +72,9 @@ class TestDeriveHomodimers(unittest.TestCase):
 
     def test_expand_chains_across_assemblies_models(self):
         chains = ['1on3_A', '1on3_B', '6k3g_B']
-        result = expand_chains_across_assemblies_models(chains, test_lib)
+        with open(f'{test_lib}/rcsb_index.pkl', 'rb') as f:
+            index = pickle.load(f)
+        result = expand_chains_across_assemblies_models(chains, index)
         expected = ['1on3_a1_m1_cA', '1on3_a1_m1_cB', '6k3g_a1_m1_cB', '6k3g_a1_m2_cB', '6k3g_a2_m2_cB']
         self.assertEqual(set(result), set(expected))
 

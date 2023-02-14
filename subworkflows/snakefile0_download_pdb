@@ -19,7 +19,7 @@ localrules: all, download_pdb
 
 rule all:
     input:
-        config['snake_donefiles']['sub0_split_pdb_done']
+        config['paths']['lib'] + '/rcsb_index.pkl'
     output:
         done =  config['snake_donefiles']['sub0_all_done'] 
     shell:
@@ -75,6 +75,32 @@ rule split_pdb:
         exe = config['paths']['cif2pdb']
         parallel_convert_split_rename_cifs(parent_dir=rcsb, cif2pdb_exe=exe, threads=threads)
         simple_write(output.done)
+
+
+rule index_pdb:
+    input:
+        config['snake_donefiles']['sub0_split_pdb_done']
+    output:
+        index_file = config['paths']['lib'] + '/rcsb_index.txt'
+    resources:
+        time = "4:00:00"
+    run:
+        from generate_rcsb_index import generate_rcsb_index
+        rcsb = config['paths']['lib'] + '/rcsb'
+        generate_rcsb_index(rcsb_path=rcsb, index_file=output.index_file)
+
+
+rule pdb_index_to_pkl:
+    input:
+        index_file = config['paths']['lib'] + '/rcsb_index.txt'
+    output:
+        index_file = config['paths']['lib'] + '/rcsb_index.pkl'
+    run:
+        from generate_rcsb_index import rcsb_index_to_pkl
+        rcsb_index_to_pkl(input.index_file, output.index_file)
+
+
+
 
 
 

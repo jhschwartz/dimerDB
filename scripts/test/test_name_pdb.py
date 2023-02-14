@@ -66,13 +66,13 @@ class TestNamePDB(unittest.TestCase):
 
 
     def test_name_chain(self):
-        result = name_chain('abcd', '3', '22', 'G')
+        result = name_chain_from_filename('abcd-a3-m22-cG.pdb')
         expected = 'abcd_a3_m22_cG'
         self.assertEqual(result, expected)
 
 
     def test_name_chain_dashedChain(self):
-        result = name_chain('abcd', '3', '22', 'G-42')
+        result = name_chain_from_filename('abcd-a3-m22-cG-42.pdb')
         expected = 'abcd_a3_m22_cG-42'
         self.assertEqual(result, expected)
 
@@ -158,17 +158,6 @@ class TestNamePDB(unittest.TestCase):
             read_chain_names(name)
 
 
-    def test_instances_of_chain(self):
-        result = get_instances_of_chain('7a6w', 'AAA', lib)
-
-        expected_instances = [
-                ('7a6w', '1', '1', 'AAA'),
-                ('7a6w', '1', '42', 'AAA'),
-                ('7a6w', '2', '42', 'AAA')
-        ]
-
-        for item in expected_instances:
-            self.assertTrue(item in result)
 
 
 

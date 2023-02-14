@@ -41,7 +41,8 @@ def read_chain_names(name):
         raise ValueError(f'invalid chain name encoutnered, neither a filename nor a simple name: {name}')
 
 
-def name_chain(pdb_base, assembly, model, chain):
+def name_chain_from_filename(filename):
+    pdb_base, assembly, model, chain = read_chain_names(filename)
     return f'{pdb_base}_a{assembly}_m{model}_c{chain}'
 
 
@@ -61,24 +62,5 @@ def dimer2pdbs(dimer_name, lib_path):
     pdb0, assembly0, model0, chain0 = read_chain_names(dimer_name.split('-')[0])
     pdb1, assembly1, model1, chain1 = read_chain_names(dimer_name.split('-')[1])
     return name_pdb_file(pdb0, assembly0, model0, chain0, lib_path), name_pdb_file(pdb1, assembly1, model1, chain1, lib_path)
-
-    
-
-def get_instances_of_chain(pdb_base, chain, lib_path):
-    wild_model = "*"
-    wild_assembly = "*"
-    template = name_pdb_file(pdb_base, wild_assembly, wild_model, chain, lib_path, allow_nonexist=True)
-    chain_files = glob.glob(template)
-    assembly_model_chain_combos = []
-    for cf in chain_files:
-        combo = read_chain_names(cf) 
-        if combo[-1] != chain:
-            raise ValueError('should not encounter different chain when getting instances of a chain')
-        elif combo[0] != pdb_base:
-            raise ValueError('the pdb base should stay the same but it did not')
-        assembly_model_chain_combos.append( combo )
-    return assembly_model_chain_combos
-
-
 
 
