@@ -36,7 +36,8 @@ import threading
 from multiprocessing import Pool
 from read_fasta import read_prot_from_fasta
 from name_pdb import dimer2pdbs
-from name_fasta import get_homodimer_fasta
+from name_fasta import uniparc_fasta
+from align_tools import calc_nwalign
 
 
 class RedundantThings:
@@ -227,21 +228,12 @@ class RedundantSeqs(RedundantThings):
         self.nw = self.config['paths']['nwalign']
 
 
-    @staticmethod
-    def _calc_nw(nw, fasta1: str, fasta2: str) -> float:
-        exe = f'{nw} {fasta1} {fasta2}'
-        result = subprocess.run(exe, text=True, capture_output=True, shell=True)
-        if result.stderr != '':
-            raise RuntimeError(f'nwalign for seqs {fasta1} and {fasta2} failed with stderr: {result.stderr}')
-        # The line we want looks like "Sequence identity:    0.625 (=   5/   8)"
-        identity = float(re.findall(r'Sequence identity:\s+([\d\.]+)', result.stdout)[0])
-        return identity
         
     
     @staticmethod
     def max_both_ways_nw(nw, fasta1: str, fasta2: str) -> float:
-        left = RedundantSeqs._calc_nw(nw, fasta1, fasta2)
-        right = RedundantSeqs._calc_nw(nw, fasta2, fasta1)
+        left = calc_nwalign(nw, fasta1, fasta2)
+        right = calc_nwalign(nw, fasta2, fasta1)
         if left > right:
             return left
         return right
@@ -294,19 +286,18 @@ class RedundantSeqs(RedundantThings):
 class RedundantSeqsHomodimer(RedundantSeqs):
     def __init__(self, dimer_names, yamlfile, threshold, config):
         super().__init__(dimer_names, yamlfile, threshold, config)
-        self.fd = self.config['paths']['intermediates_homodimer_filtering']
+        self.lib = self.config['paths']['lib']
 
     
     def _count_dimer_length(self, dimer_name: str) -> int:
-        fasta = get_homodimer_fasta(uniparc_id=dimer_name, filtering_dir=self.fd)
+        fasta = uniparc_fasta(uniparc_id=dimer_name, lib_path=self.lib)
         _, seq = next(read_prot_from_fasta(fasta))
         return 2*len(seq)
     
     
     def distance(self, dimer1name: str, dimer2name: str) -> float:
-        fasta1 = get_homodimer_fasta(uniparc_id=dimer1name, filtering_dir=self.fd)
-        fasta2 = get_homodimer_fasta(uniparc_id=dimer2name, filtering_dir=self.fd)
+        fasta1 = uniparc_fasta(uniparc_id=dimer1name, lib_path=self.lib)
+        fasta2 = uniparc_fasta(uniparc_id=dimer2name, lib_path=self.lib)
         nw_val = super().max_both_ways_nw(self.nw, fasta1, fasta2)
         return 1 - nw_val
-
 

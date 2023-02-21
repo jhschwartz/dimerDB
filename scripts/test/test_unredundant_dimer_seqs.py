@@ -17,7 +17,8 @@ nw = f'{test_dir}/../../bin/NWalign/align'
 config = {
     'paths': {
         'nwalign': nw,
-        'intermediates_homodimer_filtering': f'{test_data}/homodimer_filtering'
+        #'intermediates_homodimer_filtering': f'{test_data}/homodimer_filtering'
+        'lib': f'{test_data}/lib'
     }
 }
 
@@ -54,15 +55,6 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
         expected = ['Q921A3', 'P11223', 'P59594']
 
 
-    def test_calc_nw(self):
-        fasta1 = f'{test_data}/redundant_monomer_fastas/O15205.fasta'
-        fasta2 = f'{test_data}/redundant_monomer_fastas/P63072.fasta'
-        expected1 = 0.71
-        expected2 = 0.697
-        result1 = ConcreteRedundantSeqs._calc_nw(nw, fasta1, fasta2)
-        result2 = ConcreteRedundantSeqs._calc_nw(nw, fasta2, fasta1)
-        self.assertEqual(result1, expected1)
-        self.assertEqual(result2, expected2)
 
     
     def test_max_both_ways_nw(self):

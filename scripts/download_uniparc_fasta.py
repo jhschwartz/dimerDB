@@ -9,12 +9,14 @@ This function is unittested by test/test_download_uniparc_fasta.py and passing a
 This work requires python >= 3.8
 '''
 import requests
+import os
 
 def download_fasta(uniparc, out_path):
     url = f'https://rest.uniprot.org/uniparc/{uniparc}.fasta'
     r = requests.get(url)
     if r.status_code != 200:
         raise ConnectionError(f'received status code {r.status_code} upon requesting the fasta of {uniparc} from {url}')
+    os.makedirs(os.path.dirname(os.path.realpath(out_path)), exist_ok=True)
     with open(out_path, 'w') as f:
         f.write(r.text)
 

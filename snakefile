@@ -36,9 +36,9 @@ subworkflow prune_seqs:
 rule all:
     input:
         download_pdb(config['snake_donefiles']['sub0_all_done']),
-        deduce_all_dimers(config['snake_donefiles']['sub1_all_done']),
-        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done']),
-        prune_seqs(config['snake_donefiles']['sub3_all_done']),
+        deduce_all_dimers(config['snake_donefiles']['sub1_all_done'])
+#        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done']),
+#        prune_seqs(config['snake_donefiles']['sub3_all_done']),
         #'intermediates/cleanup.done'
 
 

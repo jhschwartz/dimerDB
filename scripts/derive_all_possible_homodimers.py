@@ -15,7 +15,9 @@ This work requires python >= 3.8
 import yaml
 import itertools
 import pickle
+import re
 from name_pdb import name_chain_from_filename
+from read_fasta import read_prot_from_fasta
 
 
 def expand_chains_across_assemblies_models(chains, pdb_index):
@@ -54,17 +56,21 @@ def expand_chains_across_assemblies_models(chains, pdb_index):
 
 def group_chains(chains):
     '''
-    Given a list of chains, each a string of the form "<pdb code>_<chain id>", 
-    returns a list of lists, where each list is the chains of one pdb_code.
+    Given a list of chains, each a string of the form "<pdb code>_a<assembly>_m<model>_c<chain>", 
+    returns a list of lists, where each list is the chains of one pdb_code and one assembly.
 
-    So if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C'],
-    we should return [['1abc_A', '1abc_B', '1abc_C'], ['7cba_B']]
+    So if we have chains ['1abc_a1_m1_cA', '1abc_a1_m1_cB', '1abc_a2_m1_cA', '7cba_a1_m1_cB', '1abc_a2_m1_cC'],
+    we should return [['1abc_a1_m1_cA', '1abc_a1_m1_cB'], ['1abc_a2_m1_cA', '1abc_a2_m1_cC'], ['7cba_B']]
 
     :param chains: list[str] a list of chains in pdb assemblies that correspond to a uniprot sequence
     '''
     
     chains = sorted(chains)
-    group_result = itertools.groupby(chains, key=lambda chain: chain.split('_')[0])
+
+    # 1abc_a1_m1_cA -> 1abca1
+    pdb_and_assembly = lambda fullname: ''.join(fullname.split('_')[:2])
+    
+    group_result = itertools.groupby(chains, key=pdb_and_assembly)
     result = []
     for k, v in group_result:
         result.append(list(v))
@@ -106,7 +112,7 @@ def derive_homodimers_from_groups(grouped_chains):
 
 
 
-def homodimers(infile, outfile, lib_path):
+def homodimers(infile, outfile, config):
     '''
     This function makes a dict, which is later saved in a yaml file, of 
     uniparc IDs matched to their mutliple homodimers. For example, if I 
@@ -128,6 +134,8 @@ def homodimers(infile, outfile, lib_path):
     :param outfile: str, the path where we are putting the output dict as a yaml
     '''
 
+    lib_path = config['paths']['lib']
+
     # open the uniparc2others yaml as a dict
     with open(infile, 'r') as f:
         uniparc2others = yaml.safe_load(f)
@@ -142,6 +150,14 @@ def homodimers(infile, outfile, lib_path):
     
     # for each uniparc sequence and its matching chains
     for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
+
+        # read fasta and skip if too short
+        div = uniparc[-2:]
+        seqs_loc = config['paths']['uniparc_seqs']
+        fasta = f'{seqs_loc}/{div}/{uniparc}.fasta'
+        _, seq = next(read_prot_from_fasta(fasta))
+        if len(seq) < config['database_settings']['chain_min_seq_len']:
+            continue
 
         # expand list of chains to include all models
         all_chains = expand_chains_across_assemblies_models(chains, pdb_index)

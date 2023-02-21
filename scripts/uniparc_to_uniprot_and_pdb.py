@@ -74,6 +74,7 @@ def make_uniparc2others(infile, outfile):
                                 "4H3B:B; 4H3B:D; 6DJL:B; 6DJL:C;" meaning "PDBCODE:CHAIN"
     
     :param outfile: str, the path of the output yaml file we are saving the dict in. Should end in .yml or .yaml.
+    :returns entries: dict, the uniparc2others data that was saved into the yaml
     '''
     
     # init empty dict - this is ultimately what we will save
@@ -115,8 +116,10 @@ def make_uniparc2others(infile, outfile):
     entries = _clear_entries_with_no_chains(entries)
     entries = _sort_entries(entries)
 
-
     # write the dict to yaml
     with open(outfile, 'w') as f:
         yaml.dump(entries, f)
+
+    return entries
+
 

@@ -1,12 +1,13 @@
 import os
 import sys
 import requests
+import yaml
 
 configfile: 'config.yaml'
 
 sys.path.append(config['paths']['scripts'])
 from simple_write import simple_write
-
+from download_uniparc_fasta import download_fasta 
 
 
 
@@ -64,7 +65,7 @@ rule create_uniparc_to_others:
         mem_mb = "10000"
     run:
         from scripts.uniparc_to_uniprot_and_pdb import make_uniparc2others
-        make_uniparc2others(input.id_mapping, output.uniparc2others)
+        make_uniparc2others(infile=input.id_mapping, outfile=output.uniparc2others, out_seqs_dir=seqs_dir)
 
 
 
@@ -80,24 +81,40 @@ rule spotcheck_uniparc2others:
         simple_write(output.passed, 'success')
 
 
+rule download_uniparc_seqs:
+    input:
+        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+    output:
+        done = config['snake_donefiles']['sub1_uniparc_download_done']
+    params:
+        seqs_dir = config['paths']['uniparc_seqs']
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
+    run:
+        with open(input.yamlfile, 'r') as f:
+            data = yaml.safe_load(f)
+        for uniparc in data.keys():
+            div = uniparc[-2:]
+            fasta = f'{params.seqs_dir}/{div}/{uniparc}.fasta'
+            download_fasta(uniparc, fasta)
+        simple_write(output.done, 'success')
+          
 
-
-           
 rule derive_all_homodimers:
     input:
         uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
-        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done']
+        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done'],
+        download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
     output:
         homodimers = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
     threads: 1
     resources:
         time = "4:00:00",
         mem_mb = "5000"
-    params:
-        lib = config['paths']['lib']
     run:
         from scripts.derive_all_possible_homodimers import homodimers
-        homodimers(input.uniparc2others, output.homodimers, params.lib)
+        homodimers(input.uniparc2others, output.homodimers, config)
 
 
 

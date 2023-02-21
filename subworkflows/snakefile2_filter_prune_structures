@@ -180,7 +180,8 @@ rule prefilter_by_length_homo:
         mem_mb = "8000"
     run:
         simple_write(output.info, 'no')
-        download_fasta(wildcards.sample_homo, output.fasta)
+        # TODO: deal with new fasta loc
+#        download_fasta(wildcards.sample_homo, output.fasta)
         maxlen = config['database_settings']['chain_max_seq_len']
         write_yes_if_func(output.info, len_ok, output.fasta, maxlen)
 

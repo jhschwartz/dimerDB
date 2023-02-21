@@ -3,6 +3,7 @@ database_settings:
     dimer_define_contact_min_total_contacting_pairs: 10
     dimer_define_contact_distance_threshold_angstroms: 8
     dimer_cluster_distance_threshold: 0.25
+    chain_min_seq_len: 30
     chain_max_seq_len: 1024
     seq_cluster_distance_threshold: 0.1
     force_update_pdb: False
@@ -39,6 +40,7 @@ paths:
     intermediates: intermediates
     intermediates_homodimer_filtering: intermediates/homodimer_filtering
     lib: lib
+    uniparc_seqs: lib/uniparc
 
 snake_donefiles:
     sub0_all_done: intermediates/subflow0.done
@@ -48,6 +50,7 @@ snake_donefiles:
 
     sub1_all_done: intermediates/subflow1.done
     sub1_uniparc2others_checked_done: intermediates/uniparc2others_checked.done
+    sub1_uniparc_download_done: intermediates/uniparc_download.done
     sub1_homodimers_checked_done: intermediates/homodimers_checked.done
 
     sub2_all_done: intermediates/subflow2.done

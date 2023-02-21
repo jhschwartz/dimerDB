@@ -13,6 +13,16 @@ test_dir = pathlib.Path(__file__).parent.resolve()
 test_data = f'{test_dir}/data/derive_all_possible_homodimers'
 test_lib = f'{test_data}/lib'
 
+config = {
+    'database_settings': {
+        'chain_min_seq_len': 30
+    },
+    'paths': {
+        'uniparc_seqs': f'{test_lib}/uniparc',
+        'lib': test_lib 
+    }
+}
+
 
 class TestDeriveHomodimers(unittest.TestCase):
     def test_group_chains_1(self):
@@ -28,8 +38,8 @@ class TestDeriveHomodimers(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_group_chains_3(self):
-        chains = ['1abc_a1_m1_cA', '1abc_a1_m1_cB', '1abc_a1_m1_cD', '1abc_a1_m2_cC', ]
-        expected = [['1abc_a1_m1_cA', '1abc_a1_m1_cB', '1abc_a1_m1_cD', '1abc_a1_m2_cC', ]] 
+        chains = ['1abc_a1_m1_cA', '1abc_a1_m1_cB', '1abc_a1_m1_cD', '1abc_a1_m2_cC', '1abc_a7_m2_cT','1abc_a7_m2_cR']
+        expected = [['1abc_a1_m1_cA', '1abc_a1_m1_cB', '1abc_a1_m1_cD', '1abc_a1_m2_cC'], ['1abc_a7_m2_cR', '1abc_a7_m2_cT']] 
         result = group_chains(chains)
         self.assertEqual(expected, result)
 
@@ -56,11 +66,11 @@ class TestDeriveHomodimers(unittest.TestCase):
         outfile = 'testout.tmp'
         with tempfile.TemporaryDirectory() as td:
             outfile = f'{td}/out.yaml'
-            homodimers(infile, outfile, test_lib)
+            homodimers(infile, outfile, config)
 
             expected = {
                 'UPI00000C0390': ['1on3_a1_m1_cA-1on3_a1_m1_cB', '1on9_a1_m1_cA-1on9_a1_m1_cB', '1on9_a1_m1_cA-1on9_a1_m1_cC', '1on9_a1_m1_cB-1on9_a1_m1_cC'],
-                'UPI00001BD6BE': ['6k3g_a1_m1_cB-6k3g_a1_m2_cB', '6k3g_a1_m1_cB-6k3g_a2_m2_cB', '6k3g_a1_m2_cB-6k3g_a2_m2_cB']
+                'UPI00001BD6BE': ['6k3g_a1_m1_cB-6k3g_a1_m2_cB', '6k3g_a2_m14_cN-6k3g_a2_m2_cB']
             }
             
             with open(outfile, 'r') as f:

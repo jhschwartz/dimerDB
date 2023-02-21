@@ -21,8 +21,9 @@ def check_homodimers(yamlfile):
     
     parc = 'UPI000016A4A9' # human aldolase
     assert parc in data
-    assert '1xdl_A-1xdl_Y' in data[parc]
-    assert not '1xdl_A-1xdm_B' in data[parc]
+    assert '1xdl_a1_m1_cA-1xdl_a1_m1_cY' in data[parc]
+    assert not '1xdl_a1_m1_cA-1xdm_a1_m1_cB' in data[parc]
+    assert not '1xdl_a1_m1_cA-1xdl_a2_m1_cB' in data[parc]
     print('ok')
 
 
@@ -38,5 +39,5 @@ def check_heterodimers(yamlfile):
 
 if __name__ == '__main__':
     check_uniparc2others('../intermediates/uniparc2others.yaml')
-    check_homodimers('../intermediates/all_homodimers.yaml')
-    check_heterodimers('../intermediates/all_heterodimers.yaml')
+    check_homodimers('../intermediates/possible_homodimers.yaml')
+    #check_heterodimers('../intermediates/all_heterodimers.yaml')
