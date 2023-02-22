@@ -4,6 +4,7 @@ database_settings:
     dimer_define_contact_distance_threshold_angstroms: 8
     dimer_cluster_distance_threshold: 0.25
     chain_min_seq_len: 30
+    uniparc_chain_seqmatch_id_thresh: 0.95
     chain_max_seq_len: 1024
     seq_cluster_distance_threshold: 0.1
     force_update_pdb: False

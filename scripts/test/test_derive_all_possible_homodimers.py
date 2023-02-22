@@ -4,7 +4,9 @@ sys.path.append('..')
 import unittest
 import yaml
 import tempfile
-from derive_all_possible_homodimers import *
+from derive_all_possible_homodimers import \
+        _group_chains, _derive_homodimers_from_groups, derive_homodimers
+
 
 import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
@@ -52,7 +54,7 @@ class TestDeriveHomodimers(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_homodimers_yaml(self):
-        infile = f'{test_data}/fake_uniparc2others.yaml'
+        infile = f'{test_data}/expanded_cleaned_uniparc2others.yaml'
         outfile = 'testout.tmp'
         with tempfile.TemporaryDirectory() as td:
             outfile = f'{td}/out.yaml'

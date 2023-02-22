@@ -1,0 +1,51 @@
+1a29:
+  A:
+  - 1a29-a1-m1-cA.pdb
+1cv7:
+  A:
+  - 1cv7-a1-m1-cA.pdb
+1on3:
+  A:
+  - 1on3-a1-m1-cA.pdb
+  B:
+  - 1on3-a1-m1-cB.pdb
+  C:
+  - 1on3-a1-m1-cC.pdb
+  D:
+  - 1on3-a1-m1-cD.pdb
+  E:
+  - 1on3-a1-m1-cE.pdb
+  F:
+  - 1on3-a1-m1-cF.pdb
+1on9:
+  A:
+  - 1on9-a1-m1-cA.pdb
+  B:
+  - 1on9-a1-m1-cB.pdb
+  C:
+  - 1on9-a1-m1-cC.pdb
+  D:
+  - 1on9-a1-m1-cD.pdb
+  E:
+  - 1on9-a1-m1-cE.pdb
+  F:
+  - 1on9-a1-m1-cF.pdb
+1zzz:
+  A:
+  - 1zzz-a2-m2-cA.pdb
+  B:
+  - 1zzz-a2-m2-cB.pdb
+3ek7:
+  A:
+  - 3ek7-a1-m1-cA.pdb
+  - 3ek7-a1-m2-cA.pdb
+6k3g:
+  B:
+  - 6k3g-a1-m1-cB.pdb
+  - 6k3g-a1-m2-cB.pdb
+  - 6k3g-a2-m2-cB.pdb
+  N:
+  - 6k3g-a2-m14-cN.pdb
+abcd:
+  Z:
+  - abcd-a2-m2-cZ.pdb

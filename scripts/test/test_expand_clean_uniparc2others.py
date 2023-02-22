@@ -2,6 +2,7 @@ import unittest
 import sys
 import pickle
 import tempfile
+import yaml
 
 sys.path.append('..')
 from expand_clean_uniparc2others import _expand_chains_across_assemblies_models, \
@@ -15,16 +16,19 @@ test_lib = f'{test_data}/lib'
 
 config = {
     'database_settings': {
-        'chain_min_seq_len': 30
+        'chain_min_seq_len': 30,
+        'uniparc_chain_seqmatch_id_thresh': 0.95
     },
     'paths': {
         'uniparc_seqs': f'{test_lib}/uniparc',
-        'lib': test_lib 
+        'lib': test_lib,
+        'nwalign': '../../bin/NWalign/align',
+        'pdb2fasta': '../../bin/USalign/pdb2fasta'
     }
 }
 
 
-class TestFilterUnitparc2othersSeqmatch(unittest.TestCase):
+class TestExpandCleanUniparc2others(unittest.TestCase):
     def test_expand_chains_across_assemblies_models(self):
         chains = ['1on3_A', '1on3_B', '6k3g_B']
         with open(f'{test_lib}/rcsb_index.pkl', 'rb') as f:
@@ -62,3 +66,8 @@ class TestFilterUnitparc2othersSeqmatch(unittest.TestCase):
             'UPI00000000C1': ['3ek7_A', '1a29_A']
         }
         self.assertEqual(sorted(expected), sorted(result))
+
+
+if __name__ == '__main__':
+    unittest.main()
+

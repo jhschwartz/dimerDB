@@ -59,7 +59,7 @@ def _compare_uniparc_to_chain(uniparc_id, chain_name, config):
     nw = config['paths']['nwalign']
     pdb2fasta = config['paths']['pdb2fasta']
 
-    uniparc_fastafile = uniparc_fasta(uniparc_id)
+    uniparc_fastafile = uniparc_fasta(uniparc_id, lib)
     pdb_file = name_pdb_file(*read_chain_names(chain_name), lib)
 
     score = nw_fasta_to_pdb(uniparc_fastafile, pdb_file, nw, pdb2fasta)
