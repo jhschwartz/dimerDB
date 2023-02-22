@@ -7,54 +7,13 @@ derive_all_possible_homodimers.py - from a preprocessed yaml file that matches u
 Written by Jacob Schwartz (jaschwa@umich.edu) in Winter 2022-23.
 Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
 https://freddolino-lab.med.umich.edu
-
-These functions are unittested by test/test_derive_all_possible_homodimers.py and passing as of 1/12/2023. NNED UPDATE 2/5/23
-This work requires python >= 3.8
 '''
 
 import yaml
 import itertools
-import pickle
-import re
-from name_pdb import name_chain_from_filename
-from read_fasta import read_prot_from_fasta
 
 
-def expand_chains_across_assemblies_models(chains, pdb_index):
-    '''
-    Given a list of chains, each a string of the form "<pdb code>_<chain id>",
-    returns a list of those chains with model numbers and assembly identifies, 
-    duplicating chain names that occur across different models and/or assemblies.
-
-    So if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C'] we might get
-    something like ['1abc_a1_m1_cA', '1abc_a1_m2_cB', ...] 
-    
-    :param chains: list[str], a list of chains in pdb assemblies that correspond to a uniprot sequence
-    :param pdb_index: dict, wherein keys are pdb entry codes, second-depth keys are chain names, and
-                        third-depth members are lists of which each member is a pdb filename.
-                            E.g.:
-                                {
-                                    '1abc': {
-                                        'A': ['1abc-a1-m1-cA.pdb', ...'],
-                                        ...
-                                    },
-                                    ...
-                                }
-    '''
-    all_chains = []
-    for chain in chains:
-        pdb_base, chain_ID = chain.split('_')
-        try:
-            chain_files = pdb_index[pdb_base][chain_ID]
-        except KeyError:
-            print(f'Warning: the chain {pdb_base}:{chain_ID} does not exist in the local pdb and has been skipped while creating possible homodimers list') 
-            continue
-        for cf in chain_files:
-            all_chains.append(name_chain_from_filename(cf))
-    return all_chains
-
-
-def group_chains(chains):
+def _group_chains(chains):
     '''
     Given a list of chains, each a string of the form "<pdb code>_a<assembly>_m<model>_c<chain>", 
     returns a list of lists, where each list is the chains of one pdb_code and one assembly.
@@ -77,7 +36,7 @@ def group_chains(chains):
     return result
 
 
-def derive_homodimers_from_groups(grouped_chains):
+def _derive_homodimers_from_groups(grouped_chains):
     '''
     Given a list of grouped chains (grouped by gSo if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C']roup_chains(..) above), returns an unnested list
     of combinations limited to combinations within individual groups.
@@ -112,7 +71,7 @@ def derive_homodimers_from_groups(grouped_chains):
 
 
 
-def homodimers(infile, outfile, config):
+def derive_homodimers(infile, outfile):
     '''
     This function makes a dict, which is later saved in a yaml file, of 
     uniparc IDs matched to their mutliple homodimers. For example, if I 
@@ -134,40 +93,22 @@ def homodimers(infile, outfile, config):
     :param outfile: str, the path where we are putting the output dict as a yaml
     '''
 
-    lib_path = config['paths']['lib']
-
     # open the uniparc2others yaml as a dict
     with open(infile, 'r') as f:
         uniparc2others = yaml.safe_load(f)
-
-    # open the pdb index
-    indexfile = f'{lib_path}/rcsb_index.pkl'
-    with open(indexfile, 'rb') as f:
-        pdb_index = pickle.load(f)
-
+ 
     # the homodimers dict we are going to output
     homodimers = {}
     
     # for each uniparc sequence and its matching chains
-    for uniparc, chains in [(uniparc, subdict['pdb']) for uniparc, subdict in uniparc2others.items()]:
-
-        # read fasta and skip if too short
-        div = uniparc[-2:]
-        seqs_loc = config['paths']['uniparc_seqs']
-        fasta = f'{seqs_loc}/{div}/{uniparc}.fasta'
-        _, seq = next(read_prot_from_fasta(fasta))
-        if len(seq) < config['database_settings']['chain_min_seq_len']:
-            continue
-
-        # expand list of chains to include all models
-        all_chains = expand_chains_across_assemblies_models(chains, pdb_index)
+    for uniparc, chains in uniparc2others.items():
 
         # group the chains by uniprot code, making a nested list
-        grouped_chains = group_chains(all_chains)
+        grouped_chains = _group_chains(chains)
 
         # make an unnested list of tuples which describe intra-assembly (same pdb code)
         # combinations of chains, e.g. ('1abc_A', '1abc_C')
-        prot_homodimers = derive_homodimers_from_groups(grouped_chains)
+        prot_homodimers = _derive_homodimers_from_groups(grouped_chains)
 
         # convert each tuple to a combined name like '1abc_A-1abc_C'
         prot_homodimers = [f'{ph[0]}-{ph[1]}' for ph in prot_homodimers]
@@ -179,6 +120,3 @@ def homodimers(infile, outfile, config):
     # save to yaml
     with open(outfile, 'w') as f:
         yaml.dump(homodimers, f, default_flow_style=None)
-
-
-

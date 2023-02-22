@@ -27,7 +27,6 @@ def read_chain_names(name):
         chain = re.findall(r'.*[0-9a-z]{4}-a[0-9]+-m[0-9]+-c([A-Za-z0-9\-]+)\.pdb', name)[0] 
         return pdb, assembly, model, chain
 
-        homodimers(infile, outfile, test_lib)
     # just a name
     elif re.match(r'[0-9a-z]{4}_a[0-9]+_m[0-9]+_c[A-Za-z0-9\-]+$', name):
         pdb = re.findall(r'([0-9a-z]{4})_a[0-9]+_m[0-9]+_c[A-Za-z0-9\-]+', name)[0]
