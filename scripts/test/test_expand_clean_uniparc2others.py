@@ -17,6 +17,7 @@ test_lib = f'{test_data}/lib'
 config = {
     'database_settings': {
         'chain_min_seq_len': 30,
+        'chain_max_seq_len': 1024,
         'uniparc_chain_seqmatch_id_thresh': 0.95
     },
     'paths': {

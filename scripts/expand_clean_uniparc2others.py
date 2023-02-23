@@ -92,6 +92,8 @@ def expand_clean_uniparc2others(inyaml, outyaml, config):
         _, seq = next(read_prot_from_fasta(fasta))
         if len(seq) < config['database_settings']['chain_min_seq_len']:
             continue
+        elif len(seq) > config['database_settings']['chain_max_seq_len']:
+            continue
 
         chains = entry['pdb']
         expanded_chains = _expand_chains_across_assemblies_models(chains, pdb_index)

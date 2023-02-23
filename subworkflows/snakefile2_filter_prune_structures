@@ -60,7 +60,8 @@ rule all:
         merged_yamlfile_homo = config['snake_data_yaml_files']['sub2_homo_prefiltered_yaml'],
 #        merged_yamlfile_hetero = config['snake_data_yaml_files']['sub2_hetero_prefiltered_yaml'],
         merged_uniparc2af_homo = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo']
-#        merged_uniparc2af_hetero = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_hetero']
+#        merg            f.write(content)
+ed_uniparc2af_hetero = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_hetero']
     output:
         done = config['snake_donefiles']['sub2_all_done']
     run:
@@ -86,9 +87,9 @@ def make_uniparc2afinfo(afinfo_files, names, outfile):
     uniparc2af = {}
     for afinfo, uniparc in zip(afinfo_files, names):
         with open(afinfo, 'r') as f:
-            info = f.read()
-        if 'yes' in info:
-            afname = info.split()[1]
+            info = f.read().strip()
+        if info != 'no'
+            afname = info
             uniparc2af[uniparc] = afname
     with open(outfile, 'w') as f:
         yaml.dump(uniparc2af, f, default_flow_style=None)
@@ -113,11 +114,6 @@ def write_yes_if_func(outfile, func, *args):
     if func(*args):
         simple_write(outfile, 'yes')
     
-def len_ok(fasta, maxlen):
-    _, seq = next(read_prot_from_fasta(fasta))
-    if len(seq) <= 0:
-        raise ValueError(f'failed to read seq for fastafile {fasta}')
-    return len(seq) <= maxlen
 
 
 
@@ -169,43 +165,24 @@ rule init_indiv_yamls_homo:
         init_indiv_yamls(data=homodimers_data, yamlfiles=output.yamlfiles)
 
 
-rule prefilter_by_length_homo:
-    input:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/initial.yaml'
-    output:
-        info = out_base_path_homo+'/{div}/{sample_homo}/ok_len.info',
-        fasta = out_base_path_homo+'/{div}/{sample_homo}/seq.fasta'
-    threads: 1
-    resources:
-        mem_mb = "8000"
-    run:
-        simple_write(output.info, 'no')
-        # TODO: deal with new fasta loc
-#        download_fasta(wildcards.sample_homo, output.fasta)
-        maxlen = config['database_settings']['chain_max_seq_len']
-        write_yes_if_func(output.info, len_ok, output.fasta, maxlen)
 
 
 
 
 rule prefilter_by_in_afdb_homo:
     input:
-        info = out_base_path_homo+'/{div}/{sample}/ok_len.info',
-        fasta = out_base_path_homo+'/{div}/{sample}/seq.fasta'
+        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/initial.yaml'
     output:
-        info = out_base_path_homo+'/{div}/{sample}/ok_len_afdb.info'
+        info = out_base_path_homo+'/{div}/{sample}/ok_afdb.info'
     threads: 1
     resources:
         mem_mb = "8000"
     run:
         simple_write(output.info, 'no')
-        with open(input.info, 'r') as f:
-            len_ok = 'yes' in f.read()
-        if len_ok:
-            afdb_fasta = config['paths']['afdb_fasta']
-            af_name = match_seq_to_afdb(input.fasta, afdb_fasta)
-            if af_name:
-                simple_write(output.info, f'yes, {af_name}')
+        afdb_fasta = config['paths']['afdb_fasta']
+        af_name = match_seq_to_afdb(input.fasta, afdb_fasta)
+        if af_name:
+            simple_write(output.info, f'{af_name}')
 
 
                     
@@ -214,9 +191,9 @@ rule prefilter_by_in_afdb_homo:
 rule prefilter_by_physical_contact:
     input:
         yamlfile = out_base_path_homo+'/{div}/{sample_homo}/initial.yaml',
-        info = out_base_path_homo+'/{div}/{sample_homo}/ok_len_afdb.info'
+        info = out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info'
     output:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/prefiltered.yaml'
+        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.yaml'
     threads: 1
     resources:
         mem_mb = "8000",
@@ -224,8 +201,8 @@ rule prefilter_by_physical_contact:
     run:
         simple_write(output.yamlfile, '')
         with open(input.info, 'r') as f:
-            len_ok_afdb_ok = 'yes' in f.read()
-        if len_ok_afdb_ok:
+             afdb_ok = f.read().strip() != 'no'
+        if afdb_ok:
             filter_only_contacting_structures(uniparc=wildcards.sample_homo, inyaml=input.yamlfile, outyaml=output.yamlfile)
 
 
@@ -233,9 +210,9 @@ rule prefilter_by_physical_contact:
 
 rule filter_by_redundancy:
     input:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/prefiltered.yaml'
+        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.yaml'
     output:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/pruned_filtered.yaml'
+        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.yaml'
     threads: 4
     resources:
         mem_mb = 5000,
@@ -244,7 +221,7 @@ rule filter_by_redundancy:
         simple_write(output.yamlfile, '')
         with open(input.yamlfile, 'r') as f:
             loaded = yaml.safe_load()
-        if loaded != {}: 
+        if loaded: 
             uniparc = loaded.keys()[0]
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
@@ -259,8 +236,8 @@ rule filter_by_redundancy:
 
 rule merge_homo_data:
     input:
-        yamlfiles = expand(out_base_path_homo+'/{div}/{sample}/pruned_filtered.yaml', zip, div=divs, sample=samples_homo),
-        afinfos = expand(out_base_path_homo+'/{div}/{sample}/ok_len_afdb.info', zip, div=divs, sample=samples_homo)
+        yamlfiles = expand(out_base_path_homo+'/{div}/{sample}/incontact_nonredundant.yaml', zip, div=divs, sample=samples_homo),
+        afinfos = expand(out_base_path_homo+'/{div}/{sample}/ok_afdb.info', zip, div=divs, sample=samples_homo)
     output:
         merged_yamlfile = config['snake_data_yaml_files']['sub2_homo_prefiltered_yaml'],
         merged_uniparc2af = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo']
@@ -273,95 +250,3 @@ rule merge_homo_data:
         make_uniparc2afinfo(afinfo_files=input.afinfos, names=samples_homo, outfile=output.merged_uniparc2af)
 
 
-
-##########################################
-############ HETERODIMER RULES ###########
-# VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV #
-
-
-#rule init_indiv_yamls_hetero:
-#    output:
-#        yamlfiles = expand(out_base_path_hetero+'/{div}/{sample}/initial.yaml', zip, div=divs, sample=samples_hetero)
-#    threads: 1
-#    resources:
-#       time = "48:00:00",
-#       mem_mb = "30000"
-#    run:
-#        init_indiv_yamls(data=heterodimers_data, yamlfiles=output.yamlfiles)
-#
-#
-#rule prefilter_by_length_hetero:
-#    input:
-#        yamlfile = out_base_path_hetero+'/{div}/{sample_hetero}/initial.yaml'
-#    output:
-#        info = out_base_path_hetero+'/{div}/{sample_hetero}/ok_len.info',
-#        fasta1 = out_base_path_hetero+'/{div}/{sample_hetero}/seq1.fasta'
-#        fasta2 = out_base_path_hetero+'/{div}/{sample_hetero}/seq2.fasta'
-#    threads: 1
-#    resources:
-#        mem_mb = "8000"
-#    run:
-#        simple_write(output.info, 'no')
-#   uniparc1, uniparc2 = wildcards.sample_hetero.split('-')
-#        download_fasta(uniparc1, output.fasta1)
-#        download_fasta(uniparc2, output.fasta2)
-#   maxlen = config['database_settings']['chain_max_seq_len']
-#   both_len_ok = lambda fasta1, fasta2: len_ok(fasta1, maxlen) and len_ok(fasta2, maxlen)
-#        write_yes_if_func(output.info, both_len_ok, output.fasta1, output.fasta2)
-#
-#
-#rule prefilter_by_in_afdb_hetero:
-#    input:
-#        info = out_base_path_hetero+'/{div}/{sample}/ok_len.info',
-#        fasta = out_base_path_hetero+'/{div}/{sample}/seq.fasta'
-#    output:
-#        info = out_base_path_hetero+'/{div}/{sample}/ok_len_afdb.info'
-#    threads: 1
-#    resources:
-#        mem_mb = "8000"
-#    run:
-#        simple_write(output.info, 'no')
-#        with open(input.info, 'r') as f:
-#            len_ok = 'yes' in f.read()
-#        if len_ok:
-#            afdb_fasta = config['paths']['afdb_fasta']
-#            af_name = match_seq_to_afdb(input.fasta, afdb_fasta)
-#            if af_name:
-#                simple_write(output.info, f'yes, {af_name}')
-#
-#
-#
-#rule prefilter_by_physical_contact:
-#    input:
-#        yamlfile = out_base_path_hetero+'/{div}/{sample_hetero}/initial.yaml',
-#        info = out_base_path_hetero+'/{div}/{sample_hetero}/ok_len_afdb.info'
-#    output:
-#        yamlfile = out_base_path_hetero+'/{div}/{sample_hetero}/filtered.yaml'
-#    threads: 1
-#    resources:
-#        mem_mb = "8000",
-#        time = "4:00:00"
-#    run:
-#        simple_write(output.yamlfile, '')
-#        with open(input.info, 'r') as f:
-#            len_ok_afdb_ok = 'yes' in f.read()
-#        if len_ok_afdb_ok:
-#            filter_only_contacting_structures(uniparc=wildcards.sample_hetero, inyaml=input.yamlfile, outyaml=output.yamlfile)
-#
-#
-#rule merge_hetero_data:
-#    input:
-#        yamlfiles = expand(out_base_path_hetero+'/{div}/{sample}/filtered.yaml', zip, div=divs, sample=samples_hetero),
-#        afinfos = expand(out_base_path_hetero+'/{div}/{sample}/ok_len_afdb.info', zip, div=divs, sample=samples_hetero)
-#    output:
-#        merged_yamlfile = config['snake_data_yaml_files']['sub2_hetero_prefiltered_yaml'],
-#        merged_uniparc2af = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_hetero']
-#    threads: 1
-#    resources:
-#        mem_mb = 5000,
-#        time = '24:00:00'
-#    run:
-#        merge_yamlfiles(infiles=input.yamlfiles, outfile=output.merged_yamlfile)
-#        make_uniparc2afinfo(afinfo_files=input.afinfos, names=samples_hetero, outfile=output.merged_uniparc2af)
-#
-#

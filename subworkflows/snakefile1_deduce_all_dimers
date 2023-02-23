@@ -2,12 +2,15 @@ import os
 import sys
 import requests
 import yaml
+import pickle
+from sortedcontainers import SortedSet
 
 configfile: 'config.yaml'
 
 sys.path.append(config['paths']['scripts'])
 from simple_write import simple_write
 from download_uniparc_fasta import download_fasta 
+from name_fasta import uniparc_fasta
 
 
 
@@ -58,14 +61,18 @@ rule create_uniparc_to_others:
     input:
         id_mapping = id_mapping_fn
     output:
-        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        uniparc_index = config['snake_data_yaml_files']['sub1_uniparc2others_index']
     threads: 1
     resources:
         time = "12:00:00",
         mem_mb = "10000"
     run:
         from scripts.uniparc_to_uniprot_and_pdb import make_uniparc2others
-        make_uniparc2others(infile=input.id_mapping, outfile=output.uniparc2others, out_seqs_dir=seqs_dir)
+        uniparc2others_data = make_uniparc2others(infile=input.id_mapping, outfile=output.uniparc2others)
+        uniparc_names = SortedSet(uniparc2others_data.keys())
+        with open(output.uniparc_index, 'wb') as f:
+            pickle.dump(uniparc_names, f)
 
 
 
@@ -83,7 +90,7 @@ rule spotcheck_uniparc2others:
 
 rule download_uniparc_seqs:
     input:
-        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+        indexfile = config['snake_data_yaml_files']['sub1_uniparc2others_index']
     output:
         done = config['snake_donefiles']['sub1_uniparc_download_done']
     params:
@@ -92,18 +99,40 @@ rule download_uniparc_seqs:
         time = "12:00:00",
         mem_mb = "10000"
     run:
-        with open(input.yamlfile, 'r') as f:
-            data = yaml.safe_load(f)
-        for uniparc in data.keys():
-            div = uniparc[-2:]
-            fasta = f'{params.seqs_dir}/{div}/{uniparc}.fasta'
+        seqs_downloaded = SortedSet()
+        for root, dirs, files in os.walk(params.seqs_dir):
+            for f in files:
+                if f.endswith('.fasta'):
+                    seqs_downloaded.add(f)
+
+        with open(input.indexfile, 'rb') as f:
+            uniparc_ids = pickle.load(f)
+        for uniparc in uniparc_ids:
+            if uniparc in seqs_downloaded:
+                continue
+            fasta = uniparc_fasta(uniparc_id=uniparc, lib_path=config['paths']['lib'])
             download_fasta(uniparc, fasta)
         simple_write(output.done, 'success')
           
 
+rule expand_clean_uniparc2others:
+    input:
+        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
+    output:
+        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_expanded_cleaned_yaml']
+    resources:
+        time = "12:00:00",
+        mem_mb = "10000"
+    run:
+        from scripts.expand_clean_uniparc2others import expand_clean_uniparc2others
+        expand_clean_uniparc2others(inyaml=input.yamlfile, outyaml=output.yamlfile, config=config)
+
+
+
 rule derive_all_homodimers:
     input:
-        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_expanded_cleaned_yaml'],
         uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done'],
         download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
     output:
@@ -113,8 +142,8 @@ rule derive_all_homodimers:
         time = "4:00:00",
         mem_mb = "5000"
     run:
-        from scripts.derive_all_possible_homodimers import homodimers
-        homodimers(input.uniparc2others, output.homodimers, config)
+        from scripts.derive_all_possible_homodimers import derive_homodimers
+        derive_homodimers(input.uniparc2others, output.homodimers, config)
 
 
 

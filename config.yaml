@@ -4,8 +4,8 @@ database_settings:
     dimer_define_contact_distance_threshold_angstroms: 8
     dimer_cluster_distance_threshold: 0.25
     chain_min_seq_len: 30
-    uniparc_chain_seqmatch_id_thresh: 0.95
     chain_max_seq_len: 1024
+    uniparc_chain_seqmatch_id_thresh: 0.95
     seq_cluster_distance_threshold: 0.1
     force_update_pdb: False
     force_update_id_mapping: False
@@ -59,6 +59,8 @@ snake_donefiles:
 
 snake_data_yaml_files:
     sub1_uniparc2others_yaml: intermediates/uniparc2others.yaml
+    sub1_uniparc2others_index: intermediates/uniparc_index.pkl
+    sub1_uniparc2others_expanded_cleaned_yaml: intermediates/uniparc2others_expanded_cleaned.yaml
     sub1_all_homodimers_yaml: intermediates/possible_homodimers.yaml
     sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
     
