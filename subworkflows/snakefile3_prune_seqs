@@ -1,42 +1,84 @@
-import os
 import sys
 import pickle
+import yaml
 
 configfile: 'config.yaml'
 
-sys.path.append('..')
-from scripts.simple_write import simple_write
+sys.path.append(config['paths']['scripts'])
+from simple_write import simple_write
+from unredundant import RedundantSeqsHomodimer
 
 
-non_redundant_homodimers = 'intermediates/nonredundant_homodimers.pkl'
-non_redundant_homodimers = config['intermediate_data_files']['sub2_homo_prefiltered_pkl']
-
-with open(non_redundant_homodimers, 'rb') as f:
-	homodimers_dict = pickle.load(f)
-	#uniparcs = list(homodimers_dict.keys())
+homodimers_pkl = config['intermediate_data_files']['sub2_homo_prefiltered_pkl']
+thresh = config['database_settings']['seq_cluster_distance_threshold']
 
 
 
 rule all:
-	input:
-        config['output']['doubly_nonredundant_homodimers']
-	output:
+    input:
+        pklfile = config['output']['doubly_nonredundant_homodimers_pkl'],
+        yamlfile = config['output']['doubly_nonredundant_homodimers_yaml']
+    output:
         done = config['donefiles']['sub3_all_done']
-	run:
-		simple_write(output.done, 'success')
+    run:
+        simple_write(output.done, 'success')
 
 
 
-rule align:
-	output:
-        pklfile = config['output']['doubly_nonredundant_homodimers'] 
-		list_ = 'intermediates/working_homodimers.pkl'
-	threads: 512 # must make multi node...?
-	run:
-		from scripts.unredundant import RedundantSeqs
-		seqs = RedundantSeqs(seq_names=uniprots, threshold=0.7, homodimers_dict=homodimers_dict)
-		non_redundant_seqs = seqs.prune_redundancy(num_workers=threads)
-		filtered = {homodimers_dict[seqname] for seqname in non_redundant_seqs}
-		with open(output.list_, 'wb') as f:
-			pickle.dump(filtered, f)
+rule calc_nwalign_distance_matrix:
+    output:
+        npyfile = config['intermediate_data_files']['sub3_nwalign_distance_matrix']
+    threads: config['runtime']['max_threads']
+    resources:
+        time = '14-00:00:00',
+        mem_mb = 20000        
+    run:
+        seqs = RedundantSeqsHomodimer(pklfile=homodimers_pkl, threshold=thresh, config=config)
+        seqs.initiate_distance_matrix(num_workers=threads)
+        seqs.save_dist_matrix(savefile=output.npyfile)
+        
+
+
+
+
+rule cluster_seqs:
+    input:
+        npyfile = config['intermediate_data_files']['sub3_nwalign_distance_matrix']
+    output:
+        uniparcs_listfile = config['intermediate_data_files']['sub3_nonredundant_uniparcs']
+    threads: 1
+    resources:
+        time = '24:00:00',
+        mem_mb = 20000
+    run:
+        seqs = RedundantSeqsHomodimer(pklfile=homodimers_pkl, threshold=thresh, config=config)
+        seqs.load_dist_matrix(loadfile=input.npyfile)
+        nonredundant_uniparcs = seqs.prune_redundancy(num_workers=1, calc_dist_matrix=False)
+        with open(output.unipacs_list_pkl, 'wb') as f:
+            pickle.dump(nonredundant_uniparcs, f)
+
+
+
+
+rule generate_final_homodimers:
+    input:
+        uniparcs_listfile = config['intermediate_data_files']['sub3_nonredundant_uniparcs']
+    output:
+        pklfile = config['output']['doubly_nonredundant_homodimers_pkl'],
+        yamlfile = config['output']['doubly_nonredundant_homodimers_yaml']
+    threads: 1
+    resources:
+        time = '24:00:00',
+        mem_mb = 10000
+    run:
+        with open(input.uniparcs_listfile, 'rb') as f:
+            uniparcs_to_use = pickle.load(f)
+        with open(homodimers_pkl, 'rb') as f:
+            homodimers_seqredundant = pickle.load(f)
+        homodimers_final = {uniparc: homodimers_seqredundant[uniparc] for uniparc in uniparcs_to_use}
+        with open(output.pklfile, 'wb') as f:
+            pickle.dump(homodimers_final, f)
+        with open(output.yamlfile, 'w') as f:
+            yaml.dump(homodimers_final, f, default_flow_style=None)
+
 

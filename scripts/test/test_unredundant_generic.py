@@ -1,7 +1,7 @@
 import unittest
 import sys
-import os 
 import numpy as np
+import tempfile
 
 sys.path.append('..')
 from unredundant import RedundantThings
@@ -108,6 +108,44 @@ class TestRedundantGeneric(unittest.TestCase):
         self.assertEqual(i3, i4)
         self.assertNotEqual(i1, i3)
 
+
+    def test_save_load_distance_matrix(self):
+        n1 = list(range(5))
+        n2 = list(range(500,505))
+        numbers = n1 + n2
+        rg = RedundantGeneric(numbers=numbers, threshold=10)
+        rg.initiate_distance_matrix()
+        old_mat = rg.distance_matrix.copy()
+        with tempfile.TemporaryDirectory() as td:
+            matfile = f'{td}/mat.npy'
+            rg.save_dist_matrix(savefile=matfile)
+            rg.distance_matrix = None
+            rg.load_dist_matrix(loadfile=matfile)
+        self.assertTrue(np.array_equal(rg.distance_matrix, old_mat))
+
+
+    def test_prune_from_saved_distance_matrix(self):
+        n1 = list(range(5))
+        n2 = list(range(500,505))
+        numbers = n1 + n2
+        rg = RedundantGeneric(numbers=numbers, threshold=10)
+        rg.initiate_distance_matrix()
+        with tempfile.TemporaryDirectory() as td:
+            matfile = f'{td}/mat.npy'
+            rg.save_dist_matrix(savefile=matfile)
+            rg.distance_matrix = None
+            rg.load_dist_matrix(loadfile=matfile)
+        result = rg.prune_redundancy(calc_dist_matrix=False)
+        self.assertEqual(sorted(result), [2, 502])
+
+
+    def test_noprune_without_distance_matrix(self):
+        n1 = list(range(5))
+        n2 = list(range(500,505))
+        numbers = n1 + n2
+        rg = RedundantGeneric(numbers=numbers, threshold=10)
+        with self.assertRaises(ValueError):
+            rg.prune_redundancy(calc_dist_matrix=False)
 
 
 
