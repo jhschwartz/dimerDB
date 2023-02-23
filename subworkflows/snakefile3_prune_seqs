@@ -2,26 +2,26 @@ import os
 import sys
 import pickle
 
+configfile: 'config.yaml'
+
 sys.path.append('..')
 from scripts.simple_write import simple_write
 
 
-intermediates = os.getcwd()
-
-
-
 non_redundant_homodimers = 'intermediates/nonredundant_homodimers.pkl'
+non_redundant_homodimers = config['intermediate_data_files']['sub2_homo_prefiltered_pkl']
+
 with open(non_redundant_homodimers, 'rb') as f:
 	homodimers_dict = pickle.load(f)
-	uniprots = list(homodimers_dict.keys())
+	#uniparcs = list(homodimers_dict.keys())
 
 
 
 rule all:
 	input:
-		'intermediates/working_homodimers.pkl'
+        config['output']['doubly_nonredundant_homodimers']
 	output:
-		done = 'intermediates/subflow3.done'
+        done = config['donefiles']['sub3_all_done']
 	run:
 		simple_write(output.done, 'success')
 
@@ -29,6 +29,7 @@ rule all:
 
 rule align:
 	output:
+        pklfile = config['output']['doubly_nonredundant_homodimers'] 
 		list_ = 'intermediates/working_homodimers.pkl'
 	threads: 512 # must make multi node...?
 	run:
@@ -38,3 +39,4 @@ rule align:
 		filtered = {homodimers_dict[seqname] for seqname in non_redundant_seqs}
 		with open(output.list_, 'wb') as f:
 			pickle.dump(filtered, f)
+

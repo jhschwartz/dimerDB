@@ -6,7 +6,6 @@ configfile: 'config.yaml'
 sys.path.append(config['paths']['scripts'])
 from simple_write import simple_write
 
-configfile: 'config.yaml'
 
 
 # force pdb update

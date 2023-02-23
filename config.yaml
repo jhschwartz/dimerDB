@@ -26,7 +26,7 @@ workflow:
     snakefile3: subworkflows/snakefile3_prune_seqs
 
 paths:
-    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
+    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB-2
 
     scripts: scripts
     scripts_tests: scripts/tests
@@ -67,4 +67,8 @@ intermediate_data_files:
     sub2_homo_prefiltered_pkl: intermediates/true_homodimers.pkl
     sub2_uniparc2af_pkl: intermediates/homodimers_uniparc2af.pkl
 
-    sub3_nonredundant_homodimers: nonredundant_true_homodimers.pkl
+output:    
+    doubly_nonredundant_homodimers: out/nonredundant_true_homodimers.pkl
+    
+
+
