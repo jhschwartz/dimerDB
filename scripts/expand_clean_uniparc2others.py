@@ -67,7 +67,7 @@ def _compare_uniparc_to_chain(uniparc_id, chain_name, config):
 
 
 
-def expand_clean_uniparc2others(inpkl, outpkl, config):
+def expand_clean_uniparc2others(inpkl, outpkl, config, quiet=False):
     lib_path = config['paths']['lib']
     seqmatch_thresh = config['database_settings']['uniparc_chain_seqmatch_id_thresh']
 
@@ -102,7 +102,7 @@ def expand_clean_uniparc2others(inpkl, outpkl, config):
             score = _compare_uniparc_to_chain(uniparc, ec, config)
             if score >= seqmatch_thresh:
                 matching_chains.append(ec)
-            else:
+            elif not quiet:
                 print(f'encountered non-matching chain: uniparc={uniparc}, chain={ec}, id={score}')
 
         if len(matching_chains) > 0:

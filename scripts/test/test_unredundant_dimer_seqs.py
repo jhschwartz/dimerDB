@@ -21,8 +21,8 @@ config = {
 
 
 class ConcreteRedundantSeqs(RedundantSeqs):
-    def __init__(self, names, pklfile, threshold, config):
-        super().__init__(names, pklfile, threshold, config)
+    def __init__(self, names, datadict, threshold, config):
+        super().__init__(names, datadict, threshold, config)
     
     @staticmethod
     def __get_fasta_for_test(name_not_dimer):
@@ -52,7 +52,7 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
         redundant_seqs = ConcreteRedundantSeqs(names, data, threshold, config)
         result = redundant_seqs.prune_redundancy(num_workers=2)
         expected = ['Q921A3', 'P11223', 'P59594']
-        self.assertEqual(result, expected)
+        self.assertEqual(sorted(result), sorted(expected))
 
 
     

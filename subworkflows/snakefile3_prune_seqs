@@ -82,3 +82,4 @@ rule generate_final_homodimers:
             pickle.dump(homodimers_final, f)
         with open(output.yamlfile, 'w') as f:
             yaml.dump(homodimers_final, f, default_flow_style=None)
+
