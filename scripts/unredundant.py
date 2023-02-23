@@ -232,12 +232,10 @@ class RedundantDimerStructures(RedundantThings):
 
 
 class RedundantSeqs(RedundantThings): 
-    def __init__(self, pklfile, threshold, config):
-        with open(pklfile, 'rb') as f:
-            data = pickle.load(f)
-        super().__init__(things=list(data.keys()), threshold=threshold)
+    def __init__(self, dimer_names, datadict, threshold, config):
+        super().__init__(things=dimer_names, threshold=threshold)
+        self.dimers = datadict
         self.config = config
-        self.dimers = data
         self.nw = self.config['paths']['nwalign']
 
 
