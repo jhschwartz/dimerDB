@@ -35,7 +35,7 @@ paths:
     usalign: bin/USalign/USalign
     cif2pdb: bin/USalign/cif2pdb
     nwalign: bin/NWalign/align
-    labels_loc: /scratch/sigbio_project_root/sigbio_project1/jaschwa/HDpred_working/preprocessing/bin/labels
+    #    labels_loc: /scratch/sigbio_project_root/sigbio_project1/jaschwa/HDpred_working/preprocessing/bin/labels
     afdb_fasta: /nfs/turbo/umms-zhng/jaschwa/upec-fxn-pred/DB/afdb_v4.fasta
 
     intermediates: intermediates

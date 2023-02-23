@@ -1,9 +1,3 @@
-[submodule "bin/PDBParser"]
-	path = bin/PDBParser
-	url = https://github.com/kad-ecoli/PDBParser
 [submodule "bin/USalign"]
 	path = bin/USalign
-	url = https://github.com/pylelab/USalign
-[submodule "scripts/test/bin/USalign"]
-	path = scripts/test/bin/USalign
 	url = https://github.com/pylelab/USalign
