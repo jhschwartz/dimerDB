@@ -24,8 +24,8 @@ config = {
 
 
 class ConcreteRedundantSeqs(RedundantSeqs):
-    def __init__(self, names, yamlfile, threshold, config):
-        super().__init__(names, yamlfile, threshold, config)
+    def __init__(self, names, pklfile, threshold, config):
+        super().__init__(names, pklfile, threshold, config)
     
     @staticmethod
     def __get_fasta_for_test(name_not_dimer):
@@ -48,9 +48,9 @@ class ConcreteRedundantSeqs(RedundantSeqs):
 class TestRedundantSeqsSubclass(unittest.TestCase):
     def test_redundant_seqs_subclass(self):
         names = ['O15205', 'P63072', 'Q921A3', 'P0DTC2', 'P11223', 'P59594']
-        yamlfile = f'{test_data}/redundant_monomer_fastas/fake_seqs.yaml'
+        pklfile = f'{test_data}/redundant_monomer_fastas/fake_seqs.pkl'
         threshold = 0.5 
-        redundant_seqs = ConcreteRedundantSeqs(names, yamlfile, threshold, config)
+        redundant_seqs = ConcreteRedundantSeqs(names, pklfile, threshold, config)
         result = redundant_seqs.prune_redundancy(num_workers=2)
         expected = ['Q921A3', 'P11223', 'P59594']
 
@@ -68,7 +68,7 @@ class TestRedundantSeqsSubclass(unittest.TestCase):
 
 
 
-homoyaml = f'{test_data}/homodimers.yaml'
+homopkl = f'{test_data}/homodimers.pkl'
 homodimers = {
     'UPI00001653E1': ['2gqq_A-2gqq-B', '2gqq_A-2gqq-C', '2gqq_A-2gqq-D', '2gqq_B-2gqq-C', '2gqq_B-2gqq-D', '2gqq_C-2gqq-D'],    
     'UPI000016225C': ['fake', 'yet', 'another', 'fake'],
@@ -81,7 +81,7 @@ homodimers = {
 
 class TestRedundantSeqsHomo(unittest.TestCase):
     def test_init(self):        
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         self.assertEqual(rg.things[0], 'placeholder')
         self.assertEqual(rg.things[1], 'nothing')
         self.assertEqual(rg.threshold, 10)
@@ -89,7 +89,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
          
 
     def test_distance_similar(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         d1 = 'UPI00001653E1'
         d2 = 'UPI000016225C'
         expected = 1 - 0.994
@@ -98,7 +98,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
 
     def test_distance_notsimilar(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         d1 = 'UPI00001653E1'
         d2 = 'UPI00131F240A'
         expected = 1 - 0.415
@@ -107,7 +107,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
 
     def test_representative_criterion_1(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         cluster = ['UPI00001653E1', 'UPI000016225C', 'UPI000016F82F', 'UPI0000170134']
         rep = rg.representative(cluster)
         expected = 'UPI00001653E1'
@@ -115,7 +115,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
 
     def test_representative_criterion_2(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         cluster = ['UPI000016225C', 'UPI000016F82F', 'UPI0000170134', 'fakeprot00']
         rep = rg.representative(cluster)
         expected = 'UPI000016F82F'
@@ -123,7 +123,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
 
     def test_representative_criterion_3(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         cluster = ['fakeprot00', 'fakeprot01']
         rep = rg.representative(cluster)
         expected = 'fakeprot01'
@@ -131,7 +131,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
 
     def test_representative_criterion_4(self):
-        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homoyaml, 10, config)
+        rg = RedundantSeqsHomodimer(['placeholder', 'nothing'], homopkl, 10, config)
         cluster = ['UPI000016225C', 'UPI000016F82F', 'UPI0000170134']
         rep = rg.representative(cluster)
         expected = 'UPI000016225C'
@@ -140,7 +140,7 @@ class TestRedundantSeqsHomo(unittest.TestCase):
 
     def test_prune(self):
         names = ['UPI00001653E1', 'UPI000016225C', 'UPI000016F82F', 'UPI0000170134', 'UPI00131F240A', 'fakeprot00']
-        rg = RedundantSeqsHomodimer(names, homoyaml, 0.3, config)
+        rg = RedundantSeqsHomodimer(names, homopkl, 0.3, config)
         result = rg.prune_redundancy(num_workers=2)
         expected = ['UPI00001653E1', 'UPI00131F240A']
 

@@ -1,5 +1,5 @@
 '''
-uniparc_to_uniprot_and_pdb.py - functions to make a yamlfile that matches uniparc ids to uniprot ids which 
+uniparc_to_uniprot_and_pdb.py - functions to make a pklfile that matches uniparc ids to uniprot ids which 
                                 correspond to the same sequences and to the pdb files of the matching uniprots
                                 
 
@@ -11,7 +11,7 @@ This function is unittested by test/test_uniparc_to_uniprot_and_pdb.py and passi
 This work requires python >= 3.8
 '''
 import gzip
-import yaml
+import pickle
 from sortedcontainers import SortedSet, SortedDict
 
 
@@ -40,6 +40,7 @@ def _extract_ids(line):
 
 
 def _sort_entries(entries):
+    # TODO: pickles not yamls
     # convert each entry value to a list and sort it. We do this because yamls can't elegantly store sets.
     for uniparc in entries.keys():
         entries[uniparc]['uniprot'] = sorted(list(entries[uniparc]['uniprot']))
@@ -55,7 +56,7 @@ def _clear_entries_with_no_chains(entries):
 
 def make_uniparc2others(infile, outfile):
     '''
-    This function makes a dict, which is later saved in a yaml file, of single uniparc IDs matched to all 
+    This function makes a dict, which is later saved in a pickle file, of single uniparc IDs matched to all 
     unicprot ACs and pdb chains that are that uniparc sequence. For example, for a protein with uniparc ID
     "UPI0000123567", there could be several matching uniprots like "XYZ123" and "ABC987", which each match
     pdb chains which could be, as a union, ['1abc_A', '1abc_B', '7cba_B']. The resulting entry would be:
@@ -73,8 +74,8 @@ def make_uniparc2others(infile, outfile):
                     The format of column 5 can contain zero, one, or many PDB chains in the format below:
                                 "4H3B:B; 4H3B:D; 6DJL:B; 6DJL:C;" meaning "PDBCODE:CHAIN"
     
-    :param outfile: str, the path of the output yaml file we are saving the dict in. Should end in .yml or .yaml.
-    :returns entries: dict, the uniparc2others data that was saved into the yaml
+    :param outfile: str, the path of the output pickle file we are saving the dict in. Should end in .pkl.
+    :returns entries: dict, the uniparc2others data that was saved into the pickle
     '''
     
     # init empty dict - this is ultimately what we will save
@@ -116,9 +117,9 @@ def make_uniparc2others(infile, outfile):
     entries = _clear_entries_with_no_chains(entries)
     entries = _sort_entries(entries)
 
-    # write the dict to yaml
-    with open(outfile, 'w') as f:
-        yaml.dump(entries, f)
+    # write the dict to pickle
+    with open(outfile, 'wb') as f:
+        pickle.dump(entries, f)
 
     return entries
 

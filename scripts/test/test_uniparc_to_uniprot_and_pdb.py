@@ -2,7 +2,7 @@ import sys
 sys.path.append('..')
 import uniparc_to_uniprot_and_pdb
 import os
-import yaml
+import pickle
 import unittest
 import tempfile
 
@@ -14,7 +14,7 @@ class Uniparc2othersTestCase(unittest.TestCase):
     def test_uniparc2others(self):
         infile = f'{test_data}/idmapping_selected.tab.fake.gz'
         with tempfile.TemporaryDirectory() as td:
-            outfile = f'{td}/out.yaml'
+            outfile = f'{td}/out.pkl'
             uniparc_to_uniprot_and_pdb.make_uniparc2others(infile, outfile)
 
             expected = {
@@ -32,8 +32,8 @@ class Uniparc2othersTestCase(unittest.TestCase):
                 }
             }
 
-            with open(outfile, 'r') as f:
-                result = yaml.safe_load(f)
+            with open(outfile, 'rb') as f:
+                result = pickle.load(f)
 
             for k, v in expected.items():
                 self.assertTrue(v == result[k])

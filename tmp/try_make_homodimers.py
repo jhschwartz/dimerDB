@@ -3,7 +3,7 @@ sys.path.append('../scripts')
 
 from derive_all_possible_homodimers import homodimers
 
-file_in = 'tmpsmall_uniparc2others.yaml' 
+file_in = 'tmpsmall_uniparc2others.pkl' 
 file_out =  'out.yaml'
 lib = '../lib'
 

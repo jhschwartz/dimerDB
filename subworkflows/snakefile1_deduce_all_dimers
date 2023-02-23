@@ -1,7 +1,6 @@
 import os
 import sys
 import requests
-import yaml
 import pickle
 from sortedcontainers import SortedSet
 
@@ -17,7 +16,7 @@ from name_fasta import uniparc_fasta
 
 python = config['runtime']['python']
 
-id_mapping_fn = config['snake_data_yaml_files']['sub1_id_mapping_fn']
+id_mapping_fn = config['intermediate_data_files']['sub1_id_mapping_fn']
 
 # force id_mapping update
 if config['database_settings']['force_update_id_mapping'] and os.path.exists(id_mapping):
@@ -39,7 +38,7 @@ localrules: all, retrieve_id_mapping_file, spotcheck_uniparc2others, spotcheck_h
 
 rule all:
     input: 
-        config['snake_data_yaml_files']['sub1_all_homodimers_yaml'],
+        config['intermediate_data_files']['sub1_all_homodimers_pkl'],
         config['snake_donefiles']['sub1_homodimers_checked_done']
     output:
         done = config['snake_donefiles']['sub1_all_done']
@@ -61,8 +60,8 @@ rule create_uniparc_to_others:
     input:
         id_mapping = id_mapping_fn
     output:
-        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
-        uniparc_index = config['snake_data_yaml_files']['sub1_uniparc2others_index']
+        uniparc2others = config['intermediate_data_files']['sub1_uniparc2others_pkl'],
+        uniparc_index = config['intermediate_data_files']['sub1_uniparc2others_index']
     threads: 1
     resources:
         time = "12:00:00",
@@ -78,19 +77,19 @@ rule create_uniparc_to_others:
 
 rule spotcheck_uniparc2others:
     input:
-        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+        pklfile = config['intermediate_data_files']['sub1_uniparc2others_pkl']
     output:
         passed = config['snake_donefiles']['sub1_uniparc2others_checked_done']
     threads: 1
     run:
-        from spotcheck_subflow1_yamls import check_uniparc2others
-        check_uniparc2others(input.yamlfile)
+        from spotcheck_subflow1_pkls import check_uniparc2others
+        check_uniparc2others(input.pklfile)
         simple_write(output.passed, 'success')
 
 
 rule download_uniparc_seqs:
     input:
-        indexfile = config['snake_data_yaml_files']['sub1_uniparc2others_index']
+        indexfile = config['intermediate_data_files']['sub1_uniparc2others_index']
     output:
         done = config['snake_donefiles']['sub1_uniparc_download_done']
     params:
@@ -117,26 +116,26 @@ rule download_uniparc_seqs:
 
 rule expand_clean_uniparc2others:
     input:
-        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_yaml'],
+        pklfile = config['intermediate_data_files']['sub1_uniparc2others_pkl'],
         download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
     output:
-        yamlfile = config['snake_data_yaml_files']['sub1_uniparc2others_expanded_cleaned_yaml']
+        pklfile = config['intermediate_data_files']['sub1_uniparc2others_expanded_cleaned_pkl']
     resources:
         time = "12:00:00",
         mem_mb = "10000"
     run:
         from scripts.expand_clean_uniparc2others import expand_clean_uniparc2others
-        expand_clean_uniparc2others(inyaml=input.yamlfile, outyaml=output.yamlfile, config=config)
+        expand_clean_uniparc2others(inpkl=input.pklfile, outpkl=output.pklfile, config=config)
 
 
 
 rule derive_all_homodimers:
     input:
-        uniparc2others = config['snake_data_yaml_files']['sub1_uniparc2others_expanded_cleaned_yaml'],
+        uniparc2others = config['intermediate_data_files']['sub1_uniparc2others_expanded_cleaned_pkl'],
         uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done'],
         download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
     output:
-        homodimers = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
+        homodimers = config['intermediate_data_files']['sub1_all_homodimers_pkl']
     threads: 1
     resources:
         time = "4:00:00",
@@ -150,13 +149,13 @@ rule derive_all_homodimers:
 
 rule spotcheck_homodimers:
     input:
-        yamlfile = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
+        pklfile = config['intermediate_data_files']['sub1_all_homodimers_pkl']
     output:
         passed = config['snake_donefiles']['sub1_homodimers_checked_done']
     threads: 1
     run:
-        from spotcheck_subflow1_yamls import check_homodimers
-        check_homodimers(input.yamlfile)
+        from spotcheck_subflow1_pkls import check_homodimers
+        check_homodimers(input.pklfile)
         simple_write(output.passed, 'success')
 
 

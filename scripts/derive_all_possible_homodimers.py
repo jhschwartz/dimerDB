@@ -1,6 +1,6 @@
 '''
-derive_all_possible_homodimers.py - from a preprocessed yaml file that matches uniparc sequences to pdb structures
-                             generates a yaml file of all possible homodimers in the pdb.
+derive_all_possible_homodimers.py - from a preprocessed pickle file that matches uniparc sequences to pdb structures
+                             generates a pickle file of all possible homodimers in the pdb.
                              Does not check that chains are in contact. Merely checks that two chains of
                              the same sequence sequence are in the same overall pdb assembly.
 
@@ -9,7 +9,7 @@ Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed 
 https://freddolino-lab.med.umich.edu
 '''
 
-import yaml
+import pickle
 import itertools
 
 
@@ -73,9 +73,9 @@ def _derive_homodimers_from_groups(grouped_chains):
 
 def derive_homodimers(infile, outfile):
     '''
-    This function makes a dict, which is later saved in a yaml file, of 
+    This function makes a dict, which is later saved in a pickle file, of 
     uniparc IDs matched to their mutliple homodimers. For example, if I 
-    have a listing in a uniparc2others.yaml file that looks like 
+    have a listing in a uniparc2others.pkl file that looks like 
         { 'UPXXX': {'pdb': ['1abc_A', '1abc_B', '7cba_B', '1abc_C'] ...} }
     then the result should be all intra-assemply unique combinations:
         {'UPXXX': [('1abc_A', '1bc_B'), ('1abc_A', '1bc_C'), ('1abc_B', '1bc_C')]}
@@ -89,13 +89,13 @@ def derive_homodimers(infile, outfile):
     So if we have chains ['1abc_A', '1abc_B', '7cba_B', '1abc_C'],
     the result would be [('1abc_A', '1abc_B'), ('1abc_A', '1abc_C'), ('1abc_B', '1abc_C')]
     
-    :param infile: str, the path to the uniparc2others.yaml file made by uniparc_to_uniprot_and_pdb.py
-    :param outfile: str, the path where we are putting the output dict as a yaml
+    :param infile: str, the path to the uniparc2others.pkl file made by uniparc_to_uniprot_and_pdb.py
+    :param outfile: str, the path where we are putting the output dict as a pickle
     '''
 
-    # open the uniparc2others yaml as a dict
-    with open(infile, 'r') as f:
-        uniparc2others = yaml.safe_load(f)
+    # open the uniparc2others pickle as a dict
+    with open(infile, 'rb') as f:
+        uniparc2others = pickle.load(f)
  
     # the homodimers dict we are going to output
     homodimers = {}
@@ -117,6 +117,6 @@ def derive_homodimers(infile, outfile):
         if prot_homodimers != []:
             homodimers[uniparc] = prot_homodimers
 
-    # save to yaml
-    with open(outfile, 'w') as f:
-        yaml.dump(homodimers, f, default_flow_style=None)
+    # save to pickle
+    with open(outfile, 'wb') as f:
+        pickle.dump(homodimers, f)

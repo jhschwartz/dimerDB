@@ -1,10 +1,10 @@
-import yaml
+import pickle
 import time
 
 
-def check_uniparc2others(yamlfile):
-    with open(yamlfile, 'r') as f:
-        data = yaml.safe_load(f)
+def check_uniparc2others(pklfile):
+    with open(pklfile, 'rb') as f:
+        data = pickle.load(f)
 
     assert not 'UPI00000BE9B0' in data
 
@@ -15,9 +15,9 @@ def check_uniparc2others(yamlfile):
     assert '1aap_B' in entry['pdb'] 
     print('ok')
 
-def check_homodimers(yamlfile):
-    with open(yamlfile, 'r') as f:
-        data = yaml.safe_load(f)
+def check_homodimers(pklfile):
+    with open(pklfile, 'rb') as f:
+        data = pickle.load(f)
     
     parc = 'UPI000016A4A9' # human aldolase
     assert parc in data
@@ -27,9 +27,9 @@ def check_homodimers(yamlfile):
     print('ok')
 
 
-def check_heterodimers(yamlfile):
-    with open(yamlfile, 'r') as f:
-        data = yaml.safe_load(f)
+def check_heterodimers(pklfile):
+    with open(pklfile, 'rb') as f:
+        data = pickle.load(f)
     
     parc = 'UPI000003EB27-UPI000013471A'
     pdb = '4jk1_E-4jk1_D'
@@ -38,6 +38,6 @@ def check_heterodimers(yamlfile):
    
 
 if __name__ == '__main__':
-    check_uniparc2others('../intermediates/uniparc2others.yaml')
-    check_homodimers('../intermediates/possible_homodimers.yaml')
-    #check_heterodimers('../intermediates/all_heterodimers.yaml')
+    check_uniparc2others('../intermediates/uniparc2others.pkl')
+    check_homodimers('../intermediates/possible_homodimers.pkl')
+    #check_heterodimers('../intermediates/all_heterodimers.pkl')

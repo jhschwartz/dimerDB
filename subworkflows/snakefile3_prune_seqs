@@ -1,6 +1,6 @@
 import os
 import sys
-import yaml
+import pickle
 
 sys.path.append('..')
 from scripts.simple_write import simple_write
@@ -10,16 +10,16 @@ intermediates = os.getcwd()
 
 
 
-non_redundant_homodimers = 'intermediates/nonredundant_homodimers.yaml'
-with open(non_redundant_homodimers, 'r') as f:
-	homodimers_dict = yaml.safe_load(f)
+non_redundant_homodimers = 'intermediates/nonredundant_homodimers.pkl'
+with open(non_redundant_homodimers, 'rb') as f:
+	homodimers_dict = pickle.load(f)
 	uniprots = list(homodimers_dict.keys())
 
 
 
 rule all:
 	input:
-		'intermediates/working_homodimers.yaml'
+		'intermediates/working_homodimers.pkl'
 	output:
 		done = 'intermediates/subflow3.done'
 	run:
@@ -29,12 +29,12 @@ rule all:
 
 rule align:
 	output:
-		list_ = 'intermediates/working_homodimers.yaml'
+		list_ = 'intermediates/working_homodimers.pkl'
 	threads: 512 # must make multi node...?
 	run:
 		from scripts.unredundant import RedundantSeqs
 		seqs = RedundantSeqs(seq_names=uniprots, threshold=0.7, homodimers_dict=homodimers_dict)
 		non_redundant_seqs = seqs.prune_redundancy(num_workers=threads)
 		filtered = {homodimers_dict[seqname] for seqname in non_redundant_seqs}
-		with open(output.list_, 'w') as f:
-			yaml.dump(filtered, f, default_flow_style=None)
+		with open(output.list_, 'wb') as f:
+			pickle.dump(filtered, f)

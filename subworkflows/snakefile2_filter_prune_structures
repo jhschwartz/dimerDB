@@ -1,6 +1,6 @@
 import sys
 import os
-import yaml
+import pickle
 
 configfn = 'config.yaml'  
 configfile: configfn
@@ -26,28 +26,21 @@ import labels as label_funcs
 out_base_path_homo = config['paths']['intermediates_homodimer_filtering']
 #out_base_path_hetero = config['paths']['intermediates_heterodimer_filtering']
 
-homodimers_yaml = config['snake_data_yaml_files']['sub1_all_homodimers_yaml']
-#heterodimers_yaml = config['snake_data_yaml_files']['sub1_all_heterodimers_yaml']
-uniparc2others_yaml = config['snake_data_yaml_files']['sub1_uniparc2others_yaml']
+homodimers_pkl = config['intermediate_data_files']['sub1_all_homodimers_pkl']
+#heterodimers_pkl = config['intermediate_data_files']['sub1_all_heterodimers_pkl']
+uniparc2others_pkl = config['intermediate_data_files']['sub1_uniparc2others_pkl']
 
 
-with open(homodimers_yaml, 'r') as f:
-    homodimers_data = yaml.safe_load(f)
+with open(homodimers_pkl, 'rb') as f:
+    homodimers_data = pickle.load(f)
     samples_homo = homodimers_data.keys()
 
-#with open(heterodimers_yaml, 'r') as f:
-#    heterodimers_data = yaml.safe_load(f)
-#    samples_hetero = homodimers_data.keys()
 
 divs_homo = [s[-2:] for s in samples_homo]
 
-#def make_het_div(heterodimer_name):
-#    u1, u2 = heterodimer_name.split('-')
-#    return f'{ u1[-1] }-{ u2[-1] }'
-#divs_hetero = [make_het_div(s) for s in samples_hetero]
 
-with open(uniparc2others_yaml, 'r') as f:
-    uniparc2others = yaml.safe_load(f)
+with open(uniparc2others_pkl, 'rb') as f:
+    uniparc2others = pickle.load(f)
 
 
 
@@ -57,11 +50,11 @@ localrules: all
 
 rule all:
     input:
-        merged_yamlfile_homo = config['snake_data_yaml_files']['sub2_homo_prefiltered_yaml'],
-#        merged_yamlfile_hetero = config['snake_data_yaml_files']['sub2_hetero_prefiltered_yaml'],
-        merged_uniparc2af_homo = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo']
+        merged_pklfile_homo = config['intermediate_data_files']['sub2_homo_prefiltered_pkl'],
+#        merged_pklfile_hetero = config['intermediate_data_files']['sub2_hetero_prefiltered_pkl'],
+        merged_uniparc2af_homo = config['intermediate_data_files']['sub2_uniparc2af_pkl_homo']
 #        merg            f.write(content)
-ed_uniparc2af_hetero = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_hetero']
+ed_uniparc2af_hetero = config['intermediate_data_files']['sub2_uniparc2af_pkl_hetero']
     output:
         done = config['snake_donefiles']['sub2_all_done']
     run:
@@ -74,13 +67,13 @@ ed_uniparc2af_hetero = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_het
 # VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV #
 
 
-def merge_yamlfiles(infiles, outfile):
+def merge_pklfiles(infiles, outfile):
     data = {}
-    for yamlfile in infiles:    
-        with open(yamlfile, 'r') as f:
-            data = {**data, **yaml.safe_load(f)} # merge dicts data and the read dict from yaml
-    with open(outfile, 'w') as f:
-        yaml.dump(data, f, default_flow_style=None)
+    for pklfile in infiles:    
+        with open(pklfile, 'rb') as f:
+            data = {**data, **pickle.load(f)} # merge dicts data and the read dict from pkl
+    with open(outfile, 'wb') as f:
+        pickle.dump(data, f)
 
 
 def make_uniparc2afinfo(afinfo_files, names, outfile):
@@ -91,23 +84,23 @@ def make_uniparc2afinfo(afinfo_files, names, outfile):
         if info != 'no'
             afname = info
             uniparc2af[uniparc] = afname
-    with open(outfile, 'w') as f:
-        yaml.dump(uniparc2af, f, default_flow_style=None)
+    with open(outfile, 'wb') as f:
+        pickle.dump(uniparc2af, f)
 
 
-def init_indiv_yamls(data, yamlfiles):
+def init_indiv_pkls(data, pklfiles):
     for uniparc, chain_pairs in data.items():
-        yamlfile = [yf for yf in yamlfiles if uniparc in yf]
-        if len(yamlfile) != 1:
-            raise ValueError(f'should find exactly one matching yaml filename for uniparc {uniparc} but found {len(yamlfile)}')
-        yamlfile = yamlfile[0]
-        if os.path.exists(yamlfile):
+        pklfile = [yf for yf in pklfiles if uniparc in yf]
+        if len(pklfile) != 1:
+            raise ValueError(f'should find exactly one matching pkl filename for uniparc {uniparc} but found {len(pklfile)}')
+        pklfile = pklfile[0]
+        if os.path.exists(pklfile):
             continue
         unit_data = {
             uniparc: chain_pairs
         }
-        with open(yamlfile, 'w') as f:
-            yaml.dump(unit_data, f, default_flow_style=None)
+        with open(pklfile, 'wb') as f:
+            pickle.dump(unit_data, f)
 
 
 def write_yes_if_func(outfile, func, *args):
@@ -126,9 +119,9 @@ def match_seq_to_afdb(query_fasta, afdb_fasta):
     return None
 
 
-def filter_only_contacting_structures(uniparc, inyaml, outyaml):
-    with open(inyaml, 'r') as f:
-        data = yaml.safe_load(f)
+def filter_only_contacting_structures(uniparc, inpkl, outpkl):
+    with open(inpkl, 'rb') as f:
+        data = pickle.load(f)
     dimers = data[uniparc]
     dimers_in_contact = []
     
@@ -143,8 +136,8 @@ def filter_only_contacting_structures(uniparc, inyaml, outyaml):
 
     if len(dimers_in_contact) > count_thresh:
         data[uniparc] = dimers_in_contact
-        with open(outyaml, 'w') as f:
-            yaml.dump(data, f, default_flow_style=None)
+        with open(outpkl, 'wb') as f:
+            pickle.dump(data, f)
 
 
 
@@ -154,15 +147,15 @@ def filter_only_contacting_structures(uniparc, inyaml, outyaml):
 
 
 
-rule init_indiv_yamls_homo:
+rule init_indiv_pkls_homo:
     output:
-        yamlfiles = expand(out_base_path_homo+'/{div}/{sample}/initial.yaml', zip, div=divs, sample=samples_homo)
+        pklfiles = expand(out_base_path_homo+'/{div}/{sample}/initial.pkl', zip, div=divs, sample=samples_homo)
     threads: 1
     resources:
        time = "48:00:00",
        mem_mb = "30000"
     run:
-        init_indiv_yamls(data=homodimers_data, yamlfiles=output.yamlfiles)
+        init_indiv_pkls(data=homodimers_data, pklfiles=output.pklfiles)
 
 
 
@@ -171,7 +164,7 @@ rule init_indiv_yamls_homo:
 
 rule prefilter_by_in_afdb_homo:
     input:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/initial.yaml'
+        pklfile = out_base_path_homo+'/{div}/{sample_homo}/initial.pkl'
     output:
         info = out_base_path_homo+'/{div}/{sample}/ok_afdb.info'
     threads: 1
@@ -190,45 +183,45 @@ rule prefilter_by_in_afdb_homo:
 
 rule prefilter_by_physical_contact:
     input:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/initial.yaml',
+        pklfile = out_base_path_homo+'/{div}/{sample_homo}/initial.pkl',
         info = out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info'
     output:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.yaml'
+        pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     threads: 1
     resources:
         mem_mb = "8000",
         time = "4:00:00"
     run:
-        simple_write(output.yamlfile, '')
+        simple_write(output.pklfile, '')
         with open(input.info, 'r') as f:
              afdb_ok = f.read().strip() != 'no'
         if afdb_ok:
-            filter_only_contacting_structures(uniparc=wildcards.sample_homo, inyaml=input.yamlfile, outyaml=output.yamlfile)
+            filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile, outpkl=output.pklfile)
 
 
 
 
 rule filter_by_redundancy:
     input:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.yaml'
+        pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     output:
-        yamlfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.yaml'
+        pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl'
     threads: 4
     resources:
         mem_mb = 5000,
         time = "4:00:00"
     run:
-        simple_write(output.yamlfile, '')
-        with open(input.yamlfile, 'r') as f:
-            loaded = yaml.safe_load()
+        simple_write(output.pklfile, '')
+        with open(input.pklfile, 'r') as f:
+            loaded = pkl.safe_load()
         if loaded: 
             uniparc = loaded.keys()[0]
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
             non_redundant_dimers = {}
             non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads)
-            with open(output.yamlfile, 'w') as f:
-                yaml.dump(non_redundant_dimers, f, default_flow_style=None)
+            with open(output.pklfile, 'wb') as f:
+                pickle.dump(non_redundant_dimers, f)
 
 
 
@@ -236,17 +229,17 @@ rule filter_by_redundancy:
 
 rule merge_homo_data:
     input:
-        yamlfiles = expand(out_base_path_homo+'/{div}/{sample}/incontact_nonredundant.yaml', zip, div=divs, sample=samples_homo),
+        pklfiles = expand(out_base_path_homo+'/{div}/{sample}/incontact_nonredundant.pkl', zip, div=divs, sample=samples_homo),
         afinfos = expand(out_base_path_homo+'/{div}/{sample}/ok_afdb.info', zip, div=divs, sample=samples_homo)
     output:
-        merged_yamlfile = config['snake_data_yaml_files']['sub2_homo_prefiltered_yaml'],
-        merged_uniparc2af = config['snake_data_yaml_files']['sub2_uniparc2af_yaml_homo']
+        merged_pklfile = config['intermediate_data_files']['sub2_homo_prefiltered_pkl'],
+        merged_uniparc2af = config['intermediate_data_files']['sub2_uniparc2af_pkl_homo']
     threads: 1
     resources:
         mem_mb = 5000,
         time = '24:00:00'
     run:
-        merge_yamlfiles(infiles=input.yamlfiles, outfile=output.merged_yamlfile)
+        merge_pklfiles(infiles=input.pklfiles, outfile=output.merged_pklfile)
         make_uniparc2afinfo(afinfo_files=input.afinfos, names=samples_homo, outfile=output.merged_uniparc2af)
 
 

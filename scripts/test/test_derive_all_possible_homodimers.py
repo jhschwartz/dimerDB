@@ -2,7 +2,7 @@ import sys
 sys.path.append('..')
 
 import unittest
-import yaml
+import pickle
 import tempfile
 from derive_all_possible_homodimers import \
         _group_chains, _derive_homodimers_from_groups, derive_homodimers
@@ -53,11 +53,11 @@ class TestDeriveHomodimers(unittest.TestCase):
         result = _derive_homodimers_from_groups(groups)
         self.assertEqual(expected, result)
 
-    def test_homodimers_yaml(self):
-        infile = f'{test_data}/expanded_cleaned_uniparc2others.yaml'
+    def test_homodimers_pkl(self):
+        infile = f'{test_data}/expanded_cleaned_uniparc2others.pkl'
         outfile = 'testout.tmp'
         with tempfile.TemporaryDirectory() as td:
-            outfile = f'{td}/out.yaml'
+            outfile = f'{td}/out.pkl'
             derive_homodimers(infile, outfile)
 
             expected = {
@@ -65,8 +65,8 @@ class TestDeriveHomodimers(unittest.TestCase):
                 'UPI00001BD6BE': ['6k3g_a1_m1_cB-6k3g_a1_m2_cB', '6k3g_a2_m14_cN-6k3g_a2_m2_cB']
             }
             
-            with open(outfile, 'r') as f:
-                result = yaml.safe_load(f)
+            with open(outfile, 'rb') as f:
+                result = pickle.load(f)
 
             self.assertTrue(expected == result)
 

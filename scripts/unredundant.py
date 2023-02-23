@@ -31,7 +31,7 @@ import tempfile
 from scipy.stats import gmean
 import contextlib
 import subprocess
-import yaml
+import pickle
 import threading
 from multiprocessing import Pool
 from read_fasta import read_prot_from_fasta
@@ -220,11 +220,11 @@ class RedundantDimerStructures(RedundantThings):
 
 
 class RedundantSeqs(RedundantThings): 
-    def __init__(self, dimer_names, yamlfile, threshold, config):
+    def __init__(self, dimer_names, pklfile, threshold, config):
         super().__init__(things=dimer_names, threshold=threshold)
         self.config = config
-        with open(yamlfile, 'r') as f:
-            self.dimers = yaml.safe_load(f)
+        with open(pklfile, 'rb') as f:
+            self.dimers = pickle.load(f)
         self.nw = self.config['paths']['nwalign']
 
 
@@ -284,8 +284,8 @@ class RedundantSeqs(RedundantThings):
 
 
 class RedundantSeqsHomodimer(RedundantSeqs):
-    def __init__(self, dimer_names, yamlfile, threshold, config):
-        super().__init__(dimer_names, yamlfile, threshold, config)
+    def __init__(self, dimer_names, pklfile, threshold, config):
+        super().__init__(dimer_names, pklfile, threshold, config)
         self.lib = self.config['paths']['lib']
 
     

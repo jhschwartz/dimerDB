@@ -2,7 +2,7 @@ import unittest
 import sys
 import pickle
 import tempfile
-import yaml
+
 
 sys.path.append('..')
 from expand_clean_uniparc2others import _expand_chains_across_assemblies_models, \
@@ -56,12 +56,12 @@ class TestExpandCleanUniparc2others(unittest.TestCase):
 
 
     def test_expand_clean_uniparc2others(self):
-        inyaml = f'{test_data}/uniparc2others.yaml'
+        inpkl = f'{test_data}/uniparc2others.pkl'
         with tempfile.TemporaryDirectory() as td:
-            outyaml = f'{td}/out.yaml'
-            expand_clean_uniparc2others(inyaml=inyaml, outyaml=outyaml, config=config)
-            with open(outyaml, 'r') as f:
-                result = yaml.safe_load(f)
+            outpkl = f'{td}/out.pkl'
+            expand_clean_uniparc2others(inpkl=inpkl, outpkl=outpkl, config=config)
+            with open(outpkl, 'rb') as f:
+                result = pickle.load(f)
         expected = {
             'UPI0000002FB4': ['1cv7_A'],
             'UPI00000000C1': ['3ek7_A', '1a29_A']

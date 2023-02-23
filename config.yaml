@@ -57,14 +57,14 @@ snake_donefiles:
     sub2_all_done: intermediates/subflow2.done
     sub3_all_done: intermediates/subflow3.done
 
-snake_data_yaml_files:
-    sub1_uniparc2others_yaml: intermediates/uniparc2others.yaml
+intermediate_data_files:
+    sub1_uniparc2others_pkl: intermediates/uniparc2others.pkl
     sub1_uniparc2others_index: intermediates/uniparc_index.pkl
-    sub1_uniparc2others_expanded_cleaned_yaml: intermediates/uniparc2others_expanded_cleaned.yaml
-    sub1_all_homodimers_yaml: intermediates/possible_homodimers.yaml
+    sub1_uniparc2others_expanded_cleaned_pkl: intermediates/uniparc2others_expanded_cleaned.pkl
+    sub1_all_homodimers_pkl: intermediates/possible_homodimers.pkl
     sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
     
-    sub2_homo_prefiltered_yaml: intermediates/true_homodimers.yaml
-    sub2_uniparc2af_yaml: intermediates/homodimers_uniparc2af.yaml
+    sub2_homo_prefiltered_pkl: intermediates/true_homodimers.pkl
+    sub2_uniparc2af_pkl: intermediates/homodimers_uniparc2af.pkl
 
-    sub3_nonredundant_homodimers: nonredundant_true_homodimers.yaml
+    sub3_nonredundant_homodimers: nonredundant_true_homodimers.pkl

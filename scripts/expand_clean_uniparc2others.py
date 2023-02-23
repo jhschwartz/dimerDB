@@ -1,5 +1,5 @@
 '''
-expand_uniparc2others.py - given a uniparc2others.yaml file, both expands chain
+expand_uniparc2others.py - given a uniparc2others.pkl file, both expands chain
                            names to include assembly and model numbering and drops
                            any chains which do not match their uniparc seq and drops
                            uniparc seqs (and respective chains) that are too short
@@ -9,7 +9,6 @@ Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed 
 https://freddolino-lab.med.umich.edu
 '''
 
-import yaml
 import pickle
 from read_fasta import read_prot_from_fasta
 from align_tools import nw_fasta_to_pdb
@@ -68,14 +67,14 @@ def _compare_uniparc_to_chain(uniparc_id, chain_name, config):
 
 
 
-def expand_clean_uniparc2others(inyaml, outyaml, config):
+def expand_clean_uniparc2others(inpkl, outpkl, config):
     lib_path = config['paths']['lib']
     seqmatch_thresh = config['database_settings']['uniparc_chain_seqmatch_id_thresh']
 
 
-    # open the uniparc2others yaml as a dict
-    with open(inyaml, 'r') as f:
-        uniparc2others = yaml.safe_load(f)
+    # open the uniparc2others pickle as a dict
+    with open(inpkl, 'rb') as f:
+        uniparc2others = pickle.load(f)
 
     # open the pdb index
     indexfile = f'{lib_path}/rcsb_index.pkl'
@@ -109,5 +108,5 @@ def expand_clean_uniparc2others(inyaml, outyaml, config):
         if len(matching_chains) > 0:
             homodimers[uniparc] = matching_chains
 
-    with open(outyaml, 'w') as f:
-        yaml.dump(homodimers, f)
+    with open(outpkl, 'wb') as f:
+        pickle.dump(homodimers, f)

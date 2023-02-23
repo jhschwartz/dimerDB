@@ -1,4 +1,4 @@
-import yaml
+import pickle
 
 import sys
 sys.path.append('../scripts')
@@ -17,14 +17,14 @@ args = parser.parse_args()
 
 name = args.uniparc
 div = name[-2:]
-inyaml = f'/nfs/turbo/umms-petefred/jaschwa/dimerDB/intermediates/homodimer_filtering/{div}/{name}/initial.yaml'
+inpkl = f'/nfs/turbo/umms-petefred/jaschwa/dimerDB/intermediates/homodimer_filtering/{div}/{name}/initial.pkl'
 
 lib = '../lib'
 dist_thresh = 8
 count_thresh = 10
 
-with open(inyaml) as f:
-    data = yaml.safe_load(f)
+with open(inpkl, 'rb') as f:
+    data = pickle.load(f)
 
 structure_pairs = data[name] 
 
