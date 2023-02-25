@@ -67,8 +67,12 @@ intermediate_data_files:
     sub2_homo_prefiltered_pkl: intermediates/true_homodimers.pkl
     sub2_uniparc2af_pkl: intermediates/homodimers_uniparc2af.pkl
 
+    sub3_nwalign_distance_matrix: intermediates/homodimers_nwalign_matrix.npy
+    sub3_nonredundant_uniparcs: intermediates/nonredundant_uniparcs_homodimer.pkl
+
 output:    
-    doubly_nonredundant_homodimers: out/nonredundant_true_homodimers.pkl
+    doubly_nonredundant_homodimers_pkl: out/nonredundant_true_homodimers.pkl
+    doubly_nonredundant_homodimers_yaml: out/nonredundant_true_homodimers.yaml
     
 
 

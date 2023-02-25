@@ -44,10 +44,14 @@ class RedundantThings:
     def __init__(self, things: list, threshold: float):
         self.things = things
         self.threshold = threshold
+        self.distance_matrix = None
 
 
-    def prune_redundancy(self, num_workers=1) -> list:
-        self.initiate_distance_matrix(num_workers)
+    def prune_redundancy(self, num_workers=1, calc_dist_matrix=True) -> list:
+        if calc_dist_matrix:
+            self.initiate_distance_matrix(num_workers)
+        elif self.distance_matrix is None:
+            raise ValueError('need a distance matrix to prune redundancy')
         num_clusters = self.initiate_clusters()
         self.non_redundant_things = []
         for cluster_index in range(num_clusters):
@@ -56,6 +60,15 @@ class RedundantThings:
             self.non_redundant_things.append(rep)
         return self.non_redundant_things
 
+
+    def save_dist_matrix(self, savefile: str) -> None:
+        if self.distance_matrix is None:
+            raise ValueError('cannot save nonexistent distance matrix!')
+        np.save(savefile, self.distance_matrix)
+
+
+    def load_dist_matrix(self, loadfile: str) -> None:
+        self.distance_matrix = np.load(loadfile)
 
 
     def _distance_thread_helper(self, i: int, j: int) -> float:
@@ -220,11 +233,10 @@ class RedundantDimerStructures(RedundantThings):
 
 
 class RedundantSeqs(RedundantThings): 
-    def __init__(self, dimer_names, pklfile, threshold, config):
+    def __init__(self, dimer_names, datadict, threshold, config):
         super().__init__(things=dimer_names, threshold=threshold)
+        self.dimers = datadict
         self.config = config
-        with open(pklfile, 'rb') as f:
-            self.dimers = pickle.load(f)
         self.nw = self.config['paths']['nwalign']
 
 
@@ -284,8 +296,8 @@ class RedundantSeqs(RedundantThings):
 
 
 class RedundantSeqsHomodimer(RedundantSeqs):
-    def __init__(self, dimer_names, pklfile, threshold, config):
-        super().__init__(dimer_names, pklfile, threshold, config)
+    def __init__(self, dimer_names, datadict, threshold, config):
+        super().__init__(dimer_names, datadict, threshold, config)
         self.lib = self.config['paths']['lib']
 
     

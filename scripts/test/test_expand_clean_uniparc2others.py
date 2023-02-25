@@ -59,7 +59,7 @@ class TestExpandCleanUniparc2others(unittest.TestCase):
         inpkl = f'{test_data}/uniparc2others.pkl'
         with tempfile.TemporaryDirectory() as td:
             outpkl = f'{td}/out.pkl'
-            expand_clean_uniparc2others(inpkl=inpkl, outpkl=outpkl, config=config)
+            expand_clean_uniparc2others(inpkl=inpkl, outpkl=outpkl, config=config, quiet=True)
             with open(outpkl, 'rb') as f:
                 result = pickle.load(f)
         expected = {
