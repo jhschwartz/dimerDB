@@ -12,9 +12,9 @@ https://freddolino-lab.med.umich.edu
 import os
 
 
-def uniparc_fasta(uniparc_id, lib_path):
+def uniparc_fasta(uniparc_id, lib_path, allow_nonexist=False):
     div = uniparc_id[-2:]
     path = os.path.join(lib_path, 'uniparc', div, f'{uniparc_id}.fasta')
-    if not os.path.exists(path):
+    if not allow_nonexist and not os.path.exists(path):
         raise FileNotFoundError(f'unable to find fasta for uniparc id {uniparc_id} at {path}')
     return path

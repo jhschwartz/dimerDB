@@ -8,7 +8,7 @@ configfile: 'config.yaml'
 
 sys.path.append(config['paths']['scripts'])
 from simple_write import simple_write
-from download_uniparc_fasta import download_fasta 
+from download_uniparc_fasta import download_many_fasta
 from name_fasta import uniparc_fasta
 
 
@@ -94,8 +94,9 @@ rule download_uniparc_seqs:
         done = config['snake_donefiles']['sub1_uniparc_download_done']
     params:
         seqs_dir = config['paths']['uniparc_seqs']
+    threads: config['runtime']['max_threads']
     resources:
-        time = "12:00:00",
+        time = "24:00:00",
         mem_mb = "10000"
     run:
         seqs_downloaded = SortedSet()
@@ -106,11 +107,9 @@ rule download_uniparc_seqs:
 
         with open(input.indexfile, 'rb') as f:
             uniparc_ids = pickle.load(f)
-        for uniparc in uniparc_ids:
-            if uniparc in seqs_downloaded:
-                continue
-            fasta = uniparc_fasta(uniparc_id=uniparc, lib_path=config['paths']['lib'])
-            download_fasta(uniparc, fasta)
+        uniparcs_to_download = [u for u in uniparc_ids if not u in seqs_downloaded]
+        download_many_fasta(uniparcs=uniparcs_to_download, lib_path=config['paths']['lib'], num_workers=threads)
+
         simple_write(output.done, 'success')
           
 
