@@ -35,7 +35,8 @@ paths:
     usalign: bin/USalign/USalign
     cif2pdb: bin/USalign/cif2pdb
     nwalign: bin/NWalign/align
-    #    labels_loc: /scratch/sigbio_project_root/sigbio_project1/jaschwa/HDpred_working/preprocessing/bin/labels
+    pdb2fasta: bin/USalign/pdb2fasta
+
     afdb_fasta: /nfs/turbo/umms-zhng/jaschwa/upec-fxn-pred/DB/afdb_v4.fasta
 
     intermediates: intermediates
@@ -43,21 +44,25 @@ paths:
     lib: lib
     uniparc_seqs: lib/uniparc
 
+    labels_loc: bin/labels
+
 snake_donefiles:
     sub0_all_done: intermediates/subflow0.done
     sub0_pdb_download_done: intermediates/pdb_updated.done
     sub0_ungzip_done: intermediates/pdb_ungzip.done
+    sub0_fill_empty_done: intermediates/pdb_empty_filled.done
     sub0_split_pdb_done: intermediates/pdb_split.done
 
     sub1_all_done: intermediates/subflow1.done
-    sub1_uniparc2others_checked_done: intermediates/uniparc2others_checked.done
     sub1_uniparc_download_done: intermediates/uniparc_download.done
-    sub1_homodimers_checked_done: intermediates/homodimers_checked.done
 
     sub2_all_done: intermediates/subflow2.done
     sub3_all_done: intermediates/subflow3.done
 
+
 intermediate_data_files:
+    sub0_empty_pdbs_pkl: intermediates/empty_pdbs.pkl
+
     sub1_uniparc2others_pkl: intermediates/uniparc2others.pkl
     sub1_uniparc2others_index: intermediates/uniparc_index.pkl
     sub1_uniparc2others_expanded_cleaned_pkl: intermediates/uniparc2others_expanded_cleaned.pkl

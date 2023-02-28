@@ -1,5 +1,6 @@
 import os
 import sys 
+import pickle
 
 configfile: 'config.yaml'
 
@@ -18,7 +19,8 @@ localrules: all, download_pdb
 
 rule all:
     input:
-        config['paths']['lib'] + '/rcsb_index.pkl'
+        config['paths']['lib'] + '/rcsb_index.pkl',
+        config['snake_donefiles']['sub0_fill_empty_done']
     output:
         done =  config['snake_donefiles']['sub0_all_done'] 
     shell:
@@ -76,17 +78,42 @@ rule split_pdb:
         simple_write(output.done)
 
 
+
 rule index_pdb:
     input:
         config['snake_donefiles']['sub0_split_pdb_done']
     output:
-        index_file = config['paths']['lib'] + '/rcsb_index.txt'
+        index_file = config['paths']['lib'] + '/rcsb_index.txt',
+        empty_files_pkl = config['intermediate_data_files']['sub0_empty_pdbs_pkl']
     resources:
         time = "4:00:00"
     run:
         from generate_rcsb_index import generate_rcsb_index
         rcsb = config['paths']['lib'] + '/rcsb'
-        generate_rcsb_index(rcsb_path=rcsb, index_file=output.index_file)
+        empty_files = generate_rcsb_index(rcsb_path=rcsb, index_file=output.index_file)
+        with open(output.empty_files_pkl, 'wb') as f:
+            pickle.dump(empty_files, f)
+
+
+
+
+rule fill_empty_pdb_files:
+    input:
+        empty_files_pkl = config['intermediate_data_files']['sub0_empty_pdbs_pkl']
+    output:
+        done = config['snake_donefiles']['sub0_fill_empty_done']
+    resources:
+        mem_mb = '15000'
+    run:
+        from parallel_convert_split_cif import fill_empty_pdb
+        exe = config['paths']['cif2pdb']
+        with open(input.empty_files_pkl, 'rb') as f:
+            empty_files = pickle.load(f)
+        for ef in empty_files:
+            fill_empty_pdb(filepath=ef, cif2pdb_exe=exe) 
+        simple_write(output.done, '')
+            
+
 
 
 rule pdb_index_to_pkl:
@@ -99,7 +126,7 @@ rule pdb_index_to_pkl:
         rcsb_index_to_pkl(input.index_file, output.index_file)
 
 
-
+        
 
 
 

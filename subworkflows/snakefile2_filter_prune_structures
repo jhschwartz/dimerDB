@@ -24,10 +24,8 @@ import labels as label_funcs
 
 
 out_base_path_homo = config['paths']['intermediates_homodimer_filtering']
-#out_base_path_hetero = config['paths']['intermediates_heterodimer_filtering']
 
 homodimers_pkl = config['intermediate_data_files']['sub1_all_homodimers_pkl']
-#heterodimers_pkl = config['intermediate_data_files']['sub1_all_heterodimers_pkl']
 uniparc2others_pkl = config['intermediate_data_files']['sub1_uniparc2others_pkl']
 
 
@@ -51,10 +49,7 @@ localrules: all
 rule all:
     input:
         merged_pklfile_homo = config['intermediate_data_files']['sub2_homo_prefiltered_pkl'],
-#        merged_pklfile_hetero = config['intermediate_data_files']['sub2_hetero_prefiltered_pkl'],
         merged_uniparc2af_homo = config['intermediate_data_files']['sub2_uniparc2af_pkl_homo']
-#        merg            f.write(content)
-ed_uniparc2af_hetero = config['intermediate_data_files']['sub2_uniparc2af_pkl_hetero']
     output:
         done = config['snake_donefiles']['sub2_all_done']
     run:
@@ -81,7 +76,7 @@ def make_uniparc2afinfo(afinfo_files, names, outfile):
     for afinfo, uniparc in zip(afinfo_files, names):
         with open(afinfo, 'r') as f:
             info = f.read().strip()
-        if info != 'no'
+        if info != 'no':
             afname = info
             uniparc2af[uniparc] = afname
     with open(outfile, 'wb') as f:

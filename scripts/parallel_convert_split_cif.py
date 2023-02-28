@@ -87,6 +87,26 @@ def parallel_convert_split_rename_cifs(parent_dir: str, cif2pdb_exe: str, thread
 
 
 
+def fill_empty_pdb(filepath, cif2pdb_exe):
+    destination_dir = os.path.dirname(filepath)
+    pdb, assembly, model, chain = read_chain_names(filepath)
+    assembly_path = f'{destination_dir}/{pdb}-assembly{assembly}.cif'
+    with tempfile.TemporaryDirectory() as td:
+        assembly_copy = os.path.join(td, os.path.basename(assembly_path))
+        shutil.copy(assembly_path, assembly_copy)
+        process_helper(cif_fn=assembly_copy, cif2pdb_exe=cif2pdb_exe)
+        new_pdb = os.path.join(td, os.path.basename(filepath))
+        if not os.path.exists(new_pdb):
+            raise FileNotFoundError(f'failed to create new pdb file {new_pdb}')
+        if os.stat(new_pdb).st_size == 0:
+            raise ValueError(f'failed to create non-empty new pdb file {new_pdb}')
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        shutil.move(new_pdb, filepath)
+
+
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

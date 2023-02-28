@@ -43,10 +43,46 @@ subworkflow prune_seqs:
 rule all:
     input:
         download_pdb(config['snake_donefiles']['sub0_all_done']),
-        deduce_all_dimers(config['snake_donefiles']['sub1_all_done'])
-#        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done']),
-#        prune_seqs(config['snake_donefiles']['sub3_all_done']),
+        deduce_all_dimers(config['snake_donefiles']['sub1_all_done']),
+        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done']),
+        prune_seqs(config['snake_donefiles']['sub3_all_done'])
+        #config['snake_donefiles']['partCdone']
         #'intermediates/cleanup.done'
+
+
+#rule partA:
+#    input:
+#        download_pdb(config['snake_donefiles']['sub0_all_done']),
+#        deduce_all_dimers(config['snake_donefiles']['sub1_all_done'])
+#    output:
+#        config['snake_donefiles']['partAdone']
+#    shell:
+#        ''' touch {output} '''
+#
+#
+#
+#rule partB:
+#    input:
+#        config['snake_donefiles']['partAdone'],
+#        filter_prune_homodimers(config['snake_donefiles']['sub2_all_done'])
+#    output:
+#        config['snake_donefiles']['partBdone']
+#    shell:
+#        ''' touch {output} '''
+#
+#
+#
+#
+#rule partC:
+#    input:
+#        config['snake_donefiles']['partBdone'],
+#        prune_seqs(config['snake_donefiles']['sub3_all_done'])
+#    output:
+#        config['snake_donefiles']['partCdone']
+#    shell:
+#        ''' touch {output} '''
+#
+
 
 
 #rule cleanup:

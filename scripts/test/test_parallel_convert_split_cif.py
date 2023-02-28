@@ -144,6 +144,20 @@ class TestConvertSplitCif(unittest.TestCase):
             self.assertEqual(len(after_pdbs_formatted), 49)
 
 
+    def test_fill_empty_pdb(self):
+        with tempfile.TemporaryDirectory() as td:
+            shutil.copytree(f'{test_lib}/rcsb/aa/', f'{td}/aa')
+            parallel_convert_split_rename_cifs(td, cif2pdb_exe, 1)
+            pdb_path = f'{td}/aa/1aa0-a1-m3-cA.pdb'
+            with open(pdb_path, 'r') as f:
+                old_pdb = f.read()
+            os.remove(pdb_path) 
+            fill_empty_pdb(filepath=pdb_path, cif2pdb_exe=cif2pdb_exe)
+            with open(pdb_path, 'r') as f:
+                new_pdb = f.read()
+            self.assertEqual(old_pdb, new_pdb)
+
+
 if __name__ == '__main__':
     unittest.main()
 

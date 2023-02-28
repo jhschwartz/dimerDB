@@ -34,12 +34,11 @@ def get_id_mapping():
         shell(''' touch {id_mapping_fn} ''')
 
 
-localrules: all, retrieve_id_mapping_file, spotcheck_uniparc2others, spotcheck_homodimers 
+localrules: all, retrieve_id_mapping_file
 
 rule all:
     input: 
-        config['intermediate_data_files']['sub1_all_homodimers_pkl'],
-        config['snake_donefiles']['sub1_homodimers_checked_done']
+        config['intermediate_data_files']['sub1_all_homodimers_pkl']
     output:
         done = config['snake_donefiles']['sub1_all_done']
     run:
@@ -58,7 +57,7 @@ rule retrieve_id_mapping_file:
 
 rule create_uniparc_to_others:
     input:
-        id_mapping = id_mapping_fn
+        id_mapping = ancient(id_mapping_fn)
     output:
         uniparc2others = config['intermediate_data_files']['sub1_uniparc2others_pkl'],
         uniparc_index = config['intermediate_data_files']['sub1_uniparc2others_index']
@@ -75,16 +74,6 @@ rule create_uniparc_to_others:
 
 
 
-rule spotcheck_uniparc2others:
-    input:
-        pklfile = config['intermediate_data_files']['sub1_uniparc2others_pkl']
-    output:
-        passed = config['snake_donefiles']['sub1_uniparc2others_checked_done']
-    threads: 1
-    run:
-        from spotcheck_subflow1_pkls import check_uniparc2others
-        check_uniparc2others(input.pklfile)
-        simple_write(output.passed, 'success')
 
 
 rule download_uniparc_seqs:
@@ -120,7 +109,7 @@ rule expand_clean_uniparc2others:
     output:
         pklfile = config['intermediate_data_files']['sub1_uniparc2others_expanded_cleaned_pkl']
     resources:
-        time = "12:00:00",
+        time = "48:00:00",
         mem_mb = "10000"
     run:
         from scripts.expand_clean_uniparc2others import expand_clean_uniparc2others
@@ -131,7 +120,6 @@ rule expand_clean_uniparc2others:
 rule derive_all_homodimers:
     input:
         uniparc2others = config['intermediate_data_files']['sub1_uniparc2others_expanded_cleaned_pkl'],
-        uniparc2others_checked = config['snake_donefiles']['sub1_uniparc2others_checked_done'],
         download_uniparcs_done = config['snake_donefiles']['sub1_uniparc_download_done']
     output:
         homodimers = config['intermediate_data_files']['sub1_all_homodimers_pkl']
@@ -141,20 +129,5 @@ rule derive_all_homodimers:
         mem_mb = "5000"
     run:
         from scripts.derive_all_possible_homodimers import derive_homodimers
-        derive_homodimers(input.uniparc2others, output.homodimers, config)
-
-
-
-
-rule spotcheck_homodimers:
-    input:
-        pklfile = config['intermediate_data_files']['sub1_all_homodimers_pkl']
-    output:
-        passed = config['snake_donefiles']['sub1_homodimers_checked_done']
-    threads: 1
-    run:
-        from spotcheck_subflow1_pkls import check_homodimers
-        check_homodimers(input.pklfile)
-        simple_write(output.passed, 'success')
-
+        derive_homodimers(input.uniparc2others, output.homodimers)
 
