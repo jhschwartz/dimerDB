@@ -35,7 +35,7 @@ import pickle
 import threading
 from multiprocessing import Pool
 from read_fasta import read_prot_from_fasta
-from name_pdb import dimer2pdbs
+from name_pdb import dimer2pdbs, read_chain_names
 from name_fasta import uniparc_fasta
 from align_tools import calc_nwalign
 
@@ -203,7 +203,31 @@ class RedundantDimerStructures(RedundantThings):
         return gmean([num0, num1])
 
 
-    def representative(self, cluster: list) -> str:
+    def _get_chain_resolu(self, chain_name):
+        pdb_base, _, _, _ = read_chain_names(chain_name)
+        with open(self.config['paths']['resolu_file'], 'r') as f:
+            # skip header
+            for line in f:
+                if line.startswith('-----'):
+                    break
+            # return first match
+            for line in f:
+                if line.startswith(pdb_base.upper()):
+                    res = line.split()[2]
+                    return float(res)
+            raise KeyError(f'{pdb_base} not found in resolu file at {self.config["paths"]["resolu_file"]}')
+
+
+    def _get_dimer_avg_resolu(self, dimer_name):
+        d1, d2 = dimer_name.split('-')
+        r1 = self._get_chain_resolu(d1)
+        r2 = self._get_chain_resolu(d2)
+        if r1 == -1.0 or r2 == -1.0:
+            return -1
+        return gmean([r1, r2])
+
+
+    def representative(self, cluster: list, prefer_xray=False) -> str:
         # Criterion 1: keep only structures with greater than half the maximum coverage,
         #               where coverage is defined as the gemoetric mean number of residues
         #               in two chains
@@ -213,10 +237,33 @@ class RedundantDimerStructures(RedundantThings):
         for index, dimer in enumerate(cluster):
             if coverages[index] >= cutoff:
                 choices.append(dimer)
-
+        
         # end if no tie
         if len(choices) == 1:
             return choices[0]
+
+        resolus = {}
+
+        # Criterion 1.5: preference xray structures if prefer_xray is True
+        #       the actual rule: if there exists an xray choice, then preference xray choices
+        if prefer_xray:
+            
+            xray_choice_exists = False
+
+            # extract resolus 
+            for dimer in choices:
+                resolus[dimer] = self._get_dimer_avg_resolu(dimer)
+                if resolus[dimer] != -1.0:
+                    xray_choice_exists = True
+            
+            # if any xray exist, they become choices
+            if xray_choice_exists:
+                choices = [c for c in choices if resolus[c] != -1.0]
+                
+                # end if no tie
+                if len(choices) == 1:
+                    return choices[0]
+
 
         # Criterion 2: pick dimers with lowest average distance to remaining
         choices = super()._things_of_lowest_distance_to_others(choices)
@@ -225,8 +272,21 @@ class RedundantDimerStructures(RedundantThings):
         if len(choices) == 1:
             return choices[0]
 
+        # Criterion 2.5: preference best xray structure if prefer_xray
+        #           actual rule: if an xray choice exists, choose the best resolution xray choice
+        if prefer_xray:
+            # Note, only xray results would make it this far.
+            leftover_resolus = [resolus[c] for c in choices]
+            lowest = sorted(leftover_resolus)[0]
+            best_choices = []
+            for choice, resolu in zip(choices, leftover_resolus):
+                if resolu == lowest:
+                    best_choices.append(choice)
+            choices = best_choices
+
+
         # Criterion 3: pick the newest, assuming higher in alphabetical order is newer
-        return sorted(choices, key=lambda dimer_tuple: dimer_tuple[0])[-1]
+        return sorted(choices, key=lambda dimer: dimer.split('-')[1], reverse=True)[0]
 
 
 

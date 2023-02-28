@@ -13,7 +13,8 @@ test_data = f'{test_dir}/data/unredundant_dimer_structures'
 config = {
     'paths': {
         'lib': f'{test_data}/lib',
-        'usalign': f'{test_dir}/../../bin/USalign/USalign'
+        'usalign': f'{test_dir}/../../bin/USalign/USalign',
+        'resolu_file': f'{test_data}/resolu.idx'
     }
 }
 
@@ -96,15 +97,86 @@ class TestRedundantDimerStructures(unittest.TestCase):
     def test_prune_redundancy_homodimers_mono(self):
         rg = RedundantDimerStructures(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m1_cB', '1xdl_a1_m0_cC-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'], 0.3, config)
         results = set(rg.prune_redundancy())
-        expected = set(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m0_cC-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'])
+        expected = set(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m1_cB', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'])
         self.assertEqual(results, expected)
 
 
     def test_prune_redundancy_homodimers_multi(self):
         rg = RedundantDimerStructures(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m1_cB', '1xdl_a1_m0_cC-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'], 0.3, config)
         results = set(rg.prune_redundancy(num_workers=3))
-        expected = set(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m0_cC-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'])
+        expected = set(['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '1xdl_a1_m1_cA-1xdl_a1_m1_cB', '1xdl_a1_m1_cA-1xdl_a1_m0_cC', '4fb8_a1_m1_cA-4fb8_a1_m1_cB'])
         self.assertEqual(results, expected)
+
+    
+    def test_get_chain_resolu_xray(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_chain_resolu('1xdl_a1_m1_cA')
+        expected = 3.0
+        self.assertEqual(result, expected)
+
+
+    def test_get_chain_resolu_notxray(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_chain_resolu('1acz_a1_m1_cA')
+        expected = -1.0
+        self.assertEqual(result, expected)
+
+    def test_get_chain_resolu_notxray2(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_chain_resolu('9999_a1_m1_cA')
+        expected = -1.0
+        self.assertEqual(result, expected)
+
+    def test_get_chain_resolu_fail(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        with self.assertRaises(KeyError):
+            rg._get_chain_resolu('9zzz_a1_m1_cA')
+
+
+    def test_get_dimer_avg_resolu_both_xray(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_dimer_avg_resolu('1xdl_a1_m1_cA-4zza_a1_m1_cA')
+        expected = 2.46171
+        self.assertTrue(abs(result-expected)<0.0001)
+
+
+    def test_get_dimer_avg_resolu_non_xray_right(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_dimer_avg_resolu('1xdl_a1_m1_cA-1acz_a1_m1_cA')
+        expected = -1.0
+        self.assertEqual(result, expected)
+
+
+    def test_get_dimer_avg_resolu_non_xray_left(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_dimer_avg_resolu('1acz_a1_m1_cA-1xdl_a1_m1_cA')
+        expected = -1.0
+        self.assertEqual(result, expected)
+
+
+    def test_get_dimer_avg_resolu_non_xray_both(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        result = rg._get_dimer_avg_resolu('4znf_a2_m4_cZ-1acz_a1_m1_cA')
+        expected = -1.0
+        self.assertEqual(result, expected)
+
+
+    def test_representative_criterion_one_point_five(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        cluster = ['1xdl_a1_m1_cA-1xdl_a1_m0_cD', '9999_a1_m1_cA-9999_a1_m1_cB']
+        # have manually made 9999 identical to 1xdl, but 9999 is non xray in resolu.idx
+        rep = rg.representative(cluster, prefer_xray=True)
+        expected = '1xdl_a1_m1_cA-1xdl_a1_m0_cD'
+        self.assertEqual(rep, expected)
+
+
+    def test_representative_criterion_two_point_five(self):
+        rg = RedundantDimerStructures(['placeholder', 'nothing'], 10, config)
+        cluster = ['1xdl_a1_m1_cA-1xdl_a1_m1_cB', 'zzzz_a1_m1_cX-zzzz_a1_m1_cY']
+        # zzzz_X-zzzz_Y is identical to 1xdl_a1_m1_cA-1xdl_a1_m1_cB, forcing us to reach criterion 2.5 - zzzz has been given very bad resolution manually in the resolu.idx file
+        rep = rg.representative(cluster, prefer_xray=True)
+        expected = '1xdl_a1_m1_cA-1xdl_a1_m1_cB'
+        self.assertEqual(rep, expected)
 
 
 if __name__ == '__main__':
