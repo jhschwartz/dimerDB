@@ -140,9 +140,18 @@ def filter_only_contacting_structures(uniparc, inpkl, outpkl):
 ############## HOMODIMER RULES ###########
 # VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV #
 
+localrules: download_xray_resolu
+
+rule download_xray_resolu:
+    output:
+        resolu = config['paths']['resolu_file']
+    shell:
+        '''
+        wget -O {output.resolu} https://files.wwpdb.org/pub/pdb/derived_data/index/resolu.idx;
+        '''
 
 
-rule init_indiv_pkls_homo:
+rule init_indiv_pkls_homo: 
     output:
         pklfiles = expand(out_base_path_homo+'/{div}/{sample}/initial.pkl', zip, div=divs, sample=samples_homo)
     threads: 1
@@ -198,6 +207,7 @@ rule prefilter_by_physical_contact:
 
 rule filter_by_redundancy:
     input:
+        resolu = config['paths']['resolu_file'],
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     output:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl'

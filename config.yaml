@@ -26,7 +26,7 @@ workflow:
     snakefile3: subworkflows/snakefile3_prune_seqs
 
 paths:
-    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB-2
+    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
 
     scripts: scripts
     scripts_tests: scripts/tests
@@ -37,6 +37,7 @@ paths:
     nwalign: bin/NWalign/align
     pdb2fasta: bin/USalign/pdb2fasta
 
+    resolu_file: intermediates/resolu.idx
     afdb_fasta: /nfs/turbo/umms-zhng/jaschwa/upec-fxn-pred/DB/afdb_v4.fasta
 
     intermediates: intermediates
