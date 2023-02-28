@@ -72,7 +72,7 @@ intermediate_data_files:
     sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
     
     sub2_homo_prefiltered_pkl: intermediates/true_homodimers.pkl
-    sub2_uniparc2af_pkl: intermediates/homodimers_uniparc2af.pkl
+    sub2_uniparc2af_pkl_homo: intermediates/homodimers_uniparc2af.pkl
 
     sub3_nwalign_distance_matrix: intermediates/homodimers_nwalign_matrix.npy
     sub3_nonredundant_uniparcs: intermediates/nonredundant_uniparcs_homodimer.pkl

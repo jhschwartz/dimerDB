@@ -10,6 +10,7 @@ sys.path.append(config['paths']['scripts'])
 from simple_write import simple_write
 from download_uniparc_fasta import download_fasta
 from read_fasta import read_prot_from_fasta
+from name_fasta import uniparc_fasta
 from name_pdb import dimer2pdbs
 from check_chains_contact import check_chains_contact
 
@@ -34,7 +35,7 @@ with open(homodimers_pkl, 'rb') as f:
     samples_homo = homodimers_data.keys()
 
 
-divs_homo = [s[-2:] for s in samples_homo]
+divs = [s[-2:] for s in samples_homo]
 
 
 with open(uniparc2others_pkl, 'rb') as f:
@@ -106,7 +107,7 @@ def write_yes_if_func(outfile, func, *args):
 
 
 def match_seq_to_afdb(query_fasta, afdb_fasta):
-    _, target_seq = next(read_prot_from_fasta(input.fasta))
+    _, target_seq = next(read_prot_from_fasta(query_fasta))
     for header, seq in read_prot_from_fasta(afdb_fasta):
         if seq == target_seq:
             name = re.findall('>AFDB:(.*?)\s', header)[0]
@@ -153,7 +154,7 @@ rule download_xray_resolu:
 
 rule init_indiv_pkls_homo: 
     output:
-        pklfiles = expand(out_base_path_homo+'/{div}/{sample}/initial.pkl', zip, div=divs, sample=samples_homo)
+        pklfiles = expand(out_base_path_homo+'/{div}/{sample_homo}/initial.pkl', zip, div=divs, sample_homo=samples_homo)
     threads: 1
     resources:
        time = "48:00:00",
@@ -170,14 +171,15 @@ rule prefilter_by_in_afdb_homo:
     input:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/initial.pkl'
     output:
-        info = out_base_path_homo+'/{div}/{sample}/ok_afdb.info'
+        info = out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info'
     threads: 1
     resources:
         mem_mb = "8000"
     run:
         simple_write(output.info, 'no')
         afdb_fasta = config['paths']['afdb_fasta']
-        af_name = match_seq_to_afdb(input.fasta, afdb_fasta)
+        fasta = uniparc_fasta(uniparc_id=wildcards.sample_homo, lib_path=config['paths']['lib'])
+        af_name = match_seq_to_afdb(fasta, afdb_fasta)
         if af_name:
             simple_write(output.info, f'{af_name}')
 
@@ -236,8 +238,8 @@ rule filter_by_redundancy:
 
 rule merge_homo_data:
     input:
-        pklfiles = expand(out_base_path_homo+'/{div}/{sample}/incontact_nonredundant.pkl', zip, div=divs, sample=samples_homo),
-        afinfos = expand(out_base_path_homo+'/{div}/{sample}/ok_afdb.info', zip, div=divs, sample=samples_homo)
+        pklfiles = expand(out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl', zip, div=divs, sample_homo=samples_homo),
+        afinfos = expand(out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info', zip, div=divs, sample_homo=samples_homo)
     output:
         merged_pklfile = config['intermediate_data_files']['sub2_homo_prefiltered_pkl'],
         merged_uniparc2af = config['intermediate_data_files']['sub2_uniparc2af_pkl_homo']
