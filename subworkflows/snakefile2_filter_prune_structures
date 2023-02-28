@@ -107,7 +107,7 @@ def write_yes_if_func(outfile, func, *args):
 
 
 def match_seq_to_afdb(query_fasta, afdb_fasta):
-    _, target_seq = next(read_prot_from_fasta(input.fasta))
+    _, target_seq = next(read_prot_from_fasta(query_fasta))
     for header, seq in read_prot_from_fasta(afdb_fasta):
         if seq == target_seq:
             name = re.findall('>AFDB:(.*?)\s', header)[0]

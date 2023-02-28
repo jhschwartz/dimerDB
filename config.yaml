@@ -27,7 +27,7 @@ workflow:
     snakefile3: subworkflows/snakefile3_prune_seqs
 
 paths:
-    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB
+    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB-2
 
     scripts: scripts
     scripts_tests: scripts/tests
