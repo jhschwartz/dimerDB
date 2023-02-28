@@ -10,6 +10,7 @@ database_settings:
     force_update_pdb: False
     force_update_id_mapping: False
     require_seq_in_afdb: True
+    preference_xray_structures: True
 
 
 runtime:

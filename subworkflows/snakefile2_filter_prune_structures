@@ -215,6 +215,8 @@ rule filter_by_redundancy:
     resources:
         mem_mb = 5000,
         time = "4:00:00"
+    params:
+        prefer_xray = config['database_settings']['preference_xray_structures']
     run:
         simple_write(output.pklfile, '')
         with open(input.pklfile, 'r') as f:
@@ -224,7 +226,7 @@ rule filter_by_redundancy:
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
             non_redundant_dimers = {}
-            non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads)
+            non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads, prefer_xray=params.prefer_xray)
             with open(output.pklfile, 'wb') as f:
                 pickle.dump(non_redundant_dimers, f)
 
