@@ -198,11 +198,13 @@ rule prefilter_by_physical_contact:
         mem_mb = "8000",
         time = "4:00:00"
     run:
-        simple_write(output.pklfile, '')
         with open(input.info, 'r') as f:
              afdb_ok = f.read().strip() != 'no'
         if afdb_ok:
             filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile, outpkl=output.pklfile)
+        else:
+            with open(output.pklfile, 'wb') as f:
+                pickle.dump('no match', f)
 
 
 
@@ -220,10 +222,9 @@ rule filter_by_redundancy:
     params:
         prefer_xray = config['database_settings']['preference_xray_structures']
     run:
-        simple_write(output.pklfile, '')
-        with open(input.pklfile, 'r') as f:
+        with open(input.pklfile, 'rb') as f:
             loaded = pickle.load(f)
-        if loaded: 
+        if loaded != 'no match': 
             uniparc = loaded.keys()[0]
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
@@ -231,6 +232,9 @@ rule filter_by_redundancy:
             non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads, prefer_xray=params.prefer_xray)
             with open(output.pklfile, 'wb') as f:
                 pickle.dump(non_redundant_dimers, f)
+        else:
+            with open(output.pklfile, 'wb') as f:
+                pickle.dump('no match', f)
 
 
 
