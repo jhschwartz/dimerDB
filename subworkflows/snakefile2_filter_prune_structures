@@ -225,7 +225,7 @@ rule filter_by_redundancy:
         with open(input.pklfile, 'rb') as f:
             loaded = pickle.load(f)
         if loaded != 'no match': 
-            uniparc = loaded.keys()[0]
+            uniparc = list(loaded.keys())[0]
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
             non_redundant_dimers = {}
