@@ -24,7 +24,7 @@ def read_prot_from_fasta(fasta: str) -> str:
     seq = ''
     with open(fasta, 'r') as f:
         header = f.readline().strip()
-        while line := f.readline():
+        for line in f:
             if seq != '' and line.startswith('>'):
                 yield header, seq
                 header = line.strip()

@@ -67,7 +67,9 @@ def merge_pklfiles(infiles, outfile):
     data = {}
     for pklfile in infiles:    
         with open(pklfile, 'rb') as f:
-            data = {**data, **pickle.load(f)} # merge dicts data and the read dict from pkl
+            pklfile_data = pickle.load(f)
+            if is_instance(pklfile_data, dict):
+                data = {**data, **pklfile_data} # merge dicts data and the read dict from pkl
     with open(outfile, 'wb') as f:
         pickle.dump(data, f)
 
@@ -115,7 +117,7 @@ def match_seq_to_afdb(query_fasta, afdb_fasta):
     return None
 
 
-def filter_only_contacting_structures(uniparc, inpkl, outpkl):
+def filter_only_contacting_structures(uniparc, inpkl):
     with open(inpkl, 'rb') as f:
         data = pickle.load(f)
     dimers = data[uniparc]
@@ -130,10 +132,7 @@ def filter_only_contacting_structures(uniparc, inpkl, outpkl):
         if check_chains_contact(pdb1, pdb2, label_funcs, dist_thresh, count_thresh):
             dimers_in_contact.append(d)
 
-    if len(dimers_in_contact) > count_thresh:
-        data[uniparc] = dimers_in_contact
-        with open(outpkl, 'wb') as f:
-            pickle.dump(data, f)
+    return dimers_in_contact
 
 
 
@@ -164,19 +163,21 @@ rule init_indiv_pkls_homo:
 
 
 
-
-
-
+'''
+Ensures we move forward only with homodimers represented in AFDB.
+  In a subdirectory for each homodimer, named by its corresponding uniparc id, and given
+  a initial.pkl file that contains the uniparc2others_expanded_cleaned.pkl entry of the homdimer:
+      - if a given homodimer is represented in AFDB, write the AFDB id to the resulting "afdb_match.info" file
+      - otherwise, write "no afdb match" to the resulting "afdb_match.info" file
+'''
 rule prefilter_by_in_afdb_homo:
     input:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/initial.pkl'
     output:
-        info = out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info'
+        info = out_base_path_homo+'/{div}/{sample_homo}/afdb_match.info'
     threads: 1
-    resources:
-        mem_mb = "8000"
     run:
-        simple_write(output.info, 'no')
+        simple_write(output.info, 'no afdb match')
         afdb_fasta = config['paths']['afdb_fasta']
         fasta = uniparc_fasta(uniparc_id=wildcards.sample_homo, lib_path=config['paths']['lib'])
         af_name = match_seq_to_afdb(fasta, afdb_fasta)
@@ -184,13 +185,25 @@ rule prefilter_by_in_afdb_homo:
             simple_write(output.info, f'{af_name}')
 
 
-                    
-                    
 
+
+'''                    
+Ensures we move forward only with homodimers that are physically in contact, where contact is
+defined by parameters in the pipeline config.yaml
+  In the homodimer filtering subdirectory, and given the afdb matches (if they exist) in "afdb_match.info",
+  and given the "initial.pkl" file:
+    Depending on content of input "afdb_match.info"...
+        1. 'no afdb match'
+                --> write 'skipped because no afdb match' as string in output pkl
+        2. <a string which is the id of an afdb match>
+                --> perform filtration by physical contact, then write
+                    contacting dimers as a list in the output pkl
+      Note: the written list of dimers can be empty, i.e. [], if there is no incontact dimer upon checking.
+'''
 rule prefilter_by_physical_contact:
     input:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/initial.pkl',
-        info = out_base_path_homo+'/{div}/{sample_homo}/ok_afdb.info'
+        info = out_base_path_homo+'/{div}/{sample_homo}/afdb_match.info'
     output:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     threads: 1
@@ -198,17 +211,40 @@ rule prefilter_by_physical_contact:
         mem_mb = "8000",
         time = "4:00:00"
     run:
+        to_write = None
+
         with open(input.info, 'r') as f:
-             afdb_ok = f.read().strip() != 'no'
-        if afdb_ok:
-            filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile, outpkl=output.pklfile)
+            afdb_no_match = f.read().strip() == 'no afdb match'
+        if afdb_no_match:
+            to_write = 'skipped because no afdb match'
         else:
-            with open(output.pklfile, 'wb') as f:
-                pickle.dump('no match', f)
+            incontact = filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile)
+            to_write = incontact
+
+        with open(output.pklfile, 'wb') as f:
+            pickle.dump(to_write, f)
+        
 
 
+'''
+Ensures we move forward only with structurally non-redundant dimer structures for each homodimer sequence.
+In the filitering directory for a uniparc homodimer sequence, and given "incontact.pkl":
+    Three different actions:
+        Depending on contents of input "incontact.pkl"...
+        1. 'skipped because no afdb match' 
+                --> write 'skipped because no afdb match' as string in output pkl
+        2. []
+                --> write 'skipped because no in contact dimers' as string in output pkl
+        3. [<at least one dimer>]
+                --> prune structural redudnancy, then write the resulting list to output pkl
+                    according to the format below:
 
-
+                        dict of one key
+                            key is the uniparc ID
+                            value is the nonredundant list of dimers
+                            e.g.
+                                { '<uniparc id>': [<dimer 1>, <dimer 2>, ...] }
+'''
 rule filter_by_redundancy:
     input:
         resolu = config['paths']['resolu_file'],
@@ -222,24 +258,36 @@ rule filter_by_redundancy:
     params:
         prefer_xray = config['database_settings']['preference_xray_structures']
     run:
+        to_write = None
         with open(input.pklfile, 'rb') as f:
             loaded = pickle.load(f)
-        if loaded != 'no match': 
+        if loaded == 'skipped because no afdb match':
+            to_write = 'skipped because no afdb match'
+        elif loaded == {}:
+            to_write = 'skipped because no in contact dimers'
+        else:
             uniparc = list(loaded.keys())[0]
             structures = loaded[uniparc] 
             dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
             non_redundant_dimers = {}
             non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads, prefer_xray=params.prefer_xray)
-            with open(output.pklfile, 'wb') as f:
-                pickle.dump(non_redundant_dimers, f)
-        else:
-            with open(output.pklfile, 'wb') as f:
-                pickle.dump('no match', f)
+            to_write = non_redundant_dimers
+        
+        with open(output.pklfile, 'wb') as f:
+            pickle.dump(to_write, f)
+
+            
 
 
 
 
 
+'''
+After all filtration steps, merges all 'incontact_nonredundant.pkl' files into one dict in a pkl,
+skipping any 'incontact_nonredundant.pkl' that contain messages of skipped homodimers.
+    This skipping is done in merge_pklfiles because only pklfiles that contain dicts are merged.
+    The skip messages are all strings in 'incontact_nonredundant.pkl' files.
+'''
 rule merge_homo_data:
     input:
         pklfiles = expand(out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl', zip, div=divs, sample_homo=samples_homo),
