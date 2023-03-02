@@ -13,6 +13,7 @@ from read_fasta import read_prot_from_fasta
 from name_fasta import uniparc_fasta
 from name_pdb import dimer2pdbs
 from check_chains_contact import check_chains_contact
+from unredundant import RedundantDimerStructures
 
 sys.path.append(config['paths']['scripts'])
 from name_pdb import name_pdb_file
@@ -263,14 +264,15 @@ rule filter_by_redundancy:
             loaded = pickle.load(f)
         if loaded == 'skipped because no afdb match':
             to_write = 'skipped because no afdb match'
-        elif loaded == {}:
+        elif len(loaded) == 0:
             to_write = 'skipped because no in contact dimers'
         else:
-            uniparc = list(loaded.keys())[0]
-            structures = loaded[uniparc] 
-            dimers = RedundantDimerStructures(dimer_tuples=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
+            uniparc = wildcards.sample_homo
+            structures = loaded
+            dimers = RedundantDimerStructures(dimer_names=structures, threshold=config['database_settings']['dimer_cluster_distance_threshold'], config=config)
             non_redundant_dimers = {}
-            non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads, prefer_xray=params.prefer_xray)
+            rep_kwargs = {'prefer_xray': params.prefer_xray}
+            non_redundant_dimers[uniparc] = dimers.prune_redundancy(num_workers=threads, rep_extra_kwargs=rep_kwargs)
             to_write = non_redundant_dimers
         
         with open(output.pklfile, 'wb') as f:

@@ -47,7 +47,7 @@ class RedundantThings:
         self.distance_matrix = None
 
 
-    def prune_redundancy(self, num_workers=1, calc_dist_matrix=True) -> list:
+    def prune_redundancy(self, num_workers=1, calc_dist_matrix=True, rep_extra_kwargs={}) -> list:
         if calc_dist_matrix:
             self.initiate_distance_matrix(num_workers)
         elif self.distance_matrix is None:
@@ -56,7 +56,7 @@ class RedundantThings:
         self.non_redundant_things = []
         for cluster_index in range(num_clusters):
             cluster = self.retrieve_cluster(cluster_index)
-            rep = self.representative(cluster)
+            rep = self.representative(cluster=cluster, **rep_extra_kwargs)
             self.non_redundant_things.append(rep)
         return self.non_redundant_things
 
@@ -316,10 +316,10 @@ class RedundantSeqs(RedundantThings):
         pass
 
 
-    def representative(self, seq_cluster: list) -> str:
+    def representative(self, cluster: list) -> str:
         # Criterion 1: pick seq with most nonredundant structures
         counter = {}
-        for dimer_name in seq_cluster:
+        for dimer_name in cluster:
             counter[dimer_name] = len(self.dimers[dimer_name])
         max_count = max(counter.values())
         best_dimer_names = [dimer_name for dimer_name, count in counter.items() if count == max_count]
@@ -339,7 +339,7 @@ class RedundantSeqs(RedundantThings):
         # Criterion 3: pick the longest seq
         best_dimer_names = []
         max_len = -1
-        for dimer_name in seq_cluster:
+        for dimer_name in cluster:
             L = self._count_dimer_length(dimer_name)
             if L > max_len:
                 best_dimer_names = [ dimer_name ]

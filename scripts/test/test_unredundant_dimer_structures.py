@@ -179,6 +179,14 @@ class TestRedundantDimerStructures(unittest.TestCase):
         self.assertEqual(rep, expected)
 
 
+    def test_prune_using_prefer_xray(self):
+        dimers = ['1xdl_a1_m1_cA-1xdl_a1_m1_cB', 'zzzz_a1_m1_cX-zzzz_a1_m1_cY', '1on9_a1_m1_cA-4ij2_a1_m1_cC']
+        rg = RedundantDimerStructures(dimers, 0.3, config)
+        result = rg.prune_redundancy(num_workers=2, rep_extra_kwargs={'prefer_xray': True})
+        expected = ['1xdl_a1_m1_cA-1xdl_a1_m1_cB', '1on9_a1_m1_cA-4ij2_a1_m1_cC']
+        self.assertEqual(sorted(expected), sorted(result))
+
+
 if __name__ == '__main__':
     unittest.main()
 
