@@ -148,6 +148,30 @@ class TestRedundantGeneric(unittest.TestCase):
             rg.prune_redundancy(calc_dist_matrix=False)
 
 
+    def test_initiate_clusters(self):
+        n1 = list(range(5))
+        n2 = list(range(500,505))
+        numbers = n1 + n2
+        rg = RedundantGeneric(numbers=numbers, threshold=10)
+        rg.initiate_distance_matrix()
+        num_clusters = rg.initiate_clusters()
+        self.assertEqual(num_clusters, 2)
+        left_label = rg.things_cluster_labels[0]
+        right_label = rg.things_cluster_labels[-1]
+        l, r = left_label, right_label
+        expected = [l,l,l,l,l,r,r,r,r,r]
+        self.assertTrue(all([e==l for e,l in zip(expected, rg.things_cluster_labels)]))
+         
+
+    def test_initiate_cluster_skip_one_dimer(self):
+        numbers = [100]
+        rg = RedundantGeneric(numbers=numbers, threshold=10)
+        rg.initiate_distance_matrix()
+        num_clusters = rg.initiate_clusters()
+        self.assertEqual(num_clusters, 1)
+        self.assertEqual([0], rg.things_cluster_labels)
+        self.assertTrue(all([e==l for e,l in zip([0], rg.things_cluster_labels)]))
+
 
 if __name__ == '__main__':
     unittest.main()

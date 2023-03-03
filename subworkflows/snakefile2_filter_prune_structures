@@ -210,7 +210,7 @@ rule prefilter_by_physical_contact:
     threads: 1
     resources:
         mem_mb = "8000",
-        time = "4:00:00"
+        time = "24:00:00"
     run:
         to_write = None
 
@@ -252,10 +252,10 @@ rule filter_by_redundancy:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     output:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl'
-    threads: 4
+    threads: 2
     resources:
         mem_mb = 5000,
-        time = "4:00:00"
+        time = "24:00:00"
     params:
         prefer_xray = config['database_settings']['preference_xray_structures']
     run:

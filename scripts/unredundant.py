@@ -94,6 +94,9 @@ class RedundantThings:
 
 
     def initiate_clusters(self) -> None:
+        if self.distance_matrix.shape == (1, 1):
+            self.things_cluster_labels = [0]
+            return 1 
         cluster = AgglomerativeClustering(distance_threshold=self.threshold,
                                           affinity='precomputed',
                                           linkage='complete',
