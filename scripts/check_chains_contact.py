@@ -10,6 +10,8 @@ This work requires python >= 3.8
 '''
 
 import numpy as np
+from pathos.multiprocessing import ProcessingPool as Pool
+from name_pdb import dimer2pdbs
 
 
 def _check_chains_contact_pairwise(chain1_pdb, chain2_pdb, label_funcs, contact_distance_threshold, contact_count_threshold):
@@ -57,4 +59,23 @@ def check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, contact_distance_t
         return False
     return _check_chains_contact_pairwise(chain1_pdb, chain2_pdb, label_funcs, contact_distance_threshold, contact_count_threshold)
 
+
+
+def check_many_dimers_contact(dimers, lib_path, label_funcs, dist_thresh, count_thresh, num_workers):
+    args = []
+    for d in dimers:
+        pdb1, pdb2 = dimer2pdbs(d, lib_path)
+        args.append( (pdb1, pdb2, label_funcs, dist_thresh, count_thresh) )
+
+    task_wrapper = lambda a: check_chains_contact(*a)
+
+    with Pool(processes=num_workers) as p:
+        results = p.map(task_wrapper, args)
+
+    incontact = []
+    for d, r in zip(dimers, results):
+        if r:
+            incontact.append(d)
+
+    return incontact
 

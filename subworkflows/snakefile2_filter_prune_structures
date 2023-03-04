@@ -118,20 +118,16 @@ def match_seq_to_afdb(query_fasta, afdb_fasta):
     return None
 
 
-def filter_only_contacting_structures(uniparc, inpkl):
+def filter_only_contacting_structures(uniparc, inpkl, num_workers):
     with open(inpkl, 'rb') as f:
         data = pickle.load(f)
     dimers = data[uniparc]
-    dimers_in_contact = []
     
     lib_path = config['paths']['lib']
     dist_thresh = config['database_settings']['dimer_define_contact_distance_threshold_angstroms']
     count_thresh = config['database_settings']['dimer_define_contact_min_total_contacting_pairs']
 
-    for d in dimers:
-        pdb1, pdb2 = dimer2pdbs(d, lib_path)
-        if check_chains_contact(pdb1, pdb2, label_funcs, dist_thresh, count_thresh):
-            dimers_in_contact.append(d)
+    dimers_in_contact = check_many_dimers_contact(dimers, lib_path, label_funcs, dist_thresh, count_thresh, num_workers)
 
     return dimers_in_contact
 
@@ -207,10 +203,10 @@ rule prefilter_by_physical_contact:
         info = out_base_path_homo+'/{div}/{sample_homo}/afdb_match.info'
     output:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
-    threads: 1
+    threads: 16 
     resources:
         mem_mb = "8000",
-        time = "24:00:00"
+        time = "48:00:00"
     run:
         to_write = None
 
@@ -219,7 +215,7 @@ rule prefilter_by_physical_contact:
         if afdb_no_match:
             to_write = 'skipped because no afdb match'
         else:
-            incontact = filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile)
+            incontact = filter_only_contacting_structures(uniparc=wildcards.sample_homo, inpkl=input.pklfile, num_workers=threads)
             to_write = incontact
 
         with open(output.pklfile, 'wb') as f:

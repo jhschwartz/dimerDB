@@ -76,6 +76,23 @@ class TestCheckChainsContact(unittest.TestCase):
             result = check_chains_contact.check_chains_contact(chain1_pdb, chain2_pdb, label_funcs, 8, 10)
             self.assertTrue(result)
 
+    
+    def test_check_dimers_mono(self):
+        dimers = ['4utt_a1_m1_cA-4utt_a1_m1_cD', '5u8t_a1_m1_c5-5u8t_a1_m1_c6', '4fb8_a1_m1_cA-4fb8_a1_m1_cB', '6qle_a1_m1_cK-6qle_a1_m1_cY']
+        lib = f'{test_data}/lib'
+        result = check_chains_contact.check_many_dimers_contact(dimers, lib, label_funcs, 8, 10, 1)
+        expected = ['4utt_a1_m1_cA-4utt_a1_m1_cD', '4fb8_a1_m1_cA-4fb8_a1_m1_cB']
+        self.assertEqual(sorted(result), sorted(expected))
+
+
+    def test_check_dimers_multi(self):
+        dimers = ['4utt_a1_m1_cA-4utt_a1_m1_cD', '5u8t_a1_m1_c5-5u8t_a1_m1_c6', '4fb8_a1_m1_cA-4fb8_a1_m1_cB', '6qle_a1_m1_cK-6qle_a1_m1_cY']
+        lib = f'{test_data}/lib'
+        result = check_chains_contact.check_many_dimers_contact(dimers, lib, label_funcs, 8, 10, 4)
+        expected = ['4utt_a1_m1_cA-4utt_a1_m1_cD', '4fb8_a1_m1_cA-4fb8_a1_m1_cB']
+        self.assertEqual(sorted(result), sorted(expected))
+
+
 
 if __name__ == '__main__':
     unittest.main()
