@@ -12,7 +12,7 @@ from download_uniparc_fasta import download_fasta
 from read_fasta import read_prot_from_fasta
 from name_fasta import uniparc_fasta
 from name_pdb import dimer2pdbs
-from check_chains_contact import check_chains_contact
+from check_chains_contact import check_many_dimers_contact
 from unredundant import RedundantDimerStructures
 
 sys.path.append(config['paths']['scripts'])
@@ -206,7 +206,7 @@ rule prefilter_by_physical_contact:
     threads: 16 
     resources:
         mem_mb = "8000",
-        time = "48:00:00"
+        time = "5-00:00:00" 
     run:
         to_write = None
 
@@ -248,10 +248,10 @@ rule filter_by_redundancy:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact.pkl'
     output:
         pklfile = out_base_path_homo+'/{div}/{sample_homo}/incontact_nonredundant.pkl'
-    threads: 2
+    threads: 16 
     resources:
-        mem_mb = 5000,
-        time = "24:00:00"
+        mem_mb = 10000,
+        time = "5-00:00:00"
     params:
         prefer_xray = config['database_settings']['preference_xray_structures']
     run:
