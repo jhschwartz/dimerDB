@@ -18,6 +18,7 @@ import glob
 import re
 
 
+
 def read_chain_names(name):
     # filename
     if re.match(r'.*[0-9a-z]{4}-a[0-9]+-m[0-9]+-c[A-Za-z0-9\-]+\.pdb', name):
@@ -28,11 +29,11 @@ def read_chain_names(name):
         return pdb, assembly, model, chain
 
     # just a name
-    elif re.match(r'[0-9a-z]{4}_a[0-9]+_m[0-9]+_c[A-Za-z0-9\-]+$', name):
-        pdb = re.findall(r'([0-9a-z]{4})_a[0-9]+_m[0-9]+_c[A-Za-z0-9\-]+', name)[0]
-        assembly = re.findall(r'[0-9a-z]{4}_a([0-9]+)_m[0-9]+_c[A-Za-z0-9\-]+', name)[0] 
-        model = re.findall(r'[0-9a-z]{4}_a[0-9]+_m([0-9]+)_c[A-Za-z0-9\-]+', name)[0]
-        chain = re.findall(r'[0-9a-z]{4}_a[0-9]+_m[0-9]+_c([A-Za-z0-9\-]+)', name)[0]
+    elif re.match(r'[0-9a-z]{4}-a[0-9]+-m[0-9]+-c[A-Za-z0-9\-]+$', name):
+        pdb = re.findall(r'([0-9a-z]{4})-a[0-9]+-m[0-9]+-c[A-Za-z0-9\-]+', name)[0]
+        assembly = re.findall(r'[0-9a-z]{4}-a([0-9]+)-m[0-9]+-c[A-Za-z0-9\-]+', name)[0] 
+        model = re.findall(r'[0-9a-z]{4}-a[0-9]+-m([0-9]+)-c[A-Za-z0-9\-]+', name)[0]
+        chain = re.findall(r'[0-9a-z]{4}-a[0-9]+-m[0-9]+-c([A-Za-z0-9\-]+)', name)[0]
         return pdb, assembly, model, chain
 
     # invalid
@@ -40,9 +41,14 @@ def read_chain_names(name):
         raise ValueError(f'invalid chain name encoutnered, neither a filename nor a simple name: {name}')
 
 
+def get_div(name):
+    pdb, _, _, _ = read_chain_names(name)
+    return pdb[1:3]
+
+
 def name_chain_from_filename(filename):
     pdb_base, assembly, model, chain = read_chain_names(filename)
-    return f'{pdb_base}_a{assembly}_m{model}_c{chain}'
+    return f'{pdb_base}-a{assembly}-m{model}-c{chain}'
 
 
 
@@ -58,8 +64,19 @@ def name_pdb_file(pdb_base, assembly, model, chain, lib_path=None, allow_nonexis
 
 
 def dimer2pdbs(dimer_name, lib_path):
-    pdb0, assembly0, model0, chain0 = read_chain_names(dimer_name.split('-')[0])
-    pdb1, assembly1, model1, chain1 = read_chain_names(dimer_name.split('-')[1])
+    pdb0, assembly0, model0, chain0 = read_chain_names(dimer_name.split('_')[0])
+    pdb1, assembly1, model1, chain1 = read_chain_names(dimer_name.split('_')[1])
     return name_pdb_file(pdb0, assembly0, model0, chain0, lib_path), name_pdb_file(pdb1, assembly1, model1, chain1, lib_path)
+
+
+
+def name_dimer(chain1name, chain2name):
+    c1 = chain1name
+    c2 = chain2name
+    if chain2name < chain1name:
+        c1 = chain2name
+        c2 = chain1name
+    return f'{c1}_{c2}'
+
 
 

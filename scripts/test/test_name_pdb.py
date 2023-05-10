@@ -67,18 +67,18 @@ class TestNamePDB(unittest.TestCase):
 
     def test_name_chain(self):
         result = name_chain_from_filename('abcd-a3-m22-cG.pdb')
-        expected = 'abcd_a3_m22_cG'
+        expected = 'abcd-a3-m22-cG'
         self.assertEqual(result, expected)
 
 
     def test_name_chain_dashedChain(self):
         result = name_chain_from_filename('abcd-a3-m22-cG-42.pdb')
-        expected = 'abcd_a3_m22_cG-42'
+        expected = 'abcd-a3-m22-cG-42'
         self.assertEqual(result, expected)
 
 
     def test_dimer2pdbs(self):
-        dimer_name = '6qle_a1_m1_cN-7a6w_a1_m42_cAAA' 
+        dimer_name = '6qle-a1-m1-cN_7a6w-a1-m42-cAAA' 
         result1, result2 = dimer2pdbs(dimer_name, lib)
         self.assertEqual(result1, f'{lib}/rcsb/ql/6qle-a1-m1-cN.pdb')
         self.assertEqual(result2, f'{lib}/rcsb/a6/7a6w-a1-m42-cAAA.pdb')
@@ -120,21 +120,21 @@ class TestNamePDB(unittest.TestCase):
 
 
     def test_read_chain_name_nameonly_1(self):
-        name = '7a6w_a155_m42_cA2fA'
+        name = '7a6w-a155-m42-cA2fA'
         result = read_chain_names(name)
         expected = ('7a6w', '155', '42', 'A2fA')
         self.assertEqual(result, expected)
 
 
     def test_read_chain_name_nameonly_2(self):
-        name = '4zbw_a1_m2_cZ'
+        name = '4zbw-a1-m2-cZ'
         result = read_chain_names(name)
         expected = ('4zbw', '1', '2', 'Z')
         self.assertEqual(result, expected)
 
 
     def test_read_chain_name_nameonly_dashedChain(self):
-        name = '4zbw_a1_m2_cZ-42'
+        name = '4zbw-a1-m2-cZ-42'
         result = read_chain_names(name)
         expected = ('4zbw', '1', '2', 'Z-42')
         self.assertEqual(result, expected)
@@ -147,7 +147,7 @@ class TestNamePDB(unittest.TestCase):
 
 
     def test_read_chain_name_mismatch_2(self):
-        name = '7a6w-a155-m42-cA2fA'
+        name = '7a6w_a155_m42_cA2fA'
         with self.assertRaises(ValueError):
             read_chain_names(name)
 
@@ -158,6 +158,36 @@ class TestNamePDB(unittest.TestCase):
             read_chain_names(name)
 
 
+    def test_get_div_no_ext(self):
+        name = '7a6w-a155-m42-cA2fA'
+        div = get_div(name)
+        self.assertEqual(div, 'a6')
+
+
+    def test_get_div_with_ext(self):
+        name = '7a6w-a155-m42-cA2fA.pdb'
+        div = get_div(name)
+        self.assertEqual(div, 'a6')
+
+    
+    def test_get_div_abs_path_name(self):
+        name = '/nfs/turbo/umms-helloworld/notreal/7a6w-a155-m42-cA2fA.pdb'
+        div = get_div(name)
+        self.assertEqual(div, 'a6')
+
+
+    def test_name_dimer_sort_needed(self):
+        c1 = '7a6w-a155-m42-cA2fA'
+        c2 = '4zbw-a1-m2-cZ-42'
+        result = name_dimer(c1, c2)
+        self.assertEqual(result, '4zbw-a1-m2-cZ-42_7a6w-a155-m42-cA2fA')
+    
+                
+    def test_name_dimer__nosort_needed(self):
+        c2 = '7a6w-a155-m42-cA2fA'
+        c1 = '4zbw-a1-m2-cZ-42'
+        result = name_dimer(c1, c2)
+        self.assertEqual(result, '4zbw-a1-m2-cZ-42_7a6w-a155-m42-cA2fA')
 
 
 

@@ -1,0 +1,85 @@
+database_settings:
+    dimer_redundancy_representative_criterion_1_min_coverage_divider_versus_max: 2
+    dimer_define_contact_min_total_contacting_pairs: 10
+    dimer_define_contact_distance_threshold_angstroms: 8
+    dimer_cluster_distance_threshold: 0.25
+    chain_min_seq_len: 30
+    chain_max_seq_len: 1024
+    uniparc_chain_seqmatch_id_thresh: 0.9
+    seq_cluster_distance_threshold: 0.1
+    force_update_pdb: False
+    force_update_id_mapping: False
+    require_seq_in_afdb: True
+    preference_xray_structures: False
+
+
+runtime:
+    user: jaschwa
+    python: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python
+    slurm_account: sigbio_project1
+    slurm_queue: sigbio
+    max_threads: 128
+
+workflow:
+    snakefile0: subworkflows/snakefile0_download_pdb
+    snakefile1: subworkflows/snakefile1_deduce_all_dimers
+    snakefile2: subworkflows/snakefile2_filter_prune_structures
+    snakefile3: subworkflows/snakefile3_prune_seqs
+
+paths:
+    basepath: /scratch/sigbio_project_root/sigbio_project1/jaschwa/dimerDB-clean-gen
+
+    scripts: scripts
+    scripts_tests: scripts/tests
+    scripts_tests_data: scripts/tests/data
+
+    usalign: bin/USalign/USalign
+    cif2pdb: bin/USalign/cif2pdb
+    nwalign: bin/NWalign/align
+    pdb2fasta: bin/USalign/pdb2fasta
+
+    resolu_file: intermediates/resolu.idx
+    afdb_fasta: /nfs/turbo/umms-zhng/jaschwa/upec-fxn-pred/DB/afdb_v4.fasta
+
+    intermediates: intermediates
+    intermediates_homodimer_filtering: intermediates/homodimer_filtering
+    lib: lib
+    uniparc_seqs: lib/uniparc
+
+    labels_loc: bin/labels
+
+snake_donefiles:
+    sub0_all_done: intermediates/subflow0.done
+    sub0_pdb_download_done: intermediates/pdb_updated.done
+    sub0_ungzip_done: intermediates/pdb_ungzip.done
+    sub0_fill_empty_done: intermediates/pdb_empty_filled.done
+    sub0_split_pdb_done: intermediates/pdb_split.done
+
+    sub1_all_done: intermediates/subflow1.done
+    sub1_uniparc_download_done: intermediates/uniparc_download.done
+
+    sub2_all_done: intermediates/subflow2.done
+    sub3_all_done: intermediates/subflow3.done
+
+
+intermediate_data_files:
+    sub0_empty_pdbs_pkl: intermediates/empty_pdbs.pkl
+
+    sub1_uniparc2others_pkl: intermediates/uniparc2others.pkl
+    sub1_uniparc2others_index: intermediates/uniparc_index.pkl
+    sub1_uniparc2others_expanded_cleaned_pkl: intermediates/uniparc2others_expanded_cleaned.pkl
+    sub1_all_homodimers_pkl: intermediates/possible_homodimers.pkl
+    sub1_id_mapping_fn: intermediates/idmapping_selected.tab.gz
+    
+    sub2_homo_prefiltered_pkl: intermediates/true_homodimers.pkl
+    sub2_uniparc2af_pkl_homo: intermediates/homodimers_uniparc2af.pkl
+
+    sub3_nwalign_distance_matrix: intermediates/homodimers_nwalign_matrix.npy
+    sub3_nonredundant_uniparcs: intermediates/nonredundant_uniparcs_homodimer.pkl
+
+output:    
+    doubly_nonredundant_homodimers_pkl: out/nonredundant_true_homodimers.pkl
+    doubly_nonredundant_homodimers_yaml: out/nonredundant_true_homodimers.yaml
+    
+
+
