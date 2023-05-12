@@ -2,20 +2,24 @@ import tarfile
 import itertools
 import os
 import glob 
+import name_pdb
 
 
-def tar_pdb_chains(indexfile, chains_lib, target_dir):
+def tar_pdb_chains(indexfile, div, chains_lib, target_dir):
     '''
-    Function to create a .tar.gz for groups of chain .pdb
-    files. Specifically, uses the two middle characters of 
-    pdb entry IDs to group, so we get files like aa.tar.gz 
-    or e6.tar.gz.
+    Function to create a .tar.gz for a group of chain .pdb
+    files. Specifically, uses div parameter to look for
+    pdb files in chains_lib via indexfile which have div 
+    as the pdb entry's middle two char. 
 
     :param indexfile: str, path to a sorted textfile which
                       lists all pdb files contained within
                       chains_lib, one on each line.
                         This file includes divs, e.g. 
                         "aa/1aa1-a1-m1-cA.pdb"
+    :param div: str, the div which defines the group of 
+                pdb chains, specifically by the middle two
+                chars of the pdb entry id of each chain
     :param chains_lib: str, path to the directory which
                        contains the divs that contain single
                        chain pdb files in the naming scheme
@@ -24,37 +28,31 @@ def tar_pdb_chains(indexfile, chains_lib, target_dir):
                        the .tar.gz files will be created,
                        i.e. <target_dir>/aa.tar.gz
 
-    :returns: list, strings which are the paths to the created
-              .tar.gz files (or, specifically, just the ones
-              which exist in target_dir at end of func.)
+    :returns: lists, strings which are the names of the pdb
+              files put into the created tar in target_dir.
     '''
 
     os.makedirs(target_dir, exist_ok=True)
     
-    with open(indexfile, 'r') as f:
-        chainfiles = []
+    tar_path = os.path.join(target_dir, f'{div}.tar.gz')
+
+    chains_tarred = []
+    with open(indexfile, 'r') as f, tarfile.open(tar_path, 'w:gz') as tar:
         for line in f:
-            cfile = os.path.basename(line.strip())
-            chainfiles.append(cfile)
+            chain_name = line.strip()
+            if chain_name.endswith('.pdb') and name_pdb.get_div(chain_name) == div:
+                chain_source =  name_pdb.name_pdb_file(
+                                    *name_pdb.read_chain_names(chain_name),
+                                    lib_path=chains_lib,
+                                    allow_nonexist=False
+                                    )
+                simple_name = os.path.basename(chain_source)
+                tar.add(chain_source, arcname=simple_name)
+                chains_tarred.append(simple_name)
 
-    middle_two = lambda filename: filename[1:3]
-    for key, group in itertools.groupby(chainfiles, key=middle_two):
-        tarname = os.path.join(target_dir, f'{key}.tar.gz')
-        with tarfile.open(tarname, 'w:gz') as tar:
-            for pdb in group:
-                if not pdb.endswith('.pdb'):
-                    continue
-                filename = os.path.basename(pdb)
-                path = os.path.join(chains_lib, key, filename)
-                if not os.path.exists(path):
-                    raise FileNotFoundError('creating tar for pdb entry'  \
-                                          +f'group {key} failed upon add' \
-                                          +f'of {pdb} because path {path}'\
-                                          +f'does not exist!')
-                tar.add(path)
+    return chains_tarred
 
-    found_tars = glob.glob(f'{target_dir}/*.tar.gz')
-    return found_tars
+            
     
 
 
