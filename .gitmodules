@@ -1,3 +1,6 @@
 [submodule "bin/USalign"]
 	path = bin/USalign
 	url = https://github.com/pylelab/USalign
+[submodule "bin/check_contact"]
+	path = bin/check_contact
+	url = https://github.com/jhschwartz/check-dimer-contact

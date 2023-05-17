@@ -69,6 +69,9 @@ def dimer2pdbs(dimer_name, lib_path):
     return name_pdb_file(pdb0, assembly0, model0, chain0, lib_path), name_pdb_file(pdb1, assembly1, model1, chain1, lib_path)
 
 
+def dimer2chains(dimer_name):
+    return dimer_name.split('_')
+
 
 def name_dimer(chain1name, chain2name):
     c1 = chain1name
@@ -77,6 +80,9 @@ def name_dimer(chain1name, chain2name):
         c1 = chain2name
         c2 = chain1name
     return f'{c1}_{c2}'
+
+
+
 
 
 
