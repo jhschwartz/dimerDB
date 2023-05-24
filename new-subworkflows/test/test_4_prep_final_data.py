@@ -7,7 +7,6 @@ from datetime import datetime
 import tempfile
 
 from run_tmp_snakemake import run_tmp_snakemake
-from tsvs_equal import tsvs_equal
 
 import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
@@ -48,12 +47,12 @@ class TestSubworkflow4Rules(unittest.TestCase):
             result_chains_30 = os.path.join(outdir, 'extra', 'cluster30_chains.txt') 
             result_dimers_30 = os.path.join(outdir, 'extra', 'cluster30_dimers.txt')  
             
-            self.assertTrue(filecmp.cmp(expected_fasta_80, result_fasta_80))
-            self.assertTrue(filecmp.cmp(expected_chains_80, result_chains_80))
-            self.assertTrue(filecmp.cmp(expected_dimers_80, result_dimers_80))
-            self.assertTrue(filecmp.cmp(expected_fasta_30, result_fasta_30))
-            self.assertTrue(filecmp.cmp(expected_chains_30, result_chains_30))
-            self.assertTrue(filecmp.cmp(expected_dimers_30, result_dimers_30))
+            self.assertTrue(filecmp.cmp(expected_fasta_80, result_fasta_80, shallow=False))
+            self.assertTrue(filecmp.cmp(expected_chains_80, result_chains_80, shallow=False))
+            self.assertTrue(filecmp.cmp(expected_dimers_80, result_dimers_80, shallow=False))
+            self.assertTrue(filecmp.cmp(expected_fasta_30, result_fasta_30, shallow=False))
+            self.assertTrue(filecmp.cmp(expected_chains_30, result_chains_30, shallow=False))
+            self.assertTrue(filecmp.cmp(expected_dimers_30, result_dimers_30, shallow=False))
             
 
 
@@ -64,7 +63,7 @@ class TestSubworkflow4Rules(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule) as tmpsnake:
             outdir = os.path.join(os.path.dirname(tmpsnake), outname)
             result_fasta = os.path.join(outdir, 'all', 'seqs.fasta')
-            self.assertTrue(filecmp.cmp(expected_file, result_fasta))
+            self.assertTrue(filecmp.cmp(expected_file, result_fasta, shallow=False))
 
 
 
@@ -96,8 +95,8 @@ class TestSubworkflow4Rules(unittest.TestCase):
             result_clusters_file = os.path.join(outdir, 'cluster', 'clusters.txt') 
             result_membership_file = os.path.join(outdir, 'cluster', 'membership.tsv')
 
-            self.assertTrue(tsvs_equal(result_clusters_file, expected_clusters_file))
-            self.assertTrue(tsvs_equal(result_membership_file, expected_membership_file))
+            self.assertTrue(filecmp.cmp(result_clusters_file, expected_clusters_file, shallow=False))
+            self.assertTrue(filecmp.cmp(result_membership_file, expected_membership_file, shallow=False))
 
    
 
@@ -156,7 +155,6 @@ class TestSubworkflow4Rules(unittest.TestCase):
                 self.assertTrue(time_of_run < time_after_run)
                 
                 # check counts in remaining lines, using tempfiles
-                # and tsvs_equal to allow different size tabs
                 with tempfile.NamedTemporaryFile('w+t') as e_temp, \
                   tempfile.NamedTemporaryFile('w+t') as r_temp:
                 
@@ -167,7 +165,7 @@ class TestSubworkflow4Rules(unittest.TestCase):
 
                     e_temp.seek(0)
                     r_temp.seek(0)
-                    self.assertTrue(tsvs_equal(e_temp.name, r_temp.name))
+                    self.assertTrue(filecmp.cmp(e_temp.name, r_temp.name, shallow=False))
 
 
 
@@ -177,7 +175,7 @@ class TestSubworkflow4Rules(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule) as tmpsnake:
             outdir = os.path.join(os.path.dirname(tmpsnake), outname)
             result_counts_file = os.path.join(outdir, 'info', 'contact_counts.tsv')
-            self.assertTrue(tsvs_equal(expected_counts_file, result_counts_file))
+            self.assertTrue(filecmp.cmp(expected_counts_file, result_counts_file, shallow=False))
 
 
 
@@ -187,7 +185,18 @@ class TestSubworkflow4Rules(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule) as tmpsnake:
             outdir = os.path.join(os.path.dirname(tmpsnake), outname)
             result_seqid_file = os.path.join(outdir, 'info', 'seq_ids.tsv')
-            self.assertTrue(tsvs_equal(expected_seqid_file, result_seqid_file))
+            self.assertTrue(filecmp.cmp(expected_seqid_file, result_seqid_file, shallow=False))
+
+
+
+    def test_out_dimers_info(self):
+        rule = 'out_dimers_info'
+        expected_seqid_file = os.path.join(data_dir, 'out_dimers_info', 'expected.tsv')
+        with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule) as tmpsnake:
+            outdir = os.path.join(os.path.dirname(tmpsnake), outname)
+            result_seqid_file = os.path.join(outdir, 'nonredundant', 'dimers_info.tsv')
+            self.assertTrue(filecmp.cmp(expected_seqid_file, result_seqid_file, shallow=False))
+
 
 
 

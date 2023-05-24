@@ -1,0 +1,9 @@
+paths:
+    intermediates_dir: intermediates
+    lib: lib
+workflow:
+    2_derive_dimers_done: 2.test.done
+workflow_params:
+    max_threads: 32
+    seq_cluster_id: 0.9
+test: True

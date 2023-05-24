@@ -6,7 +6,7 @@ import os
 import glob
 
 @contextmanager
-def run_tmp_snakemake(snakefile, config, snakemake_exe, scripts, bin, rule=None):
+def run_tmp_snakemake(snakefile, config, snakemake_exe, scripts, bin, rule=None, lib=None):
     init_dir = os.getcwd()
     try:
         td = tempfile.mkdtemp()
@@ -31,7 +31,8 @@ def run_tmp_snakemake(snakefile, config, snakemake_exe, scripts, bin, rule=None)
                     else:
                         smk_out.write(f'# skipping rule all target...\n')
 
-        
+        if lib:
+            shutil.copytree(lib, os.path.join(td, 'lib'))
         
         tmp_config = shutil.copy(config, os.path.join(td, 'config.yaml'))
         snakemake_exe = os.path.realpath(snakemake_exe)
@@ -51,7 +52,7 @@ def run_tmp_snakemake(snakefile, config, snakemake_exe, scripts, bin, rule=None)
         rule_info = ''
         if rule:
             rule_info = f'-R {rule}'
-        subprocess.run(f'{snakemake_exe} -s {tmp_snakefile} -c8 {rule_info}', shell=True, check=True)
+        subprocess.run(f'{snakemake_exe} -s {tmp_snakefile} -c8 {rule_info} --printshellcmds', shell=True, check=True)
         yield tmp_snakefile
     finally:
         shutil.rmtree(td)

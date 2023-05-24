@@ -42,7 +42,10 @@ def read_chain_names(name):
 
 
 def get_div(name):
-    pdb, _, _, _ = read_chain_names(name)
+    if len(name) != 4:
+        pdb, _, _, _ = read_chain_names(name)
+    else:
+        pdb = name
     return pdb[1:3]
 
 
@@ -53,7 +56,7 @@ def name_chain_from_filename(filename):
 
 
 def name_pdb_file(pdb_base, assembly, model, chain, lib_path=None, allow_nonexist=False):
-    div = pdb_base[1:3]
+    div = get_div(pdb_base)
     basename = f'{pdb_base}-a{assembly}-m{model}-c{chain}.pdb'
     if lib_path:
         path = os.path.join(lib_path, 'rcsb', div, basename)

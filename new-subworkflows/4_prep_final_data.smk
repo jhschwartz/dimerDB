@@ -12,6 +12,8 @@ else:
 from datetime import datetime
 import tempfile
 from sortedcontainers import SortedSet
+import gzip
+import shutil
 
 sys.path.append('scripts')
 import name_pdb
@@ -57,7 +59,7 @@ outfile = {
         'chains': os.path.join(outdata, 'nonredundant', 'chains.txt'), 
         'dimers': os.path.join(outdata, 'nonredundant', 'dimers.txt'),
         'seqs': os.path.join(outdata, 'nonredundant', 'seqs.fasta'),
-        'info': os.path.join(outdata, 'nonredundant', 'dimers_info.csv')
+        'info': os.path.join(outdata, 'nonredundant', 'dimers_info.tsv')
     },
     'extra': {
         'dimers_template': outdata+'/extra/cluster{num}_dimers.txt',
@@ -69,7 +71,11 @@ outfile = {
         'seqids': os.path.join(outdata, 'info', 'seq_ids.tsv'),
         'contact_counts': os.path.join(outdata, 'info', 'contact_counts.tsv'),
         'entries': os.path.join(outdata, 'info', 'entries.idx'),
-        'pdb_chain_uniprot': os.path.join(outdata, 'info', 'pdb_chain_uniprot.csv')
+        'pdb_chain_uniprot': os.path.join(outdata, 'info', 'pdb_chain_uniprot.tsv'),
+        'pdb_chain_taxonomy': os.path.join(outdata, 'info', 'pdb_chain_taxonomy.tsv'),
+        'ncbi_taxonomy_archive': os.path.join(outdata, 'info', 'taxdump.tar.gz'),
+        'ncbi_taxonomy_names': os.path.join(outdata, 'info', 'names.dmp'),
+        'taxid2name': os.path.join(outdata, 'info', 'names_processed.tsv')
     }
 }
 
@@ -145,8 +151,12 @@ rule all:
         expand(outfile['extra']['dimers_template'], num=ids_for_extra), 
         expand(outfile['extra']['seqs_template'], num=ids_for_extra),
         expand(outfile['extra']['chains_template'], num=ids_for_extra) 
+    run:
+        # cleanup
+        shutil.rmtree(os.path.dirname(outfile['info']['seqids']), ignore_errors=True)
 #### END RULE ALL TARGETS
 # defining begin/end of rule all in comments is necessary for unittesting
+
 
 
 rule out_pdb_div_tar:
@@ -178,7 +188,7 @@ rule out_pdb_div_tar:
 
 
 
-# defacto input is the fasta library at lib_path and fasta_index
+# shadow input is the fasta library at lib_path and fasta_index
 rule out_extra_clusters:
     '''
     Given the resulting dimers and seqs written to nonredundant/,
@@ -268,7 +278,7 @@ rule out_extra_clusters:
              
 
 
-# defacto input is the fasta library at lib_path and fasta_index
+# shadow input is the fasta library at lib_path and fasta_index
 rule out_all_seqs:
     '''
     This rule writes the sequences of all chains involved
@@ -293,7 +303,7 @@ rule out_all_seqs:
 
 
 
-# defacto inputs are all_homodimers_file and chain_lengths
+# shadow inputs are all_homodimers_file and chain_lengths
 rule out_all_dimers_chains:
     '''
     This rule writes all homodimer pairs discovered, without 
@@ -335,7 +345,7 @@ rule out_all_dimers_chains:
 
 
 
-# defacto inputs cluster_index and each cluster's representation.tsv
+# shadow inputs cluster_index and each cluster's representation.tsv
 rule out_cluster_info:
     '''
     This rule collects and writes sequence clustering and
@@ -384,21 +394,19 @@ rule out_cluster_info:
                         'rep': rep_dimer
                     }
 
-        # 3: write list of all clusters to tmp and sort to outfile
-        with tempfile.NamedTemporaryFile('w+t') as tf:
+        # 3: write list of all clusters and sort
+        with open(output.clusters_txt, 'w') as f:
             for cluster, _ in cluster_repfiles:
-                tf.write(f'{cluster}\n')
-            tf.seek(0)
-            shell(''' sort {tf.name} > {output.clusters_txt} ''') 
+                f.write(f'{cluster}\n')
+        shell(''' sort -o {output.clusters_txt} {output.clusters_txt} ''') 
 
-        # 4: write membership table to tmp and sort to outfile
-        with tempfile.NamedTemporaryFile('w+t') as tf:
+        # 4: write membership table and sort
+        with open(output.membership_tsv, 'w') as f:
             for member_dimer in membership.keys():
                 cluster = membership[member_dimer]['cluster']
                 rep = membership[member_dimer]['rep']
-                tf.write(f'{member_dimer}\t{cluster}\t{rep}\n')
-            tf.seek(0)
-            shell(''' sort {tf.name} > {output.membership_tsv} ''') 
+                f.write(f'{member_dimer}\t{cluster}\t{rep}\n')
+        shell(''' sort -o {output.membership_tsv} {output.membership_tsv} ''') 
 
 
 
@@ -445,7 +453,7 @@ rule out_nonredundant_dimers_chains:
 
 
 
-# defacto input sequences in lib/fasta
+# shadow input sequences in lib/fasta
 rule out_nonredundant_seqs:
     '''
     This rule writes the sequences corresponding to nonredundant
@@ -503,16 +511,44 @@ rule out_summary:
 
 
 
+
 rule download_info_flatfiles:
     output:
        entries_file = outfile['info']['entries'],
-       pdb2uniprot_csv = outfile['info']['pdb_chain_uniprot']
+       pdb2uniprot_tsv = outfile['info']['pdb_chain_uniprot'],
+       pdb2species_tsv = outfile['info']['pdb_chain_taxonomy'],
+       ncbi_taxonomy_names = outfile['info']['ncbi_taxonomy_names'],
+       ncbi_taxonomy_targz = outfile['info']['ncbi_taxonomy_archive']
+    threads: 1
     shell:
         '''
         wget -O {output.entries_file} https://files.wwpdb.org/pub/pdb/derived_data/index/entries.idx;
-        wget -O {output.pdb2uniprot_csv} ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/csv/pdb_chain_uniprot.tsv.gz;
+        wget -O {output.pdb2uniprot_tsv} ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/tsv/pdb_chain_uniprot.tsv.gz;
+        wget -O {output.pdb2species_tsv} ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/tsv/pdb_chain_taxonomy.tsv.gz;
+        wget -O {output.ncbi_taxonomy_targz} https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz;
+        tar -zxvf {output.ncbi_taxonomy_targz} names.dmp --to-stdout > {output.ncbi_taxonomy_names}; 
         '''
 
+
+
+rule process_ncbi_taxonomy_file:
+    input:
+        ncbi_taxonomy_names_raw = outfile['info']['ncbi_taxonomy_names']
+    output:
+        ncbi_taxonomy_names_processed = outfile['info']['taxid2name']
+    run:
+        # from ncbi, for input names.dmp file:
+        #   Field terminator is "\t|\t"
+        #   Row terminator is "\t|\n"
+
+        with open(input.ncbi_taxonomy_names_raw, 'r') as fi, \
+                    open(output.ncbi_taxonomy_names_processed, 'w') as fo:
+           
+            is_sci_name = lambda row: 'scientific name' in row.lower()
+
+            for row in filter(is_sci_name, fi):
+                tax_id, sci_name, _, _ = row.rstrip('\t|\n').split('\t|\t')
+                fo.write(f'{tax_id}\t{sci_name}\n')
 
 
 
@@ -549,7 +585,6 @@ rule bulk_calc_seqid:
     output:
         seqids_file = outfile['info']['seqids']
     run:
-        ids = []
         with open(input.nonred_dimers, 'r') as fi, \
                 open(output.seqids_file, 'w') as fo:
             for line in fi:
@@ -567,7 +602,9 @@ rule out_dimers_info:
         contact_counts_file = outfile['info']['contact_counts'],
         seqids_file = outfile['info']['seqids'],
         entries_file = outfile['info']['entries'],
-        pdb2uniprot_csv = outfile['info']['pdb_chain_uniprot']
+        pdb2uniprot_tsv = outfile['info']['pdb_chain_uniprot'],
+        pdb2species_tsv = outfile['info']['pdb_chain_taxonomy'],
+        taxid2name_tsv = outfile['info']['taxid2name']
     output:
         infofile = outfile['nonredundant']['info']
     run:
@@ -593,7 +630,7 @@ rule out_dimers_info:
             seqids = [line.split()[1] for line in f]
 
         chain2uniprot = {}
-        with open(input.pdb2uniprot_csv) as f:
+        with gzip.open(input.pdb2uniprot_tsv, 'rt') as f:
             f.readline() # skip line 1 - timestamp
             f.readline() # skip line 2 - header
             for line in f:
@@ -602,11 +639,29 @@ rule out_dimers_info:
                 chain_name = f'{entry}_{chain}'
                 if chain_name in chains_nonred:
                     chain2uniprot[chain_name] = uniprot
+        
+        chain2taxid = {}
+        taxids_of_interest = SortedSet()
+        with gzip.open(input.pdb2species_tsv, 'rt') as f:
+            f.readline() # skip line 1 - timestamp
+            f.readline() # skip line 2 - header
+            for line in f:
+                entry, chain, species_id, species_name = line.rstrip().split('\t')
+                chain_name = f'{entry}_{chain}'
+                if chain_name in chains_nonred:
+                    chain2taxid[chain_name] = species_id
+                    taxids_of_interest.add(species_id)
+
+        taxid2species = {}
+        with open(input.taxid2name_tsv, 'r') as f:
+            for line in f:
+                taxid, taxname = line.rstrip().split('\t')
+                if taxid in taxids_of_interest:
+                    taxid2species[taxid] = taxname
 
         entry2title = {}
         entry2res = {}
         entry2method = {}
-        entry2source = {}
         entry2date = {}
         with open(input.entries_file, 'r') as f:
             for line in f:
@@ -615,7 +670,6 @@ rule out_dimers_info:
                 if entry in entries_nonred:
                     entry2date[entry] = spl[2]
                     entry2title[entry] = spl[3]
-                    entry2source[entry] = spl[4]
                     entry2res[entry] = spl[6]
                     entry2method[entry] = spl[7].rstrip()
                     if spl[7] == '':
@@ -628,15 +682,23 @@ rule out_dimers_info:
                 _, _, _, c2 = name_pdb.read_chain_names(c2)
                 c1, c2 = f'{entry}_{c1}', f'{entry}_{c2}'
                 
-                f.write(f'{dimer}\t')
-                f.write(f'{entry2title[entry]}\t')
-                f.write(f'{chain2uniprot.get(c1, "")]}\t')
-                f.write(f'{chain2uniprot.get(c2, "")}\t')
-                f.write(f'{entry2res[entry]}\t')
-                f.write(f'{entry2method[entry]}\t')
-                f.write(f'{num_contacts}\t')
-                f.write(f'{seqid}\t')
-                f.write(f'{entry2source[entry]}')
-                f.write('\n')
+                title = entry2title[entry]
+                up1 = chain2uniprot.get(c1, '')
+                up2 = chain2uniprot.get(c2, '')
+                res = entry2res[entry]
+                method = entry2method[entry]
+                
+                c1_taxid = chain2taxid.get(c1, '')
+                c2_taxid = chain2taxid.get(c2, '')
+                c1_taxname = taxid2species.get(c1_taxid, '')
+                c2_taxname = taxid2species.get(c2_taxid, '')
+                c1_species = c1_taxid
+                c2_species = c2_taxid
+                if c1_species != '':
+                    c1_species = f'{c1_taxid} ({c1_taxname})'
+                if c2_species != '':
+                    c2_species = f'{c2_taxid} ({c2_taxname})'
 
+                f.write(f'{dimer}\t{title}\t{up1}\t{up2}\t{res}\t{method}')
+                f.write(f'\t{num_contacts}\t{seqid}\t{c1_species}\t{c2_species}\n')
 

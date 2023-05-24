@@ -1,0 +1,10 @@
+paths:
+    intermediates_dir: intermediates
+    lib: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/new-subworkflows/test/data/1_derive_dimers/shared/lib
+workflow:
+    1_derive_dimers_done: 1.test.done
+workflow_params:
+    define_contact_max_dist_angstroms: 8
+    define_contact_min_num_residue_pairs: 10
+    max_threads: 32
+test: True
