@@ -1,6 +1,0 @@
-paths:
-    intermediates_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/new-subworkflows/test/data/4_prep_final_data/shared/intermediates
-    lib: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/new-subworkflows/test/data/4_prep_final_data/shared/lib
-workflow:
-    4_prep_webserver_data_done: 4.test.done
-test: True

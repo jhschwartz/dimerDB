@@ -1,0 +1,6 @@
+paths:
+    intermediates_dir: intermediates
+    lib: lib
+workflow:
+    4_prep_webserver_data_done: 4.test.done
+test: True

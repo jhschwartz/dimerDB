@@ -30,6 +30,23 @@ class TestGenerateRcsbIndex(unittest.TestCase):
             self.assertEqual(expected, pdbs)
 
 
+    def test_convert_index_to_pkl(self):
+        with tempfile.TemporaryDirectory() as td:
+            index_pkl = f'{td}/index.pkl'
+            index_txt = f'{lib_path}/rcsb_index.txt' 
+            rcsb_index_to_pkl(index_txt, index_pkl)
+            with open(index_pkl, 'rb') as f:
+                result = pickle.load(f)
+            expected = {
+                '6qle': {
+                    'H': ['6qle-a1-m1-cH.pdb'],
+                    'N': ['6qle-a4-m2-cN.pdb']
+                },
+                '7a6w': {
+                    'AAA': ['7a6w-a1-m1-cAAA.pdb', '7a6w-a1-m42-cAAA.pdb', '7a6w-a2-m42-cAAA.pdb']
+                }
+            }
+            self.assertEqual(result, expected)
 
 
     def test_detect_empty_pdbs(self):

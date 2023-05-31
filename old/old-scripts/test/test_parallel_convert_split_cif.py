@@ -35,35 +35,31 @@ class TestConvertSplitCif(unittest.TestCase):
     def test_rename_resulting_pdbs_1(self):
         cif = f'{test_lib}/rcsb/aa/1aa1-assembly1.cif'
         with tempfile.TemporaryDirectory() as td:
-            prefixdir = f'{td}/zzzz'
-            os.mkdir(prefixdir)
-            shutil.copy(cif, prefixdir)
-            tmpcif = f'{prefixdir}/{os.path.basename(cif)}'
-            run_cif2pdb(cif=tmpcif, outdir=prefixdir, prefix='zzzz', cif2pdb_exe=cif2pdb_exe)
-            rename_resulting_pdbs(dir_=prefixdir, assembly_ID='1', prefix='zzzz')
-            all_pdb = glob.glob(f'{prefixdir}/*.pdb')
-            model_named_pdb = glob.glob(f'{prefixdir}/zzzz-*-*.pdb')
+            shutil.copy(cif, td)
+            tmpcif = f'{td}/{os.path.basename(cif)}'
+            run_cif2pdb(cif=tmpcif, outdir=td, prefix='tmp', cif2pdb_exe=cif2pdb_exe)
+            rename_resulting_pdbs(dir_=td, assembly_ID='1', prefix='tmp')
+            all_pdb = glob.glob(f'{td}/*.pdb')
+            model_named_pdb = glob.glob(f'{td}/tmp-*-*.pdb')
             self.assertEqual(all_pdb, model_named_pdb)
-            self.assertTrue(os.path.exists(f'{prefixdir}/zzzz-a1-m1-cS.pdb'))
-            self.assertFalse(os.path.exists(f'{prefixdir}/zzzzS.pdb'))
-            self.assertTrue(os.path.exists(f'{prefixdir}/zzzz-a1-m1-cS.pdb'))
+            self.assertTrue(os.path.exists(f'{td}/tmp-a1-m1-cS.pdb'))
+            self.assertFalse(os.path.exists(f'{td}/tmpS.pdb'))
+            self.assertTrue(os.path.exists(f'{td}/tmp-a1-m1-cS.pdb'))
 
 
     def test_rename_resulting_pdbs_2(self):
         cif = f'{test_lib}/rcsb/aa/1aa1-assembly1.cif'
         with tempfile.TemporaryDirectory() as td:
-            prefixdir = f'{td}/zzzz'
-            os.mkdir(prefixdir)
-            shutil.copy(cif, prefixdir)
-            tmpcif = f'{prefixdir}/{os.path.basename(cif)}'
-            run_cif2pdb(cif=tmpcif, outdir=prefixdir, prefix='zzzz', cif2pdb_exe=cif2pdb_exe)
-            rename_resulting_pdbs(dir_=prefixdir, assembly_ID='2', prefix='zzzz')
-            all_pdb = glob.glob(f'{prefixdir}/*.pdb')
-            model_named_pdb = glob.glob(f'{prefixdir}/zzzz-*-*.pdb')
+            shutil.copy(cif, td)
+            tmpcif = f'{td}/{os.path.basename(cif)}'
+            run_cif2pdb(cif=tmpcif, outdir=td, prefix='tmp', cif2pdb_exe=cif2pdb_exe)
+            rename_resulting_pdbs(dir_=td, assembly_ID='2', prefix='tmp')
+            all_pdb = glob.glob(f'{td}/*.pdb')
+            model_named_pdb = glob.glob(f'{td}/tmp-a*-m*-c*.pdb')
             self.assertEqual(all_pdb, model_named_pdb)
-            self.assertTrue(os.path.exists(f'{prefixdir}/zzzz-a2-m1-cS.pdb'))
-            self.assertFalse(os.path.exists(f'{prefixdir}/zzzzS.pdb'))
-            self.assertTrue(os.path.exists(f'{prefixdir}/zzzz-a2-m1-cS.pdb'))
+            self.assertTrue(os.path.exists(f'{td}/tmp-a2-m1-cS.pdb'))
+            self.assertFalse(os.path.exists(f'{td}/tmpS.pdb'))
+            self.assertTrue(os.path.exists(f'{td}/tmp-a2-m1-cS.pdb'))
 
 
     def test_parallel_process_helper(self):

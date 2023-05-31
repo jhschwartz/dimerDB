@@ -1,3 +1,14 @@
+'''
+read_fasta.py - function to retrieve individual protein entries in a FASTA file as a tuple generator
+
+Written by Jacob Schwartz (jaschwa@umich.edu) in November, 2022.
+Copyright Jacob Schwartz, developed for the Peter Freddolino Lab while employed at the University of Michigan.
+https://freddolino-lab.med.umich.edu
+
+These functions are unittested in test/test_read_fasta.py and found to be passing as of 11/17/22.
+This work requires python >= 3.8
+'''
+
 def read_prot_from_fasta(fasta: str) -> str:
     '''
     From a fasta file, makes a generator of tuples, for which each has the first

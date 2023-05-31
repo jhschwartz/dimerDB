@@ -1,0 +1,12 @@
+paths:
+    intermediates_dir: intermediates
+    lib: lib
+    tmscore_db: lib/tmdb_half
+workflow:
+    3_rm_structural_redundancy_done: 3.test.done
+workflow_params:
+    max_threads: 16
+    seq_cluster_id: 0.9
+    dimer_clustering_threshold: 0.25
+test: True
+

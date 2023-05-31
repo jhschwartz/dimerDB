@@ -1,8 +1,6 @@
 *intermediates*/
 lib*/
 slurm-*.out
-benchmarks/data/
-benchmarks/scripts/test/data/
 .snakemake/
 **/__pycache__/
 logs/
