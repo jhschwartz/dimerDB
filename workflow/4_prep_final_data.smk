@@ -25,14 +25,14 @@ from align_tools import calc_nwalign_glocal
 sys.path.append('bin/check_contact')
 from check_contact import count_contact_many_parallel
 
-subworkflow_done = config['workflow']['4_prep_webserver_data_done']
+subworkflow_done = config['subworkflow_done']['4_prep_final_data']
 
 # data locations set by config
 intermediates = config['paths']['intermediates_dir']
-lib_path = config['paths']['lib'] # TODO put in config, match to sub0, must contain folder "rcsb"
+lib_path = config['paths']['lib'] 
 
 # input data, given data locations
-pdb_index = os.path.join(lib_path, 'pdb_index.txt') # TODO match sub0
+pdb_index = os.path.join(lib_path, 'pdb_index.txt') 
 fasta_index = os.path.join(lib_path, 'fasta_index.tsv')
 fasta_lib = os.path.join(lib_path, 'fasta')
 all_homodimers_file = os.path.join(intermediates, 'check_pairs', 'all_homodimers.txt')
@@ -40,6 +40,7 @@ all_homodimers_file = os.path.join(intermediates, 'check_pairs', 'all_homodimers
 cluster_index = os.path.join(intermediates, 'cluster', 'cluster_index.txt')
 cluster_data = os.path.join(intermediates, 'cluster', 'seq_clusters')
 
+mmseqs_exe = config['exe']['mmseqs']
 
 
 # outfile naming
@@ -152,6 +153,8 @@ rule all:
         expand(outfile['extra']['dimers_template'], num=ids_for_extra), 
         expand(outfile['extra']['seqs_template'], num=ids_for_extra),
         expand(outfile['extra']['chains_template'], num=ids_for_extra) 
+    output:
+        done = config['subworkflow_done']['4_prep_final_data']
     run:
         # cleanup
         shutil.rmtree(os.path.dirname(outfile['info']['seqids']), ignore_errors=True)
@@ -245,7 +248,7 @@ rule out_extra_clusters:
                 run_mmseqs_cluster(  infasta=tmp_inseqs, 
                                      outprefix=tmp_outprefix, 
                                      seq_id=wildcards.num,
-                                     mmseqs_exe='mmseqs',
+                                     mmseqs_exe=mmseqs_exe,
                                      cores=threads           )
             mmseqs_reps = derive_mmseqs_reps_from_tsv(mmseqs_membership_tsv) 
 

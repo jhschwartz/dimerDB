@@ -11,9 +11,9 @@ import name_pdb
 import read_fasta 
 from wrap_mmseqs import run_mmseqs_cluster, derive_mmseqs_reps_from_tsv
 
-subworkflow_done = config['workflow']['2_derive_dimers_done']
+subworkflow_done = config['subworkflow_done']['2_seq_cluster']
 intermediates = config['paths']['intermediates_dir']
-lib_path = config['paths']['lib'] # TODO put in config, match to sub0, must contain folder "rcsb"
+lib_path = config['paths']['lib'] 
 
 pdb_index = os.path.join(lib_path, 'pdb_index.txt')
 all_homodimers = os.path.join(intermediates, 'check_pairs', 'all_homodimers.txt')
@@ -24,6 +24,7 @@ if config.get('test'):
 max_threads = config['workflow_params']['max_threads']
 seq_cluster_id = config['workflow_params']['seq_cluster_id']
 
+mmseqs_exe = config['exe']['mmseqs']
 
 outfile = {
     'fasta': {
@@ -149,7 +150,7 @@ rule run_seq_cluster:
             mmseqs_cluster_tsv, _ = run_mmseqs_cluster(  infasta=input.fasta, 
                                                          outprefix=outpref,
                                                          seq_id=seq_cluster_id, 
-                                                         mmseqs_exe='mmseqs', 
+                                                         mmseqs_exe=mmseqs_exe, 
                                                          cores=threads          )
 
             # read membership relationships from mmseqs output

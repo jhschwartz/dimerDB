@@ -13,9 +13,9 @@ import tmscore_database as TMDB
 import unredundant as unred
 from wrap_tmscore import calculate_many_dimers_TM_score
 
-subworkflow_done = config['workflow']['3_rm_structural_redundancy_done']
+subworkflow_done = config['subworkflow_done']['3_rm_structural_redundancy']
 intermediates = config['paths']['intermediates_dir']
-lib_path = config['paths']['lib'] # TODO put in config, match to sub0, must contain folder "rcsb"
+lib_path = config['paths']['lib']
 
 tm_distances_database = config['paths']['tmscore_db']
 
@@ -23,8 +23,9 @@ tm_distances_database = config['paths']['tmscore_db']
 max_threads = config['workflow_params']['max_threads']
 cluster_thresh = config['workflow_params']['dimer_clustering_threshold']
 
+usalign_exe = config['exe']['usalign']
 
-cl_base = os.path.join(intermediates, 'cluster', 'seq_cluster')
+cl_base = os.path.join(intermediates, 'cluster', 'seq_clusters')
 outfile = {
     'cluster_index': os.path.join(intermediates, 'cluster', 'cluster_index.txt'), 
     'calc_dists_stored_done': os.path.join(intermediates, 'cluster', 'calcs_stored.done'),
@@ -152,7 +153,7 @@ rule compute_distances:
 
         ## STEP 2: perform calc
         scores = calculate_many_dimers_TM_score(  dimer_pairs=dimer_pairs_need_calc, 
-                                                  usalign_exe='bin/USalign/USalign',
+                                                  usalign_exe=usalign_exe,
                                                   lib_path=lib_path,
                                                   cores=threads                      )
 

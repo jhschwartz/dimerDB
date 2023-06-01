@@ -1,6 +1,10 @@
 paths:
     intermediates_dir: intermediates
     lib: lib
-workflow:
-    4_prep_webserver_data_done: 4.test.done
 test: True
+subworkflow_done:
+    4_prep_final_data: intermediates/sub4.done
+exe:
+    cif2pdb: bin/USalign/cif2pdb
+    mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
+    usalign: bin/USalign/USalign

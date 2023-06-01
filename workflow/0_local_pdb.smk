@@ -8,28 +8,32 @@ configfile: 'config.yaml'
 
 sys.path.append('scripts')
 from parallel_convert_split_cif import parallel_convert_split_rename_cifs, fill_empty_pdb
-from tar_pdb_chains import tar_pdb_chains
 from generate_rcsb_index import generate_rcsb_index
 
-subworkflow_done = config['workflow']['0_local_pdb_done']
+subworkflow_done = config['subworkflow_done']['0_local_pdb']
 
 files = config['paths']['intermediates_dir']
-tar_pdb_parent_dir = config['paths']['pdb_tar_lib']
+lib = config['paths']['lib']
 
-assemblies_lib = f'{files}/sub0/no_sample/assemblies' # TODO move to config 
-assemblies_download_done = f'{files}/sub0/no_sample/assemblies_download.done'
-assemblies_ungzip_done = f'{files}/sub0/no_sample/assemblies_ungzip.done'
-split_renamed_all_chains_done = f'{files}/sub0/no_sample/split+renamed.done'
-tar_chainfiles_done = f'{files}/sub0/no_sample/chains_pdb_tar.done'
-chains_index_file = f'{assemblies_lib}/index_pdb.txt' # TODO move to config for later use
-empty_pdbs_list = f'{files}/sub0/no_sample/initially_empty_chain_pdbs'
-empty_files_filled_done = f'{files}/sub0/no_sample/filled_init_empty_pdbs.done'
+cif2pdb_exe = config['exe']['cif2pdb']
+
+outfile = {
+    'assemblies_dir': os.path.join(lib, 'rcsb'),
+    'chains_index': os.path.join(lib, 'pdb_index.txt'),
+    'empty_pdbs': os.path.join(files, 'sub_0', 'initially_empty_pdbs.txt'),
+    'done': {
+        'rsync': os.path.join(files, 'sub_0', 'assemblies_download.done'),
+        'ungzip': os.path.join(files, 'sub_0', 'assemblies_ungzip.done'),
+        'split': os.path.join(files, 'sub_0', 'split_rename.done'),
+        'fill_empty': os.path.join(files, 'sub_0', 'filled_init_empty_pdbs.done')
+    }
+}
 
 
 localrules: all
 rule all:
     input: 
-        done = empty_files_filled_done
+        done = outfile['done']['fill_empty']
     output:
         done = subworkflow_done
     run:
@@ -42,11 +46,11 @@ rule all:
 localrules: download_assemblies
 rule download_assemblies:
     output:
-        done = assemblies_download_done
+        done = outfile['done']['rsync']
     shell:
         ''' 
         rsync -rlpt -v -z -q --delete --port=33444 \
-        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ {assemblies_lib};
+        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ {outfile['assemblies_dir']};
         touch {output.done};
         '''
         
@@ -59,16 +63,16 @@ rule download_assemblies:
 
 rule ungzip_assemblies:
     input:
-        done = assemblies_download_done
+        done = outfile['done']['rsync']
     output:
-        done = assemblies_ungzip_done
+        done = outfile['done']['ungzip']
     threads: 32 
     resources:
         time = '12:00:00',
         mem_mb = '500000'
     shell:
         '''
-        scripts/parallel_ungzip_all.sh {assemblies_lib} {threads} 1000;
+        scripts/parallel_ungzip_all.sh {outfile['assemblies_dir']} {threads} 1000;
         touch {output.done};
         '''
         
@@ -80,17 +84,16 @@ rule ungzip_assemblies:
 
 rule split_rename_chains:
     input:
-        done = assemblies_ungzip_done
+        done = outfile['done']['ungzip']
     output:
-        done = split_renamed_all_chains_done
+        done = outfile['done']['split']
     threads: 32 
     resources:
        mem_mb = '500000',
        time = '24:00:00'
     run:
-        exe = os.path.join('bin', 'USalign', 'cif2pdb')
-        parallel_convert_split_rename_cifs(parent_dir=assemblies_lib,
-                                           cif2pdb_exe=exe,
+        parallel_convert_split_rename_cifs(parent_dir=outfile['assemblies_dir'],
+                                           cif2pdb_exe=cif2pdb_exe,
                                            threads=threads
                                            )
         shell(''' touch {output.done} ''')
@@ -102,15 +105,15 @@ rule split_rename_chains:
 
 rule index_chains_pdb:
     input:
-        done = split_renamed_all_chains_done
+        done = outfile['done']['split']
     output:
-        indexfile = chains_index_file,
-        empty_files_txt = empty_pdbs_list
+        indexfile = outfile['chains_index'],
+        empty_files_txt = outfile['empty_pdbs']
     threads: 1
     resources:
         time = '4:00:00'
     run:
-        empty_files = generate_rcsb_index(rcsb_path=assemblies_lib, index_file=output.indexfile)
+        empty_files = generate_rcsb_index(rcsb_path=outfile['assemblies_dir'], index_file=output.indexfile)
         with open(output.empty_files_txt, 'w') as f:
             for ef in empty_files:
                 f.write(f'{ef}\n')
@@ -120,18 +123,17 @@ rule index_chains_pdb:
 
 rule fill_empty_pdb_files:
     input:
-        empty_files_txt = empty_pdbs_list
+        empty_files_txt = outfile['empty_pdbs']
     output:
-        done = empty_files_filled_done
+        done = outfile['done']['fill_empty']
     threads: 1
     resources:
         mem_mb = '15000'
     run:
-        exe = os.path.join('bin', 'USalign', 'cif2pdb')
         with open(input.empty_files_txt, 'rb') as f:
             for line in f:
                 empty_file = line.strip()
-                fill_empty_pdb(filepath=empty_file, cif2pdb_exe=exe) 
+                fill_empty_pdb(filepath=empty_file, cif2pdb_exe=cif2pdb_exe) 
         shell(''' touch {output.done} ''')
             
 

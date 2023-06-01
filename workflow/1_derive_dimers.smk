@@ -15,9 +15,9 @@ sys.path.append('bin/check_contact')
 from check_contact import check_contact_many_parallel
 from align_tools import calc_nwalign_glocal
 
-subworkflow_done = config['workflow']['1_derive_dimers_done']
+subworkflow_done = config['subworkflow_done']['1_derive_dimers']
 intermediates = config['paths']['intermediates_dir']
-lib_path = config['paths']['lib'] # TODO put in config, match to sub0, must contain folder "rcsb"
+lib_path = config['paths']['lib'] 
 
 pdb_index = os.path.join(lib_path, 'pdb_index.txt')
 
@@ -153,7 +153,7 @@ rule check_contacts:
         contactsfile = outfile['entry_template']['contacting_pairs']
     threads:
         # set threads based on number of chains in entry
-        lambda wildcards: min(math.ceil(entries_counter[wildcards.entry] / 1000), max_threads)
+        lambda wildcards: min(math.ceil(entries_counter[wildcards.entry] / 10), max_threads)
     run:
         with open(input.pairsfile, 'r') as f:
             dimers = [line.rstrip() for line in f] 

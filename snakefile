@@ -14,7 +14,7 @@ start = datetime.utcnow()
 
 
 # 0 -> output: intermediates/sub0.done
-out_sub0 = config['workflow']['0_local_pdb_done']
+out_sub0 = config['subworkflow_done']['0_local_pdb']
 subworkflow download_pdb:
     workdir:
         config['paths']['basepath']
@@ -23,7 +23,7 @@ subworkflow download_pdb:
 
 
 # 1 -> output: intermediates/sub1.done
-out_sub1 = config['workflow']['1_derive_dimers_done']
+out_sub1 = config['subworkflow_done']['1_derive_dimers']
 subworkflow derive_dimers:
     workdir:
         config['paths']['basepath']
@@ -32,7 +32,7 @@ subworkflow derive_dimers:
 
 
 # 2 -> output: intermediates/sub2.done
-out_sub2 = config['workflow']['2_seq_cluster_done']
+out_sub2 = config['subworkflow_done']['2_seq_cluster']
 subworkflow seq_cluster:
     workdir:
         config['paths']['basepath']
@@ -41,7 +41,7 @@ subworkflow seq_cluster:
 
 
 # 3 -> output: intermediates/sub3.done
-out_sub3 = config['workflow']['3_rm_structural_redundancy_done']
+out_sub3 = config['subworkflow_done']['3_rm_structural_redundancy']
 subworkflow rm_structural_redundancy:
     workdir:
         config['paths']['basepath']
@@ -51,7 +51,7 @@ subworkflow rm_structural_redundancy:
 
 
 # 4 -> output: intermediates/sub4.done
-out_sub4 = config['workflow']['4_prep_final_data_done']
+out_sub4 = config['subworkflow_done']['4_prep_final_data']
 subworkflow prep_final_data:
     workdir:
         config['paths']['basepath']

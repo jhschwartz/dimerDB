@@ -22,12 +22,12 @@ class TestGenerateRcsbIndex(unittest.TestCase):
             generate_rcsb_index(rcsb_path, index_file)
             with open(index_file) as f:
                 pdbs = [line.strip() for line in f]
-            expected = ['6qle-a1-m1-cH.pdb', 
-                        '6qle-a4-m2-cN.pdb',
-                        '7a6w-a1-m1-cAAA.pdb',
-                        '7a6w-a1-m42-cAAA.pdb',
-                        '7a6w-a2-m42-cAAA.pdb']
-            self.assertEqual(expected, pdbs)
+            expected = ['ql/6qle-a1-m1-cH.pdb', 
+                        'ql/6qle-a4-m2-cN.pdb',
+                        'a6/7a6w-a1-m1-cAAA.pdb',
+                        'a6/7a6w-a1-m42-cAAA.pdb',
+                        'a6/7a6w-a2-m42-cAAA.pdb']
+            self.assertEqual(sorted(expected), pdbs)
 
 
 
@@ -43,12 +43,12 @@ class TestGenerateRcsbIndex(unittest.TestCase):
 
             with open(index_file) as f:
                 pdbs = [line.strip() for line in f]
-            expected_pdbs = ['6qle-a1-m1-cH.pdb',
-                        '6qle-a4-m2-cN.pdb',
-                        '7a6w-a1-m1-cAAA.pdb',
-                        '7a6w-a1-m42-cAAA.pdb',
-                        '7a6w-a2-m42-cAAA.pdb']
+            expected_pdbs = ['ql/6qle-a1-m1-cH.pdb', 
+                        'ql/6qle-a4-m2-cN.pdb',
+                        'a6/7a6w-a1-m1-cAAA.pdb',
+                        'a6/7a6w-a1-m42-cAAA.pdb',
+                        'a6/7a6w-a2-m42-cAAA.pdb']
 
             self.assertEqual(expected_missing, missing_files)
-            self.assertEqual(expected_pdbs, pdbs)
+            self.assertEqual(sorted(expected_pdbs), pdbs)
 

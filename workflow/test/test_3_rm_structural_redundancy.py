@@ -36,7 +36,7 @@ class TestSubworkflow3(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule, lib, intermediates) as tmpsnake:
             outinter = os.path.join(os.path.dirname(tmpsnake), 'intermediates')
             outlib = os.path.join(os.path.dirname(tmpsnake), 'lib')
-            outclusts = [os.path.join(outinter, 'cluster', 'seq_cluster', c) for c in seq_clusters]
+            outclusts = [os.path.join(outinter, 'cluster', 'seq_clusters', c) for c in seq_clusters]
 
             # check that lookup file is empty:
             for result_lookup in [os.path.join(c, 'dist_lookup.tsv') for c in outclusts]:
@@ -115,7 +115,7 @@ class TestSubworkflow3(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule, lib, intermediates) as tmpsnake:
             outinter = os.path.join(os.path.dirname(tmpsnake), 'intermediates')
             outlib = os.path.join(os.path.dirname(tmpsnake), 'lib')
-            outclusts = [os.path.join(outinter, 'cluster', 'seq_cluster', c) for c in seq_clusters]
+            outclusts = [os.path.join(outinter, 'cluster', 'seq_clusters', c) for c in seq_clusters]
 
 
             # check that lookup results are correct:
@@ -199,7 +199,7 @@ class TestSubworkflow3(unittest.TestCase):
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule, lib, intermediates) as tmpsnake:
             outinter = os.path.join(os.path.dirname(tmpsnake), 'intermediates')
             outlib = os.path.join(os.path.dirname(tmpsnake), 'lib')
-            outclusts = [os.path.join(outinter, 'cluster', 'seq_cluster', c) for c in seq_clusters]
+            outclusts = [os.path.join(outinter, 'cluster', 'seq_clusters', c) for c in seq_clusters]
 
             # check that lookup files not empty
             for result_lookup in [os.path.join(c, 'dist_lookup.tsv') for c in outclusts]:

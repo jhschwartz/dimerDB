@@ -1,9 +1,13 @@
 paths:
     intermediates_dir: intermediates
     lib: lib
-workflow:
-    2_derive_dimers_done: 2.test.done
 workflow_params:
     max_threads: 32
     seq_cluster_id: 0.9
 test: True
+subworkflow_done:
+    2_seq_cluster: intermediates/sub2.done
+exe:
+    cif2pdb: bin/USalign/cif2pdb
+    mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
+    usalign: bin/USalign/USalign
