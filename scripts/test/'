@@ -1,0 +1,28 @@
+import os
+import sys
+sys.path.append('..')
+
+import unittest
+import wrap_tmscore
+
+
+import pathlib
+test_dir = pathlib.Path(__file__).parent.resolve()
+data_dir = f'{test_dir}/data/wrap_tmscore'
+lib_path = os.path.join(data_dir, 'lib')
+
+
+pdbshorter = os.path.join(data_dir, '4fb8-a1-m1-cB.pdb')
+pdblonger = os.path.join(data_dir, '4fb8-a1-m1-cA.pdb')
+
+
+class TestAlignTools(unittest.TestCase):
+
+    def test_nwalign_glocal_refshorter(self):
+
+        pass
+    
+    
+    def test_nwalign_glocal_reflonger(self):
+
+        pass

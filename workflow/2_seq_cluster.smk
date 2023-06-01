@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 from sortedcontainers import SortedSet
+from datetime import datetime
 
 configfile: 'config.yaml'
 
@@ -50,7 +51,9 @@ rule all:
     output:
         done = subworkflow_done
     run:
-        shell(''' touch {output.done} ''')
+        with open(output.done, 'w') as f:
+            f.write('Subworkflow 2 done at ')
+            f.write(str(datetime.utcnow()))
 #### END RULE ALL TARGETS
 # defining begin/end of rule all in comments is necessary for unittesting
 

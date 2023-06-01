@@ -62,6 +62,9 @@ class TestSubworkflow3(unittest.TestCase):
             # check resolu
             self.assertTrue(os.path.exists(os.path.join(outinter, 'resolu.idx')))
 
+            # check methods
+            self.assertTrue(os.path.exists(os.path.join(outinter, 'pdb_entry_type.txt')))
+
             # check cluster results
             with open(os.path.join(outclusts[0], 'representatives.txt'), 'r') as f:
                 line = f.read().strip()
@@ -138,6 +141,9 @@ class TestSubworkflow3(unittest.TestCase):
             
             # check resolu
             self.assertTrue(os.path.exists(os.path.join(outinter, 'resolu.idx')))
+
+            # check methods
+            self.assertTrue(os.path.exists(os.path.join(outinter, 'pdb_entry_type.txt')))
 
             # check cluster results
             with open(os.path.join(outclusts[0], 'representatives.txt'), 'r') as f:
@@ -236,6 +242,9 @@ class TestSubworkflow3(unittest.TestCase):
             
             # check resolu
             self.assertTrue(os.path.exists(os.path.join(outinter, 'resolu.idx')))
+
+            # check methods
+            self.assertTrue(os.path.exists(os.path.join(outinter, 'pdb_entry_type.txt')))
 
             # check cluster results
             with open(os.path.join(outclusts[0], 'representatives.txt'), 'r') as f:

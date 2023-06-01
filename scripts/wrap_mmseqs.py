@@ -30,7 +30,8 @@ def run_mmseqs_cluster(infasta, outprefix, seq_id, mmseqs_exe, cores=1):
 
     with tempfile.TemporaryDirectory() as tmpdir:
         cmd = f'{mmseqs_exe} easy-cluster {infasta} {outprefix} {tmpdir} --min-seq-id {seq_id_scaled} --cov-mode 0 --threads {cores}'
-        subprocess.run(cmd, shell=True, check=True)
+        with open(os.devnull, 'w') as NULL: # NULL to silence stdout
+            subprocess.run(cmd, shell=True, check=True, stdout=NULL, stderr=subprocess.STDOUT)
         
         cluster_tsv = f'{outprefix}_cluster.tsv'
         reps_fasta = f'{outprefix}_rep_seq.fasta'

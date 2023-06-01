@@ -57,7 +57,7 @@ def get_cluster_dimers(cluster_num, cluster_labels, all_dimers):
 
 
 
-def choose_rep(dimers, all_dimers, dist_mat, lib_path, resolu_path):
+def choose_rep(dimers, all_dimers, dist_mat, lib_path, resolu_path, methods_file):
     '''
     For some set of dimers (intended to be a structural cluster),
     chooses one dimer to represent the group. This follows the
@@ -91,6 +91,10 @@ def choose_rep(dimers, all_dimers, dist_mat, lib_path, resolu_path):
     :param resolu_path: str, the path to the file from RCSB called
                           "resolu.idx" that describes the resolution
                           of PDB entries that are x-ray-derived.
+    :param methods_file: str, the path to the file from RCSB called
+                          "pdb_entry_type.txt" that describes the
+                          experimental method of each PDB entry
+                          ("diffraction", "EM", "NMR" or "other")
 
     :returns: tuple, of two strings, describing the dimer which
                 represents the set of dimers given.
@@ -122,8 +126,7 @@ def choose_rep(dimers, all_dimers, dist_mat, lib_path, resolu_path):
     #### CRITERION 2 ####
     xray_dimers = []
     for dimer in choices:
-        res = rep_helpers.get_dimer_avg_resolu(dimer, resolu_path)
-        if res != -1.0: # is xray
+        if rep_helpers.dimer_is_xray(dimer, methods_file):
             xray_dimers.append(dimer)
 
     if len(xray_dimers) > 0:

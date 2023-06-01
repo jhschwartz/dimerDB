@@ -1,5 +1,6 @@
 import os
 import sys 
+from datetime import datetime
 
 configfile: 'config.yaml'
 
@@ -62,10 +63,10 @@ rule all:
         all_homodimers = outfile['all']['homodimers']
     output:
         done = subworkflow_done
-    shell:
-        '''
-        touch {output.done};
-        '''
+    run:
+        with open(output.done, 'w') as f:
+            f.write('Subworkflow 1 done at ')
+            f.write(str(datetime.utcnow()))
 
 
 

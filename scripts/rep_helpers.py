@@ -113,3 +113,18 @@ def get_dimer_avg_resolu(dimer, resolu_path):
 
 
 
+def dimer_is_xray(dimer, entry_methods_file):
+    c1, _ = name_pdb.dimer2chains(dimer)
+    pdb, _, _ , _ = name_pdb.read_chain_names(c1)
+    
+    with open(entry_methods_file, 'r') as f:
+        for line in f:
+            if line.startswith(pdb):
+                _, _, method = line.split()
+                if method == 'diffraction':
+                    return True
+                return False
+    
+    raise ValueError(f'reached end of {entry_methods_file} and could not find entry {pdb} of {dimer}')
+
+

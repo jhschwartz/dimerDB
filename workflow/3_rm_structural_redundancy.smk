@@ -3,6 +3,7 @@ import sys
 import itertools
 import numpy as np
 from sortedcontainers import SortedSet
+from datetime import datetime
 
 configfile: 'config.yaml'
 
@@ -34,7 +35,8 @@ outfile = {
         'template_reps_list': os.path.join(cl_base, '{cluster_name}', 'representatives.txt'),
         'template_reps_table': os.path.join(cl_base, '{cluster_name}', 'representation.tsv'),
     },
-    'resolu': os.path.join(intermediates, 'resolu.idx')
+    'resolu': os.path.join(intermediates, 'resolu.idx'),
+    'methods': os.path.join(intermediates, 'pdb_entry_type.txt')
 }
 
 
@@ -71,10 +73,10 @@ rule all:
         outfile['calc_dists_stored_done']
     output:
         done = subworkflow_done
-    shell:
-        '''
-        touch {output.done};
-        '''
+    run:
+        with open(output.done, 'w') as f:
+            f.write('Subworkflow 3 done at ')
+            f.write(str(datetime.utcnow()))
 
 
 
@@ -175,6 +177,17 @@ rule download_resolu_file:
 
 
 
+rule download_methods_file:
+    '''
+    downloads pdb_entry_type from RCSB for getting structures' experiment
+    type. Used by rule cluster_poses_and_choose_rep to preference xray structures.
+    '''
+    output:
+        methods = outfile['methods']
+    run:
+        shell(''' wget -O {output.methods} https://files.wwpdb.org/pub/pdb/derived_data/pdb_entry_type.txt ''')
+        if config.get('test'):
+            shell(''' echo "3cc3\tprot\tdiffraction" >> {output.methods} ''')
 
 
 
@@ -192,7 +205,8 @@ rule cluster_poses_and_choose_rep:
     input:
         dists_lookup = outfile['seq_cluster']['template_dists_lookup'],
         dists_calc = outfile['seq_cluster']['template_dists_calc'],
-        resolu = outfile['resolu']
+        resolu = outfile['resolu'],
+        methods = outfile['methods']
     output:
         reps_txt = outfile['seq_cluster']['template_reps_list'],
         reps_tsv = outfile['seq_cluster']['template_reps_table']
@@ -253,7 +267,8 @@ rule cluster_poses_and_choose_rep:
                                      all_dimers=dimers_of_seq_clust, 
                                      dist_mat=dist_mat, 
                                      lib_path=lib_path, 
-                                     resolu_path=input.resolu         )
+                                     resolu_path=input.resolu,
+                                     methods_file=input.methods       )
             reps[c_num] = rep
 
         # write reps_txt

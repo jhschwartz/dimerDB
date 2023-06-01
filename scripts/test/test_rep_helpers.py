@@ -13,7 +13,10 @@ test_dir = pathlib.Path(__file__).parent.resolve()
 data_dir = f'{test_dir}/data/rep_helpers'
 lib_path = os.path.join(data_dir, 'lib')
 
-resolu_path = os.path.join(data_dir, 'resolu.idx')
+resolu_path = os.path.join(lib_path, 'resolu.idx')
+methods_file = os.path.join(lib_path, 'pdb_entry_type.txt')
+
+
 
 class TestRepHelpers(unittest.TestCase):
 
@@ -130,4 +133,25 @@ class TestRepHelpers(unittest.TestCase):
         result = rep_helpers.get_dimer_avg_resolu('4znf-a2-m4-cZ_1acz-a1-m1-cA', resolu_path)
         expected = -1.0
         self.assertEqual(result, expected)
+
+
+    def test_dimer_is_xray(self):
+        dimer = '1b6q-a1-m1-cA_1b6q-a1-m1-cB'
+        self.assertTrue(rep_helpers.dimer_is_xray(dimer, methods_file))
+
+
+    def test_dimer_em_is_not_xray(self):
+        dimer = '7jfo-a1-m1-cA_7jfo-a1-m1-cB'
+        self.assertFalse(rep_helpers.dimer_is_xray(dimer, methods_file))
+
+
+    def test_dimer_nmr_is_not_xray(self):
+        dimer = '4znf-a2-m4-cZ_1acz-a1-m1-cA'
+        self.assertFalse(rep_helpers.dimer_is_xray(dimer, methods_file))
+
+
+    def test_dimer_other_is_not_xray(self):
+        dimer = '4znn-a2-m4-cZ_4znn-a1-m1-cA'
+        self.assertFalse(rep_helpers.dimer_is_xray(dimer, methods_file))
+
 

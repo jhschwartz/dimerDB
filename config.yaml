@@ -1,8 +1,17 @@
 paths:
-    basepath: /nfs/turbo/umms-petefred/jaschwa/dimerDB-optimize-dev
-    pipeline_files: /nfs/turbo/umms-petefred/jaschwa/dimerDB-optimize-dev/intermediates
+    basepath: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev
+    intermediates_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/intermediates
     pdb_lib: /nfs/turbo/umms-petefred/jaschwa/dimerDB-optimize-dev/lib/chain
     pdb_tar_lib: /nfs/turbo/umms-petefred/jaschwa/dimerDB-optimize-dev/lib/tar
 
+workflow_params:
+    define_contact_max_dist_angstroms: 8
+    define_contact_min_num_residue_pairs: 10
+
+
 workflow:
     0_local_pdb_done: intermediates/sub0.done         
+    1_derive_dimers_done: intermediates/sub1.done         
+    2_seq_cluster_done: intermediates/sub2.done         
+    3_rm_structural_redundancy_done: intermediates/sub3.done         
+    4_prep_final_data_done: intermediates/sub4.done         

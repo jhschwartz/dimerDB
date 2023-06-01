@@ -2,6 +2,7 @@ import os
 import sys 
 import pickle
 import tarfile
+from datetime import datetime
 
 configfile: 'config.yaml'
 
@@ -12,7 +13,7 @@ from generate_rcsb_index import generate_rcsb_index
 
 subworkflow_done = config['workflow']['0_local_pdb_done']
 
-files = config['paths']['pipeline_files']
+files = config['paths']['intermediates_dir']
 tar_pdb_parent_dir = config['paths']['pdb_tar_lib']
 
 assemblies_lib = f'{files}/sub0/no_sample/assemblies' # TODO move to config 
@@ -31,11 +32,10 @@ rule all:
         done = empty_files_filled_done
     output:
         done = subworkflow_done
-    shell:
-        '''
-        touch {output.done}
-        '''
-
+    run:
+        with open(output.done, 'w') as f:
+            f.write('Subworkflow 0 done at ')
+            f.write(str(datetime.utcnow()))
 
 
 
