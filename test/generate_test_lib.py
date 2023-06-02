@@ -20,11 +20,11 @@ def generate_test_lib(source_lib, test_entries_file, dest_lib):
     for te in test_entries:
         div = te[1:3]
         os.makedirs(f'{dest_lib}/rcsb/{div}', exist_ok=True)
-        for cif in glob.iglob(f'{source_lib}/rcsb/{div}/{te}*.cif.gz'):
+        for cif in glob.iglob(f'{source_lib}/rcsb/{div}/{te}*.cif'):
             shutil.copy(cif, f'{dest_lib}/rcsb/{div}')
 
     # ungzip
-    subprocess.run(f'../scripts/parallel_ungzip_all.sh {dest_lib}/rcsb 8 100', shell=True, check=True)
+    #subprocess.run(f'../scripts/parallel_ungzip_all.sh {dest_lib}/rcsb 8 100', shell=True, check=True)
 
     # split and name
     parallel_convert_split_rename_cifs(f'{dest_lib}/rcsb', '../bin/USalign/cif2pdb', 8)
