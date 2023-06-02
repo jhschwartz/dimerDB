@@ -47,14 +47,14 @@ class TestWrapMMseqs(unittest.TestCase):
 
 
     def test_read_reps_30(self):
-        expected = ['A0A086N7H4', 'A0A418GFQ3', 'A0A484Y3A2', 'K7B3U4', 'O95905', 'P04439', 'P08246', 'Q5RCA9']
+        expected = ['A0A086N7H4', 'A0A0E2LDM5', 'K7B3U4', 'O95905', 'P04439', 'P05556', 'P08246']
         tsv = os.path.join(datadir, 'expected30.tsv')
         result = derive_mmseqs_reps_from_tsv(tsv)
         self.assertEqual(expected, result)
 
 
     def test_read_reps_80(self):
-        expected = ['A0A086N7H4', 'A0A0Q5HG13', 'A0A2K5L455', 'A0A418GFQ3', 'A0A484Y3A2', 'A0A4Q1R4Z3', 'A0A5N3WSI5', 'P04439', 'P08246', 'Q5RCA9']
+        expected = ['A0A086N7H4', 'A0A0E2LDM5', 'A0A0Q5HG13', 'A0A4Q1R4Z3', 'K7B3U4', 'O95905', 'P04439', 'P05556', 'P08246']
         tsv = os.path.join(datadir, 'expected80.tsv')
         result = derive_mmseqs_reps_from_tsv(tsv)
         self.assertEqual(expected, result)

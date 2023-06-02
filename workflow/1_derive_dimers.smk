@@ -70,6 +70,7 @@ rule all:
         with open(output.done, 'w') as f:
             f.write('Subworkflow 1 done at ')
             f.write(str(datetime.utcnow()))
+            f.write('\n')
 
 
 
@@ -87,6 +88,7 @@ rule write_chains:
     '''
     output:
         chainsfile_div = outfile['div']['chains']
+    group: 'div_group'
     run:
         # pdb_index is pre-sorted
         with open(pdb_index, 'r') as indexfile, open(output.chainsfile_div, 'w') as chainsfile:
@@ -113,6 +115,7 @@ rule pair_possible_contacting_chains:
         chainsfile_div = outfile['div']['chains']
     output:
         pairsfile_div = outfile['div']['all_chain_pairs']
+    group: 'div_group'
     run:
         with open(input.chainsfile_div, 'r') as f:
             chains = [line.rstrip() for line in f]
@@ -147,6 +150,7 @@ rule check_contacts:
         pairsfile_div = outfile['div']['all_chain_pairs']
     output:
         contactsfile_div = outfile['div']['dimers']
+    group: 'div_group'
     threads: 8 
     run:
         with open(input.pairsfile_div, 'r') as f:
@@ -182,6 +186,7 @@ rule calc_dimer_seq_ids:
         contactsfile_div = outfile['div']['dimers']
     output:
         dimer_seq_ids_file = outfile['div']['dimer_seq_ids']
+    group: 'div_group'
     threads: 8
     run:
         with open(input.contactsfile_div, 'r') as fi:

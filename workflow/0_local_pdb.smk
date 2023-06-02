@@ -40,6 +40,7 @@ rule all:
         with open(output.done, 'w') as f:
             f.write('Subworkflow 0 done at ')
             f.write(str(datetime.utcnow()))
+            f.write('\n')
 
 
 

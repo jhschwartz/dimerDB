@@ -4,7 +4,7 @@ paths:
     tmscore_db: lib/tmdb_half
 workflow_params:
     max_threads: 16
-    seq_cluster_id: 0.9
+    seq_cluster_id: 90
     dimer_clustering_threshold: 0.25
 test: True
 subworkflow_done:

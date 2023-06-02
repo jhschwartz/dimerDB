@@ -3,7 +3,7 @@ paths:
     lib: lib
 workflow_params:
     max_threads: 32
-    seq_cluster_id: 0.9
+    seq_cluster_id: 90
 test: True
 subworkflow_done:
     2_seq_cluster: intermediates/sub2.done

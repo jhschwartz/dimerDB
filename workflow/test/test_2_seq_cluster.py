@@ -66,7 +66,7 @@ class TestSubworkflow2Rules(unittest.TestCase):
 
     def test_run_seq_cluster(self):
         rule = 'run_seq_cluster'
-        clust1 = '6qle-a1-m1-cN-42'
+        clust1 = '6qle-a1-m1-cN'
         clust2 = '7a6w-a1-m1-cAAA'
         expected_cluster_index = os.path.join(data_dir, 'expected_intermediates', 
                                     'cluster', 'cluster_index.txt')

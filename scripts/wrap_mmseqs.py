@@ -29,7 +29,7 @@ def run_mmseqs_cluster(infasta, outprefix, seq_id, mmseqs_exe, cores=1):
     seq_id_scaled = float(seq_id) / 100
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        cmd = f'{mmseqs_exe} easy-cluster {infasta} {outprefix} {tmpdir} --min-seq-id {seq_id_scaled} --cov-mode 0 --threads {cores}'
+        cmd = f'{mmseqs_exe} easy-cluster {infasta} {outprefix} {tmpdir} --min-seq-id {seq_id_scaled} --cov-mode 1 --threads {cores}'
         with open(os.devnull, 'w') as NULL: # NULL to silence stdout
             subprocess.run(cmd, shell=True, check=True, stdout=NULL, stderr=subprocess.STDOUT)
         

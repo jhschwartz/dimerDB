@@ -162,6 +162,7 @@ rule all:
         with open(output.done, 'w') as f:
             f.write('Subworkflow 4 done at ')
             f.write(str(datetime.utcnow()))
+            f.write('\n')
 #### END RULE ALL TARGETS
 # defining begin/end of rule all in comments is necessary for unittesting
 
