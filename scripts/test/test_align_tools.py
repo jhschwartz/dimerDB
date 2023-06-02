@@ -3,7 +3,7 @@ import sys
 sys.path.append('..')
 
 import unittest
-from align_tools import calc_nwalign_glocal
+from align_tools import calc_nwalign_glocal, parallel_calc_nwalign_glocal
 
 import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
@@ -45,4 +45,16 @@ class TestAlignTools(unittest.TestCase):
         
         with self.assertRaises(ValueError):
             calc_nwalign_glocal(USnw=exe, pdb2=pdbshorter, pdb1=pdblonger, refshorter=True, reflonger=True)
+
+
+
+    def test_parallel_nwalign_glocal(self):
+        
+        expected = [0.984, 0.984, 1.0]
+        pairs = [ (pdbshorter, pdblonger), (pdblonger, pdbshorter), (pdbshorter, pdbshorter) ]
+        result = parallel_calc_nwalign_glocal(USnw=exe, pdb_pairs=pairs, cores=2)
+
+        self.assertEqual(result, expected)
+
+                                                
 

@@ -16,7 +16,7 @@ intermediates = config['paths']['intermediates_dir']
 lib_path = config['paths']['lib'] 
 
 pdb_index = os.path.join(lib_path, 'pdb_index.txt')
-all_homodimers = os.path.join(intermediates, 'check_pairs', 'all_homodimers.txt')
+all_homodimers = os.path.join(intermediates, 'all_homodimers.txt')
 
 if config.get('test'):
     all_homodimers = os.path.join(lib_path, 'test_in_homodimers.txt')
@@ -45,6 +45,7 @@ outfile = {
 
 
 
+localrules: all
 rule all:
 #### BEGIN RULE ALL TARGETS
     input:

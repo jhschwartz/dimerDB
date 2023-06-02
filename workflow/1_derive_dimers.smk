@@ -13,7 +13,7 @@ import name_pdb
 
 sys.path.append('bin/check_contact')
 from check_contact import check_contact_many_parallel
-from align_tools import calc_nwalign_glocal
+from align_tools import parallel_calc_nwalign_glocal
 
 subworkflow_done = config['subworkflow_done']['1_derive_dimers']
 intermediates = config['paths']['intermediates_dir']
@@ -27,37 +27,40 @@ contact_max_angstroms = config['workflow_params']['define_contact_max_dist_angst
 contact_min_residue_pairs = config['workflow_params']['define_contact_min_num_residue_pairs']
 max_threads = config['workflow_params']['max_threads']
 
+nw_exe = config['exe']['nwalign']
+
+
 outfile = {
     'all': {
-        'homodimers': os.path.join(intermediates, 'check_pairs', 'all_homodimers.txt')
-        #'heterodimers': os.path.join(intermediates, 'check_pairs', 'all_heterodimers.txt') 
+        'homodimers': os.path.join(intermediates, 'all_homodimers.txt'),
+        #'heterodimers': os.path.join(intermediates, 'all_heterodimers.txt'),
+#        'dimer_seq_ids': os.path.join(lib_path, 'pairs_info', 'dimer_seq_ids.tsv'),
+#        'contacting_pairs': os.path.join(lib_path, 'pairs_info', 'contacting_pairs.txt'),
+#        'non_contacting_pairs': os.path.join(lib_path, 'pairs_info', 'non_contacting_pairs.txt'),
     },
-    'entry_template': {
-        'chains': intermediates+'/check_pairs/div/{div}/{entry}/chains.txt',
-        'all_chain_pairs': intermediates+'/check_pairs/div/{div}/{entry}/all_intra_assembly_chain_pairs.txt',
-        'contacting_pairs': intermediates+'/check_pairs/div/{div}/{entry}/contacting_chain_pairs.txt',
-        'homodimers': intermediates+'/check_pairs/div/{div}/{entry}/homodimers.txt'
-        #'heterodimers': intermediates+'/check_pairs/div/{div}/{entry}/heterodimers.txt' 
+    'div': {
+        'chains': os.path.join(intermediates, 'check_pairs', '{div}', 'chains.txt'),
+        'all_chain_pairs': os.path.join(intermediates, 'check_pairs', '{div}', 'intra_assembly_chain_pairs.txt'),
+        'dimers': os.path.join(intermediates, 'check_pairs', '{div}', 'dimers.txt'),
+        'dimer_seq_ids': os.path.join(intermediates, 'check_pairs', '{div}', 'dimer_seq_ids.tsv'),
     }
 }
 
 
 
-### define samples via entries and divs
-entries_counter = {}
+
+divs = set()
 with open(pdb_index, 'r') as f:
     for line in f:
         entry, _, _, _ = name_pdb.read_chain_names(line.rstrip())
-        if entry in entries_counter:
-            entries_counter[entry] += 1
-        else:
-            entries_counter[entry] = 1
-entries = list(entries_counter.keys())
-divs = [name_pdb.get_div(e) for e in entries]
+        div = name_pdb.get_div(entry)
+        divs.add(div)
+divs = list(divs)
 
 
 
 
+localrules: all
 rule all:
     input:
         all_homodimers = outfile['all']['homodimers']
@@ -75,32 +78,24 @@ rule all:
 # shadow input is pdb_index
 rule write_chains:
     '''
-    This rule, which is run only once, writes a chain.txt
-    for each pdb entry in pdb_index, listing all chains
-    discovered from pdb assemblies of that entry. This
-    is used for downstream contact-checking and dimer 
-    categorization upon the chains of each entry.
+    This rule, which is run once for each div of pdbs,
+    writes a chains.txt listing all chains discovered
+    from assemblies of entries of one div. This is used
+    downstream for contact-checking and dimer
+    categorization upon the chains of all entries of
+    each div.
     '''
     output:
-        chainsfile = expand(outfile['entry_template']['chains'], zip, div=divs, entry=entries)
+        chainsfile_div = outfile['div']['chains']
     run:
         # pdb_index is pre-sorted
-        with open(pdb_index, 'r') as f: 
-            last_entry = None
-            ofile = None
-            for line in f:
+        with open(pdb_index, 'r') as indexfile, open(output.chainsfile_div, 'w') as chainsfile:
+            for line in indexfile:
                 chain = name_pdb.name_chain_from_filename(line.rstrip())
                 entry, _, _, _ = name_pdb.read_chain_names(chain)
                 div = name_pdb.get_div(entry)
-                if entry != last_entry:
-                    last_entry = entry
-                    if ofile and not ofile.closed:
-                        ofile.close()
-                    ofile = open(outfile['entry_template']['chains'].format(div=div, entry=entry), 'w')
-                ofile.write(f'{chain}\n')
-            if ofile and not ofile.closed:
-                ofile.close()
-                 
+                if div == wildcards.div:
+                    chainsfile.write(f'{chain}\n')
 
 
 
@@ -109,24 +104,24 @@ rule write_chains:
 rule pair_possible_contacting_chains:
     '''
     This rule, which operates separately on samples that are each
-    the chains of one pdb entry, computes the combinations of
-    two chains within each assembly of a pdb entry. These pairs
-    are the pairs to check for spatial contact, and are therefore
+    the chains of all pdb entries of a div, computes the combinations
+    of two chains within each assembly of a div. These pairs are
+    the pairs to check for spatial contact, and are therefore
     possibly, but not definitely, homodimers.
     '''
     input:
-        chainsfile = outfile['entry_template']['chains']
+        chainsfile_div = outfile['div']['chains']
     output:
-        pairsfile = outfile['entry_template']['all_chain_pairs']
+        pairsfile_div = outfile['div']['all_chain_pairs']
     run:
-        with open(input.chainsfile, 'r') as f:
+        with open(input.chainsfile_div, 'r') as f:
             chains = [line.rstrip() for line in f]
 
         # 1abc_a1_m1_cA -> 1abca1
         entry_assembly = lambda fullname: ''.join(name_pdb.read_chain_names(fullname)[:2])
         chains.sort(key=entry_assembly)        
         
-        with open(output.pairsfile, 'w') as f:
+        with open(output.pairsfile_div, 'w') as f:
             for key, group in itertools.groupby(chains, key=entry_assembly):
                 chain_pairs = itertools.combinations(group, 2)
                 for cp in chain_pairs:
@@ -137,25 +132,24 @@ rule pair_possible_contacting_chains:
 
 
 
+
 # shadow input is the pdb library at {lib_path}/rcsb
 rule check_contacts:
     '''
     This rule, which operates separately on samples that are each
-    the set of same-assembly chain pairs of one pdb entry, checks
-    chain pairs for spatial contact, where contact is defined by
-    at least 10 (non-exclusive) C-beta (or C-alpha if C-beta not
-    existing for a residue) atom pairs between chains being less
-    than 8 angstroms apart. 
+    the set of same-assembly chain pairs of the pdb entries of
+    one div, checks chain pairs for spatial contact, where contact
+    is defined by at least 10 (non-exclusive) C-beta (or C-alpha if 
+    C-beta not existing for a residue) atom pairs between chains 
+    being less than 8 angstroms apart. 
     '''
     input:
-        pairsfile = outfile['entry_template']['all_chain_pairs']
+        pairsfile_div = outfile['div']['all_chain_pairs']
     output:
-        contactsfile = outfile['entry_template']['contacting_pairs']
-    threads:
-        # set threads based on number of chains in entry
-        lambda wildcards: min(math.ceil(entries_counter[wildcards.entry] / 10), max_threads)
+        contactsfile_div = outfile['div']['dimers']
+    threads: 8 
     run:
-        with open(input.pairsfile, 'r') as f:
+        with open(input.pairsfile_div, 'r') as f:
             dimers = [line.rstrip() for line in f] 
            
         path_pairs = []
@@ -166,9 +160,9 @@ rule check_contacts:
                                                 thresh_max_dist=contact_max_angstroms, 
                                                 thresh_min_pairs=contact_min_residue_pairs, 
                                                 cores=threads, 
-                                                num_series=1000                                  )
+                                                num_series=5000                                  )
        
-        with open(output.contactsfile, 'w') as f:
+        with open(output.contactsfile_div, 'w') as f:
             for in_contact, dimer in zip(results, dimers):
                 if in_contact: 
                     f.write(f'{dimer}\n')
@@ -176,49 +170,66 @@ rule check_contacts:
 
 
 
-rule categorize_dimers:
+rule calc_dimer_seq_ids:
     '''
     This rule, which operates separately on samples that are each
-    the in-contact chains of one pdb entry, checks sequence 
-    identity between chains of a dimer to categorize each dimer
-    as either a homodimer or heterodimer. A homodimer is defined
-    as a dimer whose sequences have >= 98% glocal (both) sequence
-    identity with reference to the shorter of the two chains.
+    the in-contact chains of all pdb entries of one div, 
+    calcualtes the sequence identity between chains of a dimer.
+    Specifically, it calculates glocal sequence identity with
+    reference to the shorter chain of each dimer. 
     '''
     input:
-        contactsfile = outfile['entry_template']['contacting_pairs']
+        contactsfile_div = outfile['div']['dimers']
     output:
-        homodimersfile = outfile['entry_template']['homodimers']
-    threads: 1
+        dimer_seq_ids_file = outfile['div']['dimer_seq_ids']
+    threads: 8
     run:
-        with open(input.contactsfile, 'r') as fi, \
-                open(output.homodimersfile, 'w') as fo:
-            for line in fi:
-                dimer = line.rstrip()
-                pdb1, pdb2 = name_pdb.dimer2pdbs(dimer_name=dimer, lib_path=lib_path)
-                score = calc_nwalign_glocal('bin/USalign/NWalign', pdb1, pdb2)
-                if score >= 0.98:
-                    fo.write(line)
+        with open(input.contactsfile_div, 'r') as fi:
+            d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)
+            pdb_pairs = ( d2p(line.rstrip()) for line in fi )
+            scores = parallel_calc_nwalign_glocal(  USnw=nw_exe,
+                                                    pdb_pairs=pdb_pairs,
+                                                    cores=threads        )
+            fi.seek(0)
+            with open(output.dimer_seq_ids_file, 'w') as fo:
+                for line, score in zip(fi, scores):
+                    dimer = line.rstrip()
+                    score = round(score, 4)
+                    fo.write(f'{dimer}\t{score}\n')
 
 
 
 
-rule unify_homodimers:
+
+rule categorize_all_dimers:
     '''
-    This rule, which is run only once, combines the homodimers found
-    across pdb entries into one unified homodimers file.
+    This rule, which is run only once, uses dimer_seq_ids files
+    from all divs to create a consolidated list of homodimers.
+    A homodimer is here defined as an in-contact pair of chains
+    with glocal sequence identity, with reference to the shorter
+    chain, of >= 98%.
     '''
     input:
-        homodimer_files = expand(outfile['entry_template']['homodimers'], zip, div=divs, entry=entries)
+        dimer_seq_ids_files = expand(outfile['div']['dimer_seq_ids'], div=divs)
     output:
         all_homodimers = outfile['all']['homodimers']
-    shell:
-        '''
-        for hf in {input.homodimer_files};
-        do
-            cat $hf >> {output.all_homodimers};
-        done
+    run:
+        with open(output.all_homodimers, 'w') as fo:
 
-        sort -s --key=1.1,1.4 -o {output.all_homodimers} {output.all_homodimers};
-        '''
+            for dsi_file in input.dimer_seq_ids_files:
+
+                with open(dsi_file, 'r') as fi:
+                    for line in fi:
+                        dimer, score = line.split()
+                        if float(score) >= 0.98:
+                            fo.write(f'{dimer}\n')
+
+
+        shell('''
+
+            sort -s --key=1.1,1.4 -o {output.all_homodimers} {output.all_homodimers};
+
+                ''')
+         
+
 

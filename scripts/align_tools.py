@@ -1,5 +1,6 @@
 import subprocess
 from operator import xor
+from multiprocessing import Pool
 
 def calc_nwalign_glocal(USnw, pdb1, pdb2, refshorter=True, reflonger=False):
     if not xor(refshorter, reflonger):
@@ -18,4 +19,12 @@ def calc_nwalign_glocal(USnw, pdb1, pdb2, refshorter=True, reflonger=False):
     if refshorter:
         return float(spl[index_ID_refshorter])
     return float(spl[index_ID_reflonger])
+
+
+# this function only uses ref_shorter 
+def parallel_calc_nwalign_glocal(USnw, pdb_pairs, cores):
+    args = ( (USnw, pdb1, pdb2, True, False) for pdb1, pdb2 in pdb_pairs)
+    with Pool(processes=cores) as p:
+        scores = p.starmap(calc_nwalign_glocal, args)
+    return scores
 

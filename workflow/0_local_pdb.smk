@@ -47,10 +47,12 @@ localrules: download_assemblies
 rule download_assemblies:
     output:
         done = outfile['done']['rsync']
+    params:
+        rsync_target = outfile['assemblies_dir']
     shell:
         ''' 
-        rsync -rlpt -v -z -q --delete --port=33444 \
-        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ {outfile['assemblies_dir']};
+        rsync -rlpt -v -z -q --delete --update --port=33444 \
+        rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ {params.rsync_target};
         touch {output.done};
         '''
         
@@ -66,13 +68,15 @@ rule ungzip_assemblies:
         done = outfile['done']['rsync']
     output:
         done = outfile['done']['ungzip']
+    params:
+        assemblies = outfile['assemblies_dir']
     threads: 32 
     resources:
         time = '12:00:00',
-        mem_mb = '500000'
+        mem_mb = '20000'
     shell:
         '''
-        scripts/parallel_ungzip_all.sh {outfile['assemblies_dir']} {threads} 1000;
+        scripts/parallel_ungzip_all.sh {params.assemblies} {threads} 1000;
         touch {output.done};
         '''
         
@@ -89,7 +93,7 @@ rule split_rename_chains:
         done = outfile['done']['split']
     threads: 32 
     resources:
-       mem_mb = '500000',
+       mem_mb = '20000',
        time = '24:00:00'
     run:
         parallel_convert_split_rename_cifs(parent_dir=outfile['assemblies_dir'],

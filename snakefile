@@ -59,7 +59,7 @@ subworkflow prep_final_data:
         os.path.realpath('workflow/4_prep_final_data.smk')
 
 
-
+localrules: all
 rule all:
     input:
         download_pdb(               out_sub0 ),

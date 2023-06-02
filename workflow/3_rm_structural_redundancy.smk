@@ -67,6 +67,7 @@ def threads_func(cluster_name):
 
 
 
+localrules: all
 rule all:
     input:
         expand(outfile['seq_cluster']['template_reps_list'], cluster_name=cluster_names),

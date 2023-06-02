@@ -30,50 +30,43 @@ class TestSubworkflow1Rules(unittest.TestCase):
     def test_rule_all(self):
         rule = 'all'
 
-        expected_6qle_poss_chains = os.path.join(data_dir, 'all', 'expected_poss_chains_6qle.txt')
-        expected_7a6w_poss_chains = os.path.join(data_dir, 'all', 'expected_poss_chains_7a6w.txt')
-        expected_6qle_contacting = os.path.join(data_dir, 'all', 'expected_6qle_contacts.txt')
-        expected_7a6w_contacting = os.path.join(data_dir, 'all', 'expected_7a6w_contacts.txt') 
-        expected_6qle_homodimers = os.path.join(data_dir, 'all', 'expected_6qle_homodimers.txt')
-        expected_7a6w_homodimers = os.path.join(data_dir, 'all', 'expected_7a6w_homodimers.txt')
+        expected_ql_chains = os.path.join(data_dir, 'all', 'expected_ql_chains.txt')
+        expected_a6_chains = os.path.join(data_dir, 'all', 'expected_a6_chains.txt')
+        expected_ql_poss_chains = os.path.join(data_dir, 'all', 'expected_poss_chains_ql.txt')
+        expected_a6_poss_chains = os.path.join(data_dir, 'all', 'expected_poss_chains_a6.txt')
+        expected_ql_contacting = os.path.join(data_dir, 'all', 'expected_ql_contacts.txt')
+        expected_a6_contacting = os.path.join(data_dir, 'all', 'expected_a6_contacts.txt') 
+        expected_ql_ids = os.path.join(data_dir, 'all', 'expected_ql_ids.tsv')
+        expected_a6_ids = os.path.join(data_dir, 'all', 'expected_a6_ids.tsv')
+
         expected_all_homodimers = os.path.join(data_dir, 'all', 'expected_all_homodimers.txt') 
 
         with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule, lib) as tmpsnake:
+            outinter = os.path.join(os.path.dirname(tmpsnake), 'intermediates')
             outdir = os.path.join(os.path.dirname(tmpsnake), outname)
 
-            result_6qle_poss = os.path.join(outdir, 'div', 'ql', '6qle',
-                                                'all_intra_assembly_chain_pairs.txt')
-            result_7a6w_poss = os.path.join(outdir, 'div', 'a6', '7a6w', 
-                                                'all_intra_assembly_chain_pairs.txt')
-            self.assertTrue(filecmp.cmp(result_6qle_poss, expected_6qle_poss_chains, shallow=False))
-            self.assertTrue(filecmp.cmp(result_7a6w_poss, expected_7a6w_poss_chains, shallow=False))
+            result_ql_chains = os.path.join(outdir, 'ql', 'chains.txt')
+            result_a6_chains = os.path.join(outdir, 'a6', 'chains.txt')
+            self.assertTrue(filecmp.cmp(result_ql_chains, expected_ql_chains, shallow=False))
+            self.assertTrue(filecmp.cmp(result_a6_chains, expected_a6_chains, shallow=False))
+           
+            result_ql_poss = os.path.join(outdir, 'ql', 'intra_assembly_chain_pairs.txt')
+            result_a6_poss = os.path.join(outdir, 'a6', 'intra_assembly_chain_pairs.txt')
+            self.assertTrue(filecmp.cmp(result_ql_poss, expected_ql_poss_chains, shallow=False))
+            self.assertTrue(filecmp.cmp(result_a6_poss, expected_a6_poss_chains, shallow=False))
 
-            result_6qle_cont = os.path.join(outdir, 'div', 'ql', '6qle',
-                                                'contacting_chain_pairs.txt')
-            result_7a6w_cont = os.path.join(outdir, 'div', 'a6', '7a6w', 
-                                                'contacting_chain_pairs.txt')
-            self.assertTrue(filecmp.cmp(result_6qle_cont, expected_6qle_contacting, shallow=False))
-            self.assertTrue(filecmp.cmp(result_7a6w_cont, expected_7a6w_contacting, shallow=False))
+            result_ql_cont = os.path.join(outdir, 'ql', 'dimers.txt')
+            result_a6_cont = os.path.join(outdir, 'a6', 'dimers.txt')
+            self.assertTrue(filecmp.cmp(result_ql_cont, expected_ql_contacting, shallow=False))
+            self.assertTrue(filecmp.cmp(result_a6_cont, expected_a6_contacting, shallow=False))
 
-            result_6qle_homodimer = os.path.join(outdir, 'div', 'ql', '6qle',
-                                                'homodimers.txt')
-            result_7a6w_homodimer = os.path.join(outdir, 'div', 'a6', '7a6w', 
-                                                'homodimers.txt')
-            self.assertTrue(filecmp.cmp(result_6qle_homodimer, expected_6qle_homodimers, shallow=False))
-            self.assertTrue(filecmp.cmp(result_7a6w_homodimer, expected_7a6w_homodimers, shallow=False))
 
-            result_all_homodimers = os.path.join(outdir, 'all_homodimers.txt')
+            result_ql_ids = os.path.join(outdir, 'ql', 'dimer_seq_ids.tsv')
+            result_a6_ids = os.path.join(outdir, 'a6', 'dimer_seq_ids.tsv')
+            self.assertTrue(filecmp.cmp(result_ql_ids, expected_ql_ids, shallow=False))
+            self.assertTrue(filecmp.cmp(result_a6_ids, expected_a6_ids, shallow=False))
+
+            result_all_homodimers = os.path.join(outinter, 'all_homodimers.txt')
             self.assertTrue(filecmp.cmp(result_all_homodimers, expected_all_homodimers, shallow=False))
 
-
-    def test_rule_write_chains(self):
-        rule = 'write_chains'
-        expected_ql = os.path.join(data_dir, 'write_chains', 'expected_6qle.txt')
-        expected_a6 = os.path.join(data_dir, 'write_chains', 'expected_7a6w.txt')
-        with run_tmp_snakemake(snakefile, config, snake_exe, scripts, bin, rule, lib) as tmpsnake:
-            outdir = os.path.join(os.path.dirname(tmpsnake), outname)
-            result_ql = os.path.join(outdir, 'div', 'ql', '6qle', 'chains.txt')
-            result_a6 = os.path.join(outdir, 'div', 'a6', '7a6w', 'chains.txt')
-            self.assertTrue(filecmp.cmp(result_ql, expected_ql, shallow=False))
-            self.assertTrue(filecmp.cmp(result_a6, expected_a6, shallow=False))
 

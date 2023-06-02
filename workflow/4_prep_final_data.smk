@@ -91,7 +91,7 @@ with open(fasta_index, 'r') as f:
     # fasta_index line is like "ql/6qle-a1-m1-cH.fasta  126"
     for line in f:
         chain_fasta = line.split()[0]
-        chain_name = os.path.basename(chain_fasta).rstrip('.fasta')
+        chain_name = os.path.basename(chain_fasta).split('.fasta')[0]
         chain_length = int(line.split()[1])
         chain_lengths[chain_name] = chain_length
 
@@ -143,6 +143,7 @@ ids_for_extra = [30, 40, 50, 60, 70, 80]
 # rule all and the two rules that use wildcard samples, 
 # out_pdb_div_tar, and out_extra_clusters are defined 
 # first because their samples are defined just above
+localrules: all
 rule all:
     input:
 #### BEGIN RULE ALL TARGETS
@@ -300,7 +301,7 @@ rule out_all_seqs:
         with open(fasta_index, 'r') as f:
             for line in f:
                 path = line.split()[0]
-                chain_name = os.path.basename(path).rstrip('.fasta')
+                chain_name = os.path.basename(path).split('.fasta')[0]
                 chains_list.add(chain_name)
         write_fastas_of_chains(  chains_list=sorted(list(chains_list)), 
                                  fasta_lib=fasta_lib, 

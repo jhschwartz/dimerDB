@@ -12,3 +12,4 @@ exe:
     cif2pdb: bin/USalign/cif2pdb
     mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
     usalign: bin/USalign/USalign
+    nwalign: bin/USalign/NWalign
