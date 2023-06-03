@@ -133,6 +133,9 @@ rule compute_distances:
         dists_lookup = outfile['seq_cluster']['template_dists_lookup']
     output:
         dists_calc = outfile['seq_cluster']['template_dists_calc']
+    resources:
+        time = '24:00:00',
+        mem_mb = '5000'
     threads: 
         lambda wildcards: threads_func(wildcards.cluster_name) 
     run:

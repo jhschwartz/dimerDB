@@ -88,7 +88,7 @@ rule write_chains:
     '''
     output:
         chainsfile_div = outfile['div']['chains']
-    group: 'div_group'
+    #group: 'div_group'
     run:
         # pdb_index is pre-sorted
         with open(pdb_index, 'r') as indexfile, open(output.chainsfile_div, 'w') as chainsfile:
@@ -115,7 +115,7 @@ rule pair_possible_contacting_chains:
         chainsfile_div = outfile['div']['chains']
     output:
         pairsfile_div = outfile['div']['all_chain_pairs']
-    group: 'div_group'
+    #group: 'div_group'
     run:
         with open(input.chainsfile_div, 'r') as f:
             chains = [line.rstrip() for line in f]
@@ -150,8 +150,11 @@ rule check_contacts:
         pairsfile_div = outfile['div']['all_chain_pairs']
     output:
         contactsfile_div = outfile['div']['dimers']
-    group: 'div_group'
+    #group: 'div_group'
     threads: 8 
+    resources:
+        time = '4:00:00',
+        mem_mb = '5000'
     run:
         with open(input.pairsfile_div, 'r') as f:
             dimers = [line.rstrip() for line in f] 
@@ -186,8 +189,11 @@ rule calc_dimer_seq_ids:
         contactsfile_div = outfile['div']['dimers']
     output:
         dimer_seq_ids_file = outfile['div']['dimer_seq_ids']
-    group: 'div_group'
+    #group: 'div_group'
     threads: 8
+    resources:
+        time = '4:00:00',
+        mem_mb = '5000'
     run:
         with open(input.contactsfile_div, 'r') as fi:
             d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)
