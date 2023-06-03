@@ -1,0 +1,14 @@
+1aa1-a1-m1-cB_1aa1-a1-m1-cC
+1aa1-a1-m1-cB_1aa1-a1-m1-cF
+1aa1-a1-m1-cC_1aa1-a1-m1-cD
+1aa1-a1-m1-cD_1aa1-a1-m1-cE
+1aa1-a1-m1-cE_1aa1-a1-m1-cF
+1bb1-a1-m1-cB_1bb1-a1-m1-cC
+1bb1-a1-m1-cB_1bb1-a1-m1-cF
+1bb1-a1-m1-cC_1bb1-a1-m1-cD
+1bb1-a1-m1-cD_1bb1-a1-m1-cE
+1bb1-a1-m1-cE_1bb1-a1-m1-cF
+1cc1-a1-m1-cB_1cc1-a1-m1-cC
+1cc1-a1-m1-cB_1cc1-a1-m1-cF
+1cc1-a1-m1-cC_1cc1-a1-m1-cD
+1cc1-a1-m1-cD_1cc1-a1-m1-cE
