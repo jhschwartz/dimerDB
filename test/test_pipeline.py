@@ -8,7 +8,7 @@ class TestPipeline(unittest.TestCase):
     def setUp(self):
         # set a tmpdir here...
         
-   #     generate_test_lib(  source_lib='/nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib',
+   #     generate_test_lib(  source_lib='/home/jaschwa/dimerDB/lib',
   #                          test_entries_file='test_entries.txt', 
  #                           dest_lib='lib'  )
 

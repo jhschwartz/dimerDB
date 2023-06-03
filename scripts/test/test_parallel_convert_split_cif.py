@@ -13,7 +13,7 @@ test_dir = pathlib.Path(__file__).parent.resolve()
 test_lib = f'{test_dir}/data/parallel_convert_split_cif/lib'
 
 cif2pdb_exe = f'{test_dir}/../../bin/USalign/cif2pdb'
-python = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python'
+python = '/home/jaschwa/dimerDB/env/bin/python'
 
 
 class TestConvertSplitCif(unittest.TestCase):

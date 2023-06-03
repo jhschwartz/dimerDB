@@ -10,7 +10,7 @@ data_dir = os.path.join(test_dir, 'data', '2_seq_cluster')
 
 
 snakefile = os.path.join('..', '2_seq_cluster.smk')
-snake_exe = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/snakemake'
+snake_exe = '/home/jaschwa/env/bin/snakemake'
 config = os.path.abspath('config_for_test_2.yaml')
 outint = 'intermediates'
 outlib = 'lib'

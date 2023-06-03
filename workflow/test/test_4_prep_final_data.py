@@ -13,7 +13,7 @@ test_dir = pathlib.Path(__file__).parent.resolve()
 data_dir = os.path.join(test_dir, 'data', '4_prep_final_data')
 
 snakefile = os.path.join('..', '4_prep_final_data.smk')
-snake_exe = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/snakemake'
+snake_exe = '/home/jaschwa/env/bin/snakemake'
 config = os.path.abspath('config_for_test_4.yaml')
 outname = 'tmpout'   
 scripts = os.path.abspath('../../scripts')

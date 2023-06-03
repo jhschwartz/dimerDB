@@ -13,7 +13,7 @@ from run_tmp_snakemake import run_tmp_snakemake
 
 
 snakefile = os.path.join('..', '1_derive_dimers.smk')
-snake_exe = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/snakemake'
+snake_exe = '/home/jaschwa/env/bin/snakemake'
 config = os.path.abspath('config_for_test_1.yaml')
 outname = 'intermediates/check_pairs'
 scripts = os.path.abspath('../../scripts')

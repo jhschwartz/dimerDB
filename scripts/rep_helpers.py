@@ -1,6 +1,6 @@
 import name_pdb
 from scipy.stats import gmean
-import math
+import numpy as np 
 
 
 def dimers_of_lowest_distance_to_others(group, dist_mat, all_dimers):
@@ -54,7 +54,7 @@ def dimers_of_lowest_distance_to_others(group, dist_mat, all_dimers):
 
     dimers = []
     for mean, dimer in zip(gmean_dists_to_others, group):
-        if math.isclose(mean, min_dist):
+        if np.isclose(mean, min_dist):
             dimers.append(dimer)
     
     return dimers

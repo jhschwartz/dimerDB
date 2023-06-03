@@ -10,6 +10,6 @@ subworkflow_done:
     1_derive_dimers: intermediates/sub1.done         
 exe:
     cif2pdb: bin/USalign/cif2pdb
-    mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
+    mmseqs: env/bin/mmseqs
     usalign: bin/USalign/USalign
     nwalign: bin/USalign/NWalign

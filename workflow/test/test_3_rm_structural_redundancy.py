@@ -10,7 +10,7 @@ data_dir = os.path.join(test_dir, 'data', '3_rm_structural_redundancy')
 
 
 snakefile = os.path.join('..', '3_rm_structural_redundancy.smk')
-snake_exe = '/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/snakemake'
+snake_exe = '/home/jaschwa/env/bin/snakemake'
 lib = os.path.abspath(os.path.join(data_dir, 'lib'))
 scripts = os.path.abspath('../../scripts')
 bin = os.path.abspath('../../bin')

@@ -11,5 +11,5 @@ subworkflow_done:
     3_rm_structural_redundancy: intermediates/sub3.done         
 exe:
     cif2pdb: bin/USalign/cif2pdb
-    mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
+    mmseqs: env/bin/mmseqs
     usalign: bin/USalign/USalign

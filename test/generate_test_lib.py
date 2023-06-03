@@ -9,7 +9,7 @@ from generate_rcsb_index import generate_rcsb_index
 from parallel_convert_split_cif import parallel_convert_split_rename_cifs
 
 
-#source_lib = '/nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib'
+#source_lib = '/home/jaschwa/dimerDB-dev/lib'
 #test_entries_file = 'test_entries.txt'
 #dest_lib = 'lib/'
 

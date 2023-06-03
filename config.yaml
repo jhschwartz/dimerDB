@@ -1,13 +1,13 @@
 paths:
-    basepath: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev
-    intermediates_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/intermediates
-    lib: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib
-    tmscore_db: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib/tmdb
-    out_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/homodimerDB
+    basepath: /home/jaschwa/dimerDB-dev
+    intermediates_dir: /home/jaschwa/dimerDB-dev/intermediates
+    lib: /home/jaschwa/dimerDB-dev/lib
+    tmscore_db: /home/jaschwa/dimerDB-dev/lib/tmdb
+    out_dir: /home/jaschwa/dimerDB-dev/homodimerDB
 
 exe:
     cif2pdb: bin/USalign/cif2pdb
-    mmseqs: /nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/mmseqs
+    mmseqs: env/bin/mmseqs
     usalign: bin/USalign/USalign
     nwalign: bin/USalign/NWalign
 
