@@ -34,17 +34,35 @@ def calculate_dimers_TM_score(dimer1, dimer2, usalign_exe):
         
         with open(os.path.join(td, 'd1.pdb'), 'w') as dimer1file:
             with open(dimer1[0], 'r') as d1c1:
-                dimer1file.write(d1c1.read())
-            dimer1file.write('\n')
+                for line in d1c1:
+                    if line.startswith('ATOM') or line.startswith('HETATM'):
+                        line = list(line)
+                        line[21] = 'A'
+                        line = ''.join(line)
+                    dimer1file.write(line)
             with open(dimer1[1], 'r') as d1c2:
-                dimer1file.write(d1c2.read())
+                for line in d1c2:
+                    if line.startswith('ATOM') or line.startswith('HETATM'):
+                        line = list(line)
+                        line[21] = 'B'
+                        line = ''.join(line)
+                    dimer1file.write(line)
 
         with open(os.path.join(td, 'd2.pdb'), 'w') as dimer2file:
             with open(dimer2[0], 'r') as d2c1:
-                dimer2file.write(d2c1.read())
-            dimer2file.write('\n')
+                for line in d2c1:
+                    if line.startswith('ATOM') or line.startswith('HETATM'):
+                        line = list(line)
+                        line[21] = 'C'
+                        line = ''.join(line)
+                    dimer2file.write(line)
             with open(dimer2[1], 'r') as d2c2:
-                dimer2file.write(d2c2.read())
+                for line in d2c2:
+                    if line.startswith('ATOM') or line.startswith('HETATM'):
+                        line = list(line)
+                        line[21] = 'D'
+                        line = ''.join(line)
+                    dimer2file.write(line)
 
         cmd = f'{usalign_exe} -fast -mm 1 -ter 1 -outfmt 2 {dimer1file.name} {dimer2file.name}'
         result = subprocess.run(cmd, capture_output=True, text=True, shell=True)
