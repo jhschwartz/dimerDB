@@ -52,6 +52,7 @@ rule download_assemblies:
         rsync_target = outfile['assemblies_dir']
     shell:
         ''' 
+        mkdir -p {params.rsync_target};
         rsync -rlpt -v -z -q --delete --update --port=33444 \
         rsync.rcsb.org::ftp_data/assemblies/mmCIF/divided/ {params.rsync_target};
         touch {output.done};

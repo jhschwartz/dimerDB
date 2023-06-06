@@ -153,8 +153,8 @@ rule check_contacts:
     #group: 'div_group'
     threads: 8 
     resources:
-        time = '4:00:00',
-        mem_mb = '5000'
+        time = '12:00:00',
+        mem_mb = '10000'
     run:
         with open(input.pairsfile_div, 'r') as f:
             dimers = [line.rstrip() for line in f] 
@@ -192,8 +192,8 @@ rule calc_dimer_seq_ids:
     #group: 'div_group'
     threads: 8
     resources:
-        time = '4:00:00',
-        mem_mb = '5000'
+        time = '12:00:00',
+        mem_mb = '10000'
     run:
         with open(input.contactsfile_div, 'r') as fi:
             d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)
