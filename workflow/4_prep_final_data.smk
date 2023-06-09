@@ -153,7 +153,10 @@ rule all:
         ## targets of out_extra_clusters
         expand(outfile['extra']['dimers_template'], num=ids_for_extra), 
         expand(outfile['extra']['seqs_template'], num=ids_for_extra),
-        expand(outfile['extra']['chains_template'], num=ids_for_extra) 
+        expand(outfile['extra']['chains_template'], num=ids_for_extra),
+
+	# target of everything
+	outfile['nonredundant']['info']
     output:
         done = config['subworkflow_done']['4_prep_final_data']
     run:

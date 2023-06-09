@@ -8,7 +8,8 @@ cluster:
     mkdir -p logs/{rule} &&
     sbatch
         --partition={resources.queue}
-        --cpus-per-task={threads}
+        --ntasks={threads}
+        --nodes=1
         --mem={resources.mem_mb}
         --job-name={rule}-%j
         --output=logs/{rule}/{rule}-%j.out

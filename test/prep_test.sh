@@ -2,45 +2,42 @@
 # file to create a test environment that relies on a tiny subsample of the PDB
 # instead of the entire libraru output of subworkflow0
 
+workdir=$1;
+testpath=$(pwd);
 
 set -e;
 
-testpath=$(pwd);
-mkdir tmp;
 
 
 # create after-download snakefile
-grep -v "out_sub0" ../snakefile > tmp/snakefile_after_download_only;
+grep -v "out_sub0" $testpath/../snakefile > $workdir/snakefile_after_download_only;
 
 # copy config
-cp ../config.yaml tmp/;
+cp $testpath/../config.yaml $workdir;
 
-cd tmp;
-
-# edit config to work with tmp
-tmppath=$(pwd);
+cd $workdir;
 
 # edit paths
-sed -i "s|basepath:.*|basepath: $tmppath|" config.yaml;
-sed -i "s|intermediates_dir:.*|intermediates_dir: $tmppath/intermediates|" config.yaml;
-sed -i "s|lib:.*|lib: $testpath/lib|" config.yaml;
-sed -i "s|tmscore_db:.*|tmscore_db: $testpath/lib/tmdb|" config.yaml;
-sed -i "s|out_dir:.*|out_dir: $tmppath/homodimerDB|" config.yaml;
+sed -i "s|basepath:.*|basepath: $workdir|" config.yaml;
+sed -i "s|intermediates_dir:.*|intermediates_dir: $workdir/intermediates|" config.yaml;
+sed -i "s|lib:.*|lib: $workdir/lib|" config.yaml;
+sed -i "s|tmscore_db:.*|tmscore_db: $workdir/lib/tmdb|" config.yaml;
+sed -i "s|out_dir:.*|out_dir: $workdir/homodimerDB|" config.yaml;
 
 
 
 # copy subworkflows
 mkdir workflow;
-cp ../../workflow/*.smk workflow/;
+cp $testpath/../workflow/*.smk workflow/;
 
 # copy scripts
 mkdir scripts;
-cp ../../scripts/*.py scripts;
-cp ../../scripts/*.sh scripts;
+cp $testpath/../scripts/*.py scripts;
+cp $testpath/../scripts/*.sh scripts;
 
 
 # copy bin
-cp ../../bin bin/ -r; 
+cp $testpath/../bin bin/ -r; 
 
 
 cd $testpath;

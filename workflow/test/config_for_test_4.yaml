@@ -6,5 +6,5 @@ subworkflow_done:
     4_prep_final_data: intermediates/sub4.done
 exe:
     cif2pdb: bin/USalign/cif2pdb
-    mmseqs: env/bin/mmseqs
+    mmseqs: mmseqs
     usalign: bin/USalign/USalign

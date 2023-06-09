@@ -2,3 +2,4 @@ lib/
 intermediates/
 tmp/
 oldtmpdb/
+mytmp*/

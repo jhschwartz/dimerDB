@@ -2,7 +2,7 @@ jobs: 2000
 default-resources:
     - queue="shared"
     - account="mia174"
-    - mem_mb=1000
+    - mem_mb="1000"
     - time="01:00:00"
 cluster:
     mkdir -p logs/{rule} &&

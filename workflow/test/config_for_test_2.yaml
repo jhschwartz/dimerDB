@@ -9,5 +9,5 @@ subworkflow_done:
     2_seq_cluster: intermediates/sub2.done
 exe:
     cif2pdb: bin/USalign/cif2pdb
-    mmseqs: env/bin/mmseqs
+    mmseqs: mmseqs
     usalign: bin/USalign/USalign
