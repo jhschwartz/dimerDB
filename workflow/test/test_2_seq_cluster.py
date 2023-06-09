@@ -8,9 +8,10 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
 data_dir = os.path.join(test_dir, 'data', '2_seq_cluster')
 
+conda_env = os.environ['conda_env']
 
 snakefile = os.path.join('..', '2_seq_cluster.smk')
-snake_exe = '/home/jaschwa/env/bin/snakemake'
+snake_exe = os.path.join(conda_env, 'bin/snakemake')
 config = os.path.abspath('config_for_test_2.yaml')
 outint = 'intermediates'
 outlib = 'lib'

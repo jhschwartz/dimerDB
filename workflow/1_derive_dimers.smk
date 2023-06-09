@@ -150,24 +150,25 @@ rule check_contacts:
         pairsfile_div = outfile['div']['all_chain_pairs']
     output:
         contactsfile_div = outfile['div']['dimers']
-    #group: 'div_group'
-    threads: 8 
+    threads: lambda wildcards, attempt: 2**attempt
     resources:
-        time = '12:00:00',
-        mem_mb = '10000'
+        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
         with open(input.pairsfile_div, 'r') as f:
             dimers = [line.rstrip() for line in f] 
-           
-        path_pairs = []
-        for d in dimers:
-            c1p, c2p = name_pdb.dimer2pdbs(dimer_name=d, lib_path=lib_path)
-            path_pairs.append( (c1p, c2p) ) 
-        results = check_contact_many_parallel(  pairs_list=path_pairs, 
-                                                thresh_max_dist=contact_max_angstroms, 
-                                                thresh_min_pairs=contact_min_residue_pairs, 
-                                                cores=threads, 
-                                                num_series=5000                                  )
+          
+        results = []
+        if len(dimers) > 0: 
+            path_pairs = []
+            for d in dimers:
+                c1p, c2p = name_pdb.dimer2pdbs(dimer_name=d, lib_path=lib_path)
+                path_pairs.append( (c1p, c2p) ) 
+            results = check_contact_many_parallel(  pairs_list=path_pairs, 
+                                                    thresh_max_dist=contact_max_angstroms, 
+                                                    thresh_min_pairs=contact_min_residue_pairs, 
+                                                    cores=threads, 
+                                                    num_series=5000                                  )
        
         with open(output.contactsfile_div, 'w') as f:
             for in_contact, dimer in zip(results, dimers):
@@ -189,11 +190,10 @@ rule calc_dimer_seq_ids:
         contactsfile_div = outfile['div']['dimers']
     output:
         dimer_seq_ids_file = outfile['div']['dimer_seq_ids']
-    #group: 'div_group'
-    threads: 8
+    threads: lambda wildcards, attempt: 2**attempt
     resources:
-        time = '12:00:00',
-        mem_mb = '10000'
+        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
         with open(input.contactsfile_div, 'r') as fi:
             d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)

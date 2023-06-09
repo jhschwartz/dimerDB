@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
-/nfs/turbo/umms-petefred/jaschwa/HDPRED/bin/python -m snakemake --profile .smk_profile_slurm_lh  
+. ./set_vars.sh
+
+$conda_env/bin/python -m snakemake --profile .smk_profile_slurm_expanse 

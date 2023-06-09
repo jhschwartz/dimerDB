@@ -8,9 +8,10 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
 data_dir = os.path.join(test_dir, 'data', '3_rm_structural_redundancy')
 
+conda_env = os.environ['conda_env']
 
 snakefile = os.path.join('..', '3_rm_structural_redundancy.smk')
-snake_exe = '/home/jaschwa/env/bin/snakemake'
+snake_exe = os.path.join(conda_env, 'bin/snakemake')
 lib = os.path.abspath(os.path.join(data_dir, 'lib'))
 scripts = os.path.abspath('../../scripts')
 bin = os.path.abspath('../../bin')

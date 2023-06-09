@@ -1,15 +1,16 @@
 paths:
-    basepath: /home/jaschwa/dimerDB-dev
-    intermediates_dir: /home/jaschwa/dimerDB-dev/intermediates
-    lib: /home/jaschwa/dimerDB-dev/lib
-    tmscore_db: /home/jaschwa/dimerDB-dev/lib/tmdb
-    out_dir: /home/jaschwa/dimerDB-dev/homodimerDB
+    basepath: /expanse/lustre/projects/mia174/jaschwa/dimerDB
+    intermediates_dir: /expanse/lustre/projects/mia174/jaschwa/dimerDB/intermediates
+    lib: /expanse/lustre/projects/mia174/jaschwa/dimerDB/lib
+    tmscore_db: /expanse/lustre/projects/mia174/jaschwa/dimerDB/lib/tmdb
+    out_dir: /expanse/lustre/projects/mia174/jaschwa/dimerDB/homodimerDB
 
 exe:
-    cif2pdb: bin/USalign/cif2pdb
-    mmseqs: env/bin/mmseqs
-    usalign: bin/USalign/USalign
-    nwalign: bin/USalign/NWalign
+    cif2pdb: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/cif2pdb
+    mmseqs: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/mmseqs
+    parallel: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/parallel
+    usalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/USalign
+    nwalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/NWalign
 
 
 workflow_params:

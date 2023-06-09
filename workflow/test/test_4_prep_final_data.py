@@ -12,8 +12,10 @@ import pathlib
 test_dir = pathlib.Path(__file__).parent.resolve()
 data_dir = os.path.join(test_dir, 'data', '4_prep_final_data')
 
+conda_env = os.environ['conda_env']
+
 snakefile = os.path.join('..', '4_prep_final_data.smk')
-snake_exe = '/home/jaschwa/env/bin/snakemake'
+snake_exe = os.path.join(conda_env, 'bin/snakemake')
 config = os.path.abspath('config_for_test_4.yaml')
 outname = 'tmpout'   
 scripts = os.path.abspath('../../scripts')

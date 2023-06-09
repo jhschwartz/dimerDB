@@ -133,11 +133,10 @@ rule compute_distances:
         dists_lookup = outfile['seq_cluster']['template_dists_lookup']
     output:
         dists_calc = outfile['seq_cluster']['template_dists_calc']
+    threads: lambda wildcards, attempt: 2**attempt
     resources:
-        time = '24:00:00',
-        mem_mb = '10000'
-    threads: 
-        lambda wildcards: threads_func(wildcards.cluster_name) 
+        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
         ## STEP 1: figure out which dimers need calc
         dimers_of_clust = sorted(get_dimers(wildcards.cluster_name))
@@ -216,11 +215,10 @@ rule cluster_poses_and_choose_rep:
     output:
         reps_txt = outfile['seq_cluster']['template_reps_list'],
         reps_tsv = outfile['seq_cluster']['template_reps_table']
-    threads: 
-        lambda wildcards: threads_func(wildcards.cluster_name) 
+    threads: lambda wildcards, attempt: 2**attempt
     resources:
-        time = '4:00:00',
-        mem_mb = '10000'	
+        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
         # retrieve all dimer names
         dimers_of_seq_clust = sorted(get_dimers(wildcards.cluster_name))
@@ -309,6 +307,8 @@ rule store_distances:
                               cluster_name=cluster_names                     )
     output:
         done = outfile['calc_dists_stored_done']
+    resources:
+        time = '12:00:00'
     run:
         dimers_scores = []
         for calc_file in input.calc_files:

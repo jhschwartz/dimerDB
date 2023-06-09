@@ -11,9 +11,11 @@ data_dir = os.path.join(test_dir, 'data', '1_derive_dimers')
 sys.path.append(test_dir)
 from run_tmp_snakemake import run_tmp_snakemake
 
+conda_env = os.environ['conda_env']
+
 
 snakefile = os.path.join('..', '1_derive_dimers.smk')
-snake_exe = '/home/jaschwa/env/bin/snakemake'
+snake_exe = os.path.join(conda_env, 'bin/snakemake')
 config = os.path.abspath('config_for_test_1.yaml')
 outname = 'intermediates/check_pairs'
 scripts = os.path.abspath('../../scripts')

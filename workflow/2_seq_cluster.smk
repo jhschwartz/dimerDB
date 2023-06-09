@@ -140,7 +140,10 @@ rule run_seq_cluster:
         fasta = outfile['fasta']['homodimers_seqs'],
     output:
         cluster_index = outfile['cluster']['index']
-    threads: max_threads
+    threads: 32
+    resources:
+        mem_mb = '64000',
+        time = '24:00:00'
     run:
         with open(all_homodimers, 'r') as f:
             homodimers = [line.strip() for line in f]

@@ -8,7 +8,7 @@ cluster:
     mkdir -p logs/{rule} &&
     sbatch
         --partition={resources.queue}
-        --ntasks={threads}
+        --ntasks-per-node={threads}
         --nodes=1
         --mem={resources.mem_mb}
         --job-name={rule}-%j
@@ -22,5 +22,5 @@ printshellcmds: True
 latency-wait: 60 
 keep-going: True
 rerun-incomplete: True
-scheduler: greedy
+retries: 4
 

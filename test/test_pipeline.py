@@ -2,16 +2,19 @@ import unittest
 import subprocess
 from generate_test_lib import generate_test_lib
 
+import os
+lib_path = os.environ['lib_path']
+
 class TestPipeline(unittest.TestCase):
 
     
     def setUp(self):
         # set a tmpdir here...
         
-   #     generate_test_lib(  source_lib='/home/jaschwa/dimerDB/lib',
-  #                          test_entries_file='test_entries.txt', 
- #                           dest_lib='lib'  )
-
+#        generate_test_lib(  source_lib=lib_path,
+#                            test_entries_file='test_entries.txt', 
+#                            dest_lib='lib'  )
+#
         #subprocess.run('./prep_test.sh', shell=True, check=True)
 
         subprocess.run('../run_test_smk.sh', shell=True, check=True, cwd='tmp')
