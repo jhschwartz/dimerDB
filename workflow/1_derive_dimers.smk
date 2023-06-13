@@ -4,9 +4,15 @@ from datetime import datetime
 
 configfile: 'config.yaml'
 
+tdir_templte = os.environ.get('use_tmpdir', None)
+if tdir_template and not os.environ.get('test', None):
+    jobid = os.environ['SLURM_JOB_ID']
+    os.environ['TMPDIR'] = tdir_template.format(JOBID=jobid)
+
 import tempfile
 import itertools
 import math
+import shutil
 
 sys.path.append('scripts')
 import name_pdb
@@ -150,26 +156,39 @@ rule check_contacts:
         pairsfile_div = outfile['div']['all_chain_pairs']
     output:
         contactsfile_div = outfile['div']['dimers']
-    threads: lambda wildcards, attempt: 2**attempt
+    threads: 1
+    #lambda wildcards, attempt: 2**attempt
     resources:
-        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
-        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
+        time = '2-00:00:00', #time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        mem_mb = '2000' #lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
         with open(input.pairsfile_div, 'r') as f:
             dimers = [line.rstrip() for line in f] 
           
         results = []
         if len(dimers) > 0: 
-            path_pairs = []
-            for d in dimers:
-                c1p, c2p = name_pdb.dimer2pdbs(dimer_name=d, lib_path=lib_path)
-                path_pairs.append( (c1p, c2p) ) 
-            results = check_contact_many_parallel(  pairs_list=path_pairs, 
-                                                    thresh_max_dist=contact_max_angstroms, 
-                                                    thresh_min_pairs=contact_min_residue_pairs, 
-                                                    cores=threads, 
-                                                    num_series=5000                                  )
+
+            # tmp lib on node
+            with tempfile.TemporaryDirectory() as templib:
+                temprcsb = os.path.join(templib, 'rcsb')
+                os.makedirs(temprcsb)
+                
+                # copy div to node
+                source_div = os.path.join(lib_path, 'rcsb', wildcards.div)
+                dest_div = os.path.join(temprcsb, wildcards.div)
+                shutil.copytree(source_div, dest_div)
+                
+                path_pairs = []
+                for d in dimers:
+                    c1p, c2p = name_pdb.dimer2pdbs(dimer_name=d, lib_path=templib)
+                    path_pairs.append( (c1p, c2p) ) 
+                results = check_contact_many_parallel(  pairs_list=path_pairs, 
+                                                        thresh_max_dist=contact_max_angstroms, 
+                                                        thresh_min_pairs=contact_min_residue_pairs, 
+                                                        cores=threads, 
+                                                        num_series=5000                                  )
        
+
         with open(output.contactsfile_div, 'w') as f:
             for in_contact, dimer in zip(results, dimers):
                 if in_contact: 
