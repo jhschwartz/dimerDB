@@ -4,10 +4,11 @@ from datetime import datetime
 
 configfile: 'config.yaml'
 
-tdir_templte = os.environ.get('use_tmpdir', None)
-if tdir_template and not os.environ.get('test', None):
+tdir_template = os.environ.get('use_tmpdir', None)
+if tdir_template and not config.get('test', None):
     jobid = os.environ['SLURM_JOB_ID']
     os.environ['TMPDIR'] = tdir_template.format(JOBID=jobid)
+    print('Set TMPDIR as', os.environ['TMPDIR'])
 
 import tempfile
 import itertools
@@ -25,6 +26,7 @@ subworkflow_done = config['subworkflow_done']['1_derive_dimers']
 intermediates = config['paths']['intermediates_dir']
 lib_path = config['paths']['lib'] 
 
+
 pdb_index = os.path.join(lib_path, 'pdb_index.txt')
 
 
@@ -34,7 +36,7 @@ contact_min_residue_pairs = config['workflow_params']['define_contact_min_num_re
 max_threads = config['workflow_params']['max_threads']
 
 nw_exe = config['exe']['nwalign']
-
+check_contact_exe = config['exe']['check_contact']
 
 outfile = {
     'all': {
@@ -162,37 +164,51 @@ rule check_contacts:
         time = '2-00:00:00', #time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
         mem_mb = '2000' #lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
-        with open(input.pairsfile_div, 'r') as f:
-            dimers = [line.rstrip() for line in f] 
-          
-        results = []
-        if len(dimers) > 0: 
+        with tempfile.TemporaryDirectory() as tempdir:
 
-            # tmp lib on node
-            with tempfile.TemporaryDirectory() as templib:
-                temprcsb = os.path.join(templib, 'rcsb')
-                os.makedirs(temprcsb)
-                
-                # copy div to node
-                source_div = os.path.join(lib_path, 'rcsb', wildcards.div)
-                dest_div = os.path.join(temprcsb, wildcards.div)
-                shutil.copytree(source_div, dest_div)
-                
-                path_pairs = []
-                for d in dimers:
-                    c1p, c2p = name_pdb.dimer2pdbs(dimer_name=d, lib_path=templib)
-                    path_pairs.append( (c1p, c2p) ) 
-                results = check_contact_many_parallel(  pairs_list=path_pairs, 
-                                                        thresh_max_dist=contact_max_angstroms, 
-                                                        thresh_min_pairs=contact_min_residue_pairs, 
-                                                        cores=threads, 
-                                                        num_series=5000                                  )
-       
+            templib = os.path.join(tempdir, 'lib')
+            temprcsb = os.path.join(templib, 'rcsb')
+            os.makedirs(temprcsb)
 
-        with open(output.contactsfile_div, 'w') as f:
-            for in_contact, dimer in zip(results, dimers):
-                if in_contact: 
-                    f.write(f'{dimer}\n')
+            # copy div to node
+            source_div = os.path.join(lib_path, 'rcsb', wildcards.div)
+            dest_div = os.path.join(temprcsb, wildcards.div)
+            shutil.copytree(source_div, dest_div)
+
+            check_contact_infile = os.path.join(tempdir, 'pairs.txt')
+            check_contact_outfile = os.path.join(tempdir, 'contact_info.txt')
+            
+            with open(check_contact_infile, 'w') as fo, \
+                                        open(input.pairsfile_div, 'r') as fi:
+                for line in fi:
+                    if line == '':
+                        continue
+                    chain1path, chain2path = name_pdb.dimer2pdbs(  dimer_name=line.strip(), 
+                                                                   lib_path=templib        )
+                    fo.write(f'{chain1path}\t{chain2path}\n')
+    
+
+            # if pairsfile is not empty
+            if os.stat(check_contact_infile).st_size > 0:
+                cmd = f'{check_contact_exe} {check_contact_infile} {check_contact_outfile} 8 10'
+                exe_result = subprocess.run(cmd.split())
+                if exe_result.returncode != 0:
+                    raise RuntimeError(f'encountered error from {check_contact_exe}: {exe_result.stderr} {exe_result.stdout}') 
+
+                
+                with open(output.contactsfile_div, 'w') as fout, \
+                                        open(check_contact_outfile, 'r') as fin_result, \
+                                        open(input.pairsfile_div, 'r') as fin_name:
+                    for dimer, result in zip(fin_name, fin_result):
+                        if result.split()[0] != '0':
+                            fout.write(f'{dimer.strip()}\n')
+    
+
+            else:
+                shell(''' touch {output.contactsfile_div} ''')
+            
+
+
 
 
 

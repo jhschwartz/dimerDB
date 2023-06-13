@@ -13,3 +13,4 @@ exe:
     mmseqs: mmseqs
     usalign: bin/USalign/USalign
     nwalign: bin/USalign/NWalign
+    check_contact: bin/check_contact/check_contact.exe

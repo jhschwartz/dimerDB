@@ -11,6 +11,7 @@ exe:
     parallel: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/parallel
     usalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/USalign
     nwalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/NWalign
+    check_contact: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/check_contact/check_contact.exe
 
 
 workflow_params:
