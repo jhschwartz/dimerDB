@@ -4,11 +4,6 @@ from datetime import datetime
 
 configfile: 'config.yaml'
 
-tdir_template = os.environ.get('use_tmpdir', None)
-if tdir_template and not config.get('test', None):
-    jobid = os.environ['SLURM_JOB_ID']
-    os.environ['TMPDIR'] = tdir_template.format(JOBID=jobid)
-    print('Set TMPDIR as', os.environ['TMPDIR'])
 
 import tempfile
 import itertools
@@ -164,7 +159,17 @@ rule check_contacts:
         time = '2-00:00:00', #time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
         mem_mb = '2000' #lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
-        with tempfile.TemporaryDirectory() as tempdir:
+        jobid = os.environ.get('SLURM_JOB_ID', None)
+        user = os.environ['USER']
+        potentialtmp = f'/scratch/{user}/job_{jobid}'
+        use_tmpdir_base = None
+        if jobid and os.path.exists(potentialtmp):
+            use_tmpdir_base = potentialtmp
+            print(f'using TMPDIR {potentialtmp} for python tempfile')
+        else:
+            print('unable to use custom TMPDIR for python tempfile')
+
+        with tempfile.TemporaryDirectory(dir=use_tmpdir_base) as tempdir:
 
             templib = os.path.join(tempdir, 'lib')
             temprcsb = os.path.join(templib, 'rcsb')
@@ -183,14 +188,13 @@ rule check_contacts:
                 for line in fi:
                     if line == '':
                         continue
-                    chain1path, chain2path = name_pdb.dimer2pdbs(  dimer_name=line.strip(), 
-                                                                   lib_path=templib        )
-                    fo.write(f'{chain1path}\t{chain2path}\n')
+                    chain1name, chain2name = name_pdb.dimer2chains(line.strip())
+                    fo.write(f'{chain1name}\t{chain2name}\n')
     
 
             # if pairsfile is not empty
             if os.stat(check_contact_infile).st_size > 0:
-                cmd = f'{check_contact_exe} {check_contact_infile} {check_contact_outfile} 8 10'
+                cmd = f'{check_contact_exe} {check_contact_infile} {check_contact_outfile} 8 10 {temprcsb}'
                 exe_result = subprocess.run(cmd.split())
                 if exe_result.returncode != 0:
                     raise RuntimeError(f'encountered error from {check_contact_exe}: {exe_result.stderr} {exe_result.stdout}') 
