@@ -3,6 +3,8 @@ paths:
     intermediates_dir: !BASEPATH!/intermediates
     lib: !BASEPATH!/lib
     tmscore_db: !BASEPATH!/lib/tmdb
+    contacts_db: !BASEPATH!/lib/contactsdb
+    seqid_db: !BASEPATH!/lib/seqiddb
     out_dir: !BASEPATH!/homodimerDB
 
 exe:

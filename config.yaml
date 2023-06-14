@@ -1,16 +1,16 @@
 paths:
-    basepath: /expanse/lustre/projects/mia174/jaschwa/dimerDB
-    intermediates_dir: /expanse/lustre/projects/mia174/jaschwa/dimerDB/intermediates
-    lib: /expanse/lustre/projects/mia174/jaschwa/dimerDB/lib
-    tmscore_db: /expanse/lustre/projects/mia174/jaschwa/dimerDB/lib/tmdb
-    out_dir: /expanse/lustre/projects/mia174/jaschwa/dimerDB/homodimerDB
+    basepath: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev
+    intermediates_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/intermediates
+    lib: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib
+    tmscore_db: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib/tmdb
+    out_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/homodimerDB
 
 exe:
-    cif2pdb: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/cif2pdb
-    mmseqs: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/mmseqs
-    parallel: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/parallel
-    usalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/USalign
-    nwalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/NWalign
+    cif2pdb: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/cif2pdb
+    mmseqs: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/env/bin/mmseqs
+    parallel: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/env/bin/parallel
+    usalign: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/USalign
+    nwalign: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/NWalign
 
 
 workflow_params:

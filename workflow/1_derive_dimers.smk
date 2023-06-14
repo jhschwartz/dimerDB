@@ -10,6 +10,7 @@ import math
 
 sys.path.append('scripts')
 import name_pdb
+from contact_database import ContactDB
 
 sys.path.append('bin/check_contact')
 from check_contact import check_contact_many_parallel
@@ -18,6 +19,10 @@ from align_tools import parallel_calc_nwalign_glocal
 subworkflow_done = config['subworkflow_done']['1_derive_dimers']
 intermediates = config['paths']['intermediates_dir']
 lib_path = config['paths']['lib'] 
+
+contacts_db_path = config['paths']['contacts_db']
+seqid_db_path = config['paths']['seqid_db']
+
 
 pdb_index = os.path.join(lib_path, 'pdb_index.txt')
 
@@ -41,6 +46,7 @@ outfile = {
     'div': {
         'chains': os.path.join(intermediates, 'check_pairs', '{div}', 'chains.txt'),
         'all_chain_pairs': os.path.join(intermediates, 'check_pairs', '{div}', 'intra_assembly_chain_pairs.txt'),
+        'contacts_lookup': os.path.join(intermediates, 'check_pairs', '{div}', 'contacts_lookup.txt'),
         'dimers': os.path.join(intermediates, 'check_pairs', '{div}', 'dimers.txt'),
         'dimer_seq_ids': os.path.join(intermediates, 'check_pairs', '{div}', 'dimer_seq_ids.tsv'),
     }
@@ -133,11 +139,34 @@ rule pair_possible_contacting_chains:
 
 
 
+rule lookup_contacts:
+    input:
+        pairsfile_div = outfile['div']['all_chain_pairs']
+    output:
+        contactsfound_div = outfile['div']['contacts_lookup']
+    threads: 1
+    resources:
+        time = '3:00:00'
+        mem_mb = '2000'
+    run:
+        db = ContactDB(contacts_db_path)
+        
+        with open(input.pairsfile_div, 'r') as fi:
+            pairs = ( *name_pdb.dimer2chains(line.strip()) for line in fi )
+            
+            with open(output.contactsfound_div, 'w') as fo:
+                for contact_found in db.get(pairs, already_sorted=True):
+                    c1, c2, is_contact = contact_found
+                    fo.write(f'{c1}\t{c2}\t{is_contact}\n')
+
+
+
+
 
 
 
 # shadow input is the pdb library at {lib_path}/rcsb
-rule check_contacts:
+rule calc_contacts:
     '''
     This rule, which operates separately on samples that are each
     the set of same-assembly chain pairs of the pdb entries of
@@ -147,9 +176,10 @@ rule check_contacts:
     being less than 8 angstroms apart. 
     '''
     input:
-        pairsfile_div = outfile['div']['all_chain_pairs']
+        pairsfile_div = outfile['div']['all_chain_pairs'],
+        contactsfound_div = outfile['div']['contacts_lookup']
     output:
-        contactsfile_div = outfile['div']['dimers']
+        contactscalc_div = outfile['div']['contacts_calc']
     threads: lambda wildcards, attempt: 2**attempt
     resources:
         time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
@@ -174,6 +204,14 @@ rule check_contacts:
             for in_contact, dimer in zip(results, dimers):
                 if in_contact: 
                     f.write(f'{dimer}\n')
+
+
+
+
+rule write_dimers:
+
+
+
 
 
 

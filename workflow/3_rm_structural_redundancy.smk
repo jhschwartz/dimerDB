@@ -9,7 +9,7 @@ configfile: 'config.yaml'
 
 sys.path.append('scripts')
 import name_pdb
-import tmscore_database as TMDB
+from tmscore_database import TMDB
 import unredundant as unred
 from wrap_tmscore import calculate_many_dimers_TM_score
 
@@ -105,7 +105,8 @@ rule lookup_distances:
 
         # lookup scores
         scores = []
-        for found_dimer_pair in TMDB.lookup_scores(dimer_pairs, tm_distances_database):
+        tmdb = TMDB(tm_distances_database)
+        for found_dimer_pair in tmdb.get(dimer_pairs):
             print(found_dimer_pair)
             dimer1, dimer2, score1to2, score2to1 = found_dimer_pair 
             scores.append( (dimer1, dimer2, score1to2, score2to1) )
@@ -317,7 +318,8 @@ rule store_distances:
                     dimer1, dimer2, score1, score2 = line.split()
                     dimers_scores.append( (dimer1, dimer2, score1, score2) )
 
-        TMDB.update_db(new_pairs_scores=dimers_scores, db_path=tm_distances_database)
+        tmdb = TMDB(tm_distances_database)
+        TMDB.update(dimers_scores)
 
         shell(''' touch {output.done} ''')
 
