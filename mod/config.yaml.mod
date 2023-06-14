@@ -13,6 +13,7 @@ exe:
     parallel: !BASEPATH!/env/bin/parallel
     usalign: !BASEPATH!/bin/USalign/USalign
     nwalign: !BASEPATH!/bin/USalign/NWalign
+    check_contact: !BASEPATH!/bin/check_contact/check_contact.exe
 
 
 workflow_params:

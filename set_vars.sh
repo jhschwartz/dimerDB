@@ -8,3 +8,6 @@ sed -e "s|\!BASEPATH\!|$basepath|" mod/config.yaml.mod > config.yaml;
 
 #export smk_profile=$(realpath .smk_profile_slurm_expanse);
 export smk_profile=$(realpath .smk_profile_slurm_lh);
+
+#export use_tmpdir="/scratch/job_{JOBID}";
+
