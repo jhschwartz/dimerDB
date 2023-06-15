@@ -190,6 +190,16 @@ class TestNamePDB(unittest.TestCase):
         self.assertEqual(result, '4zbw-a1-m2-cZ-42_7a6w-a155-m42-cA2fA')
 
 
+    def test_sort_key_dimer_in(self):
+        result = sort_key('4zbw-a1-m2-cZ-42_7a6w-a155-m42-cA2fA')
+        expected = ['4zbw-a1-m2-cZ-42', '7a6w-a155-m42-cA2fA']
+        self.assertEqual(result, expected)
+
+
+    def test_sort_key_chains_in(self):
+        result = sort_key('4zbw-a1-m2-cZ-42', '7a6w-a155-m42-cA2fA')
+        expected = ['4zbw-a1-m2-cZ-42', '7a6w-a155-m42-cA2fA']
+        self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':

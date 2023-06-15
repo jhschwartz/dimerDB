@@ -22,5 +22,5 @@ printshellcmds: True
 latency-wait: 60 
 keep-going: True
 rerun-incomplete: True
-retries: 6
+retries: 1
 

@@ -3,17 +3,23 @@ paths:
     intermediates_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/intermediates
     lib: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib
     tmscore_db: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib/tmdb
-    contacts_db: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib/contactsdb
-    seqid_db: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/lib/seqiddb
     out_dir: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/homodimerDB
 
 exe:
+<<<<<<< HEAD
     cif2pdb: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/cif2pdb
     mmseqs: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/env/bin/mmseqs
     parallel: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/env/bin/parallel
     usalign: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/USalign
     nwalign: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/USalign/NWalign
-    check_contact: /nfs/turbo/umms-zcx/jaschwa/dimerDB-dev/bin/check_contact/check_contact.exe
+=======
+    cif2pdb: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/cif2pdb
+    mmseqs: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/mmseqs
+    parallel: /expanse/lustre/projects/mia174/jaschwa/dimerDB/env/bin/parallel
+    usalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/USalign
+    nwalign: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/USalign/NWalign
+    check_contact: /expanse/lustre/projects/mia174/jaschwa/dimerDB/bin/check_contact/check_contact.exe
+>>>>>>> newdev
 
 
 workflow_params:

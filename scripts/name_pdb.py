@@ -85,7 +85,13 @@ def name_dimer(chain1name, chain2name):
     return f'{c1}_{c2}'
 
 
-
-
+def sort_key(*args):
+    if len(args) > 2:
+        raise ValueError
+    elif len(args) == 2:
+        dimer = name_dimer(*args)
+    else:
+        dimer = args[0]
+    return dimer2chains(dimer)
 
 

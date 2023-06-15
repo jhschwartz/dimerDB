@@ -10,11 +10,11 @@ class ContactDB(AbstractSimpleDatabase):
     '''
 
     def group_key(self, pair):
-        # group by 1 character, the second, like "a" in 1abc
+        # group by 2 characters, the middle two like "ab" in 1abc
         chain1, chain2, = pair[:2]
         if chain1 < chain2:
-            return chain1[1]
-        return chain2[1]
+            return chain1[1:3]
+        return chain2[1:3]
 
 
     def sort_key(self, pair):
@@ -37,13 +37,15 @@ class ContactDB(AbstractSimpleDatabase):
 
 
     def compare_pair_names(self, pair1, pair2):
-        name1 = ''.join([*pair1[:2]])
-        name2 = ''.join([*pair2[:2]])
-        if name1 < name2:
+        chains1 = pair1[:2]
+        chains2 = pair2[:2]
+        if chains1 == chains2:
+            return 0
+        ordered = sorted([chains1, chains2])
+        index_chains1 = ordered.index(chains1)
+        if index_chains1 == 0:
             return -1
-        elif name1 > name2:
-            return 1
-        return 0
+        return 1
 
 
     def name_group_file(self, group_name):

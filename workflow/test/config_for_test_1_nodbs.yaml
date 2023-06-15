@@ -1,0 +1,18 @@
+paths:
+    intermediates_dir: intermediates
+    lib: lib
+    contacts_db: lib/notarealdb
+    seqid_db: lib/notarealdb2
+workflow_params:
+    define_contact_max_dist_angstroms: 8
+    define_contact_min_num_residue_pairs: 10
+    max_threads: 32
+test: True
+subworkflow_done:
+    1_derive_dimers: intermediates/sub1.done         
+exe:
+    cif2pdb: bin/USalign/cif2pdb
+    mmseqs: mmseqs
+    usalign: bin/USalign/USalign
+    nwalign: bin/USalign/NWalign
+    check_contact: bin/check_contact/check_contact.exe

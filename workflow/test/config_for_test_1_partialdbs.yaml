@@ -1,6 +1,8 @@
 paths:
     intermediates_dir: intermediates
     lib: lib
+    contacts_db: lib/contactsdb_partial
+    seqid_db: lib/seqiddb_partial
 workflow_params:
     define_contact_max_dist_angstroms: 8
     define_contact_min_num_residue_pairs: 10

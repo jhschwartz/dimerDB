@@ -25,8 +25,8 @@ class TestUpdateContacts(unittest.TestCase):
             db = ContactDB(tmp_db_path)
             db.update(data)
 
-            result_file = os.path.join(tmp_db_path, 'a.tsv')
-            expected_file = os.path.join(db_expected, 'a.tsv')
+            result_file = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file = os.path.join(db_expected, 'az.tsv')
 
             self.assertTrue(filecmp.cmp(result_file, expected_file, shallow=False))
 
@@ -44,11 +44,11 @@ class TestUpdateContacts(unittest.TestCase):
             db = ContactDB(tmp_db_path)
             db.update(data)
 
-            result_file_a = os.path.join(tmp_db_path, 'a.tsv')
-            expected_file_a = os.path.join(db_expected, 'a.tsv')
+            result_file_a = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file_a = os.path.join(db_expected, 'az.tsv')
 
-            result_file_b = os.path.join(tmp_db_path, 'b.tsv')
-            expected_file_b = os.path.join(db_expected, 'b.tsv')
+            result_file_b = os.path.join(tmp_db_path, 'bz.tsv')
+            expected_file_b = os.path.join(db_expected, 'bz.tsv')
 
             self.assertTrue(filecmp.cmp(result_file_a, expected_file_a, shallow=False))
             self.assertTrue(filecmp.cmp(result_file_b, expected_file_b, shallow=False))
@@ -56,10 +56,10 @@ class TestUpdateContacts(unittest.TestCase):
 
     def test_update_database_a_only(self):
         with tempfile.TemporaryDirectory() as tmp_db_path:
-            shutil.copy(os.path.join(db_update, 'a.tsv'), tmp_db_path)
+            shutil.copy(os.path.join(db_update, 'az.tsv'), tmp_db_path)
             
-            a_file = os.path.join(tmp_db_path, 'a.tsv')
-            expected_file = os.path.join(db_expected, 'a.tsv')
+            a_file = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file = os.path.join(db_expected, 'az.tsv')
             self.assertFalse(filecmp.cmp(a_file, expected_file))
 
             new_data = [ ('2aze-a1-m1-cA', '2aze-a1-m1-cB', True) ]
@@ -72,15 +72,15 @@ class TestUpdateContacts(unittest.TestCase):
 
     def test_update_database_a_b(self):
         with tempfile.TemporaryDirectory() as tmp_db_path:
-            shutil.copy(os.path.join(db_update, 'a.tsv'), tmp_db_path)
-            shutil.copy(os.path.join(db_update, 'b.tsv'), tmp_db_path)
+            shutil.copy(os.path.join(db_update, 'az.tsv'), tmp_db_path)
+            shutil.copy(os.path.join(db_update, 'bz.tsv'), tmp_db_path)
             
-            a_file = os.path.join(tmp_db_path, 'a.tsv')
-            a_expected_file = os.path.join(db_expected, 'a.tsv')
+            a_file = os.path.join(tmp_db_path, 'az.tsv')
+            a_expected_file = os.path.join(db_expected, 'az.tsv')
             self.assertFalse(filecmp.cmp(a_file, a_expected_file))
 
-            b_file = os.path.join(tmp_db_path, 'b.tsv')
-            b_expected_file = os.path.join(db_expected, 'b.tsv')
+            b_file = os.path.join(tmp_db_path, 'bz.tsv')
+            b_expected_file = os.path.join(db_expected, 'bz.tsv')
             self.assertFalse(filecmp.cmp(b_file, b_expected_file))
             
             new_data = [ ('3bz7-a1-m1-cN', '3bz7-a1-m1-cM', False),
@@ -96,13 +96,13 @@ class TestUpdateContacts(unittest.TestCase):
 
     def test_change_contact(self):
         with tempfile.TemporaryDirectory() as tmp_db_path:
-            shutil.copy(os.path.join(db_update, 'a.tsv'), tmp_db_path)
+            shutil.copy(os.path.join(db_update, 'az.tsv'), tmp_db_path)
             
             change_data = [ ('1az2-a1-m1-cA', '1az2-a1-m2-cA', False), # change T to F
                             ('2aze-a1-m1-cA', '2aze-a1-m1-cB', True)  # new entry
                     ]
             
-            a_file = os.path.join(tmp_db_path, 'a.tsv')
+            a_file = os.path.join(tmp_db_path, 'az.tsv')
 
             with open(a_file, 'r') as f:
                 filedata = f.read()
@@ -119,6 +119,85 @@ class TestUpdateContacts(unittest.TestCase):
                 self.assertTrue('1az2-a1-m1-cA\t1az2-a1-m2-cA\t0' in filedata)
                 self.assertFalse('1az2-a1-m1-cA\t1az2-a1-m2-cA\t1' in filedata)
 
+
+    def test_buffer_1(self):
+        with tempfile.TemporaryDirectory() as tmp_db_path:
+            data = [ ('1az2-a1-m1-cA', '1az2-a1-m2-cA', True),
+                     ('2bz6-a2-m1-cF', '2bz6-a2-m1-cG', True),
+                     ('2aze-a1-m1-cA', '2aze-a1-m1-cB', True),
+                     ('5az9-a14-m8-cU7H', '5az9-a14-m19-c47', False),
+                     ('1bz5-a1-m8-cA', '1bz5-a1-m9-cA', False),
+                     ('3bz7-a1-m1-cN', '3bz7-a1-m1-cM', False)
+                ]
+
+            db = ContactDB(tmp_db_path, max_buffer=6)
+            
+            for d in data:
+                db.auto_buffer(d)
+
+            result_file_a = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file_a = os.path.join(db_expected, 'az.tsv')
+
+            result_file_b = os.path.join(tmp_db_path, 'bz.tsv')
+            expected_file_b = os.path.join(db_expected, 'bz.tsv')
+
+            self.assertTrue(filecmp.cmp(result_file_a, expected_file_a, shallow=False))
+            self.assertTrue(filecmp.cmp(result_file_b, expected_file_b, shallow=False))
+
+
+
+
+    def test_buffer_2(self):
+        with tempfile.TemporaryDirectory() as tmp_db_path:
+            data = [ ('1az2-a1-m1-cA', '1az2-a1-m2-cA', True),
+                     ('2bz6-a2-m1-cF', '2bz6-a2-m1-cG', True),
+                     ('2aze-a1-m1-cA', '2aze-a1-m1-cB', True),
+                     ('5az9-a14-m8-cU7H', '5az9-a14-m19-c47', False),
+                     ('1bz5-a1-m8-cA', '1bz5-a1-m9-cA', False),
+                     ('3bz7-a1-m1-cN', '3bz7-a1-m1-cM', False)
+                ]
+
+            db = ContactDB(tmp_db_path, max_buffer=20)
+            
+            for d in data:
+                db.auto_buffer(d)
+            db.update_clear_buffer()
+
+            result_file_a = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file_a = os.path.join(db_expected, 'az.tsv')
+
+            result_file_b = os.path.join(tmp_db_path, 'bz.tsv')
+            expected_file_b = os.path.join(db_expected, 'bz.tsv')
+
+            self.assertTrue(filecmp.cmp(result_file_a, expected_file_a, shallow=False))
+            self.assertTrue(filecmp.cmp(result_file_b, expected_file_b, shallow=False))
+
+
+
+    def test_buffer_3(self):
+        with tempfile.TemporaryDirectory() as tmp_db_path:
+            data = [ ('1az2-a1-m1-cA', '1az2-a1-m2-cA', True),
+                     ('2bz6-a2-m1-cF', '2bz6-a2-m1-cG', True),
+                     ('2aze-a1-m1-cA', '2aze-a1-m1-cB', True),
+                     ('5az9-a14-m8-cU7H', '5az9-a14-m19-c47', False),
+                     ('1bz5-a1-m8-cA', '1bz5-a1-m9-cA', False),
+                     ('3bz7-a1-m1-cN', '3bz7-a1-m1-cM', False)
+                ]
+
+            db = ContactDB(tmp_db_path, max_buffer=2)
+            
+            for d in data:
+                db.auto_buffer(d)
+            db.update_clear_buffer()
+
+            result_file_a = os.path.join(tmp_db_path, 'az.tsv')
+            expected_file_a = os.path.join(db_expected, 'az.tsv')
+
+            result_file_b = os.path.join(tmp_db_path, 'bz.tsv')
+            expected_file_b = os.path.join(db_expected, 'bz.tsv')
+
+            self.assertTrue(filecmp.cmp(result_file_a, expected_file_a, shallow=False))
+            self.assertTrue(filecmp.cmp(result_file_b, expected_file_b, shallow=False))
 
 
 
@@ -156,7 +235,7 @@ class TestGetContacts(unittest.TestCase):
                      ('2bz6-a2-m1-cF', '2bz6-a2-m1-cG', True),
                      ('3bz7-a1-m1-cN', '3bz7-a1-m1-cM', False)
             ]
-
+        
         db = ContactDB(db_expected)
         result = db.get(dimers)
 
@@ -176,5 +255,7 @@ class TestGetContacts(unittest.TestCase):
         result = db.get(dimers)
 
         self.assertEqual(list(result), expected)
+
+
 
 

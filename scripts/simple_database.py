@@ -5,11 +5,12 @@ from name_pdb import get_div
 import abc
 
 
-
 class AbstractSimpleDatabase(abc.ABC):
 
-    def __init__(self, db_path):
+    def __init__(self, db_path, max_buffer=1000):
         self.db_path = db_path
+        self.buffer = []
+        self.max_buffer = max_buffer
 
     
 
@@ -22,7 +23,7 @@ class AbstractSimpleDatabase(abc.ABC):
     def sort_key(self, pair):
         pass
 
-
+    
     @abc.abstractmethod
     def pair_to_line(self, pair):
         pass
@@ -42,14 +43,33 @@ class AbstractSimpleDatabase(abc.ABC):
     def name_group_file(self, group_name):
         pass
 
+    
+    # add a pair to the buffer for later update
+    def buffer_update(self, name_value_pair):
+        self.buffer.append(name_value_pair)
 
 
-    def update(self, new_name_value_pairs, already_sorted=False):
-        if not already_sorted:
-            sorted_pairs = sorted(new_name_value_pairs, key=self.sort_key)
-        else:
-            sorted_pairs = new_name_value_pairs
 
+    # add a pair to the buffer, and if the buffer reaches size max_buffer, perform update
+    def auto_buffer(self, name_value_pair):
+        self.buffer_update(name_value_pair)
+        if len(self.buffer) >= self.max_buffer:
+            self.update_clear_buffer()
+
+
+
+    # use all values in the buffer for update and clear it
+    def update_clear_buffer(self):
+        self.update(self.buffer)
+        self.buffer = []
+
+
+
+    def update(self, new_name_value_pairs): #, already_sorted=False):
+        #if not already_sorted:
+        sorted_pairs = sorted(new_name_value_pairs, key=self.sort_key)
+        #else:
+        #    sorted_pairs = new_name_value_pairs
         os.makedirs(self.db_path, exist_ok=True)
 
         for gkey, group in itertools.groupby(sorted_pairs, key=self.group_key):
@@ -110,15 +130,15 @@ class AbstractSimpleDatabase(abc.ABC):
 
 
 
-    def get(self, names, strict=False, already_sorted=False):
+    def get(self, names, strict=False):
 
-        if not already_sorted:
-            unvalued_pairs = ((*n, '') for n in sorted(names, key=self.sort_key))
-        else:
-            unvalued_pairs = ((*n, '') for n in names)
+        #if not already_sorted:
+        unvalued_pairs = ((*n, '') for n in sorted(names, key=self.sort_key))
+        #else:
+        #    unvalued_pairs = ((*n, '') for n in names)
         
         for gkey, group in itertools.groupby(unvalued_pairs, key=self.group_key):
-       
+            
             db_file = self.name_group_file(group_name=gkey)
 
             if not os.path.exists(db_file):
@@ -133,7 +153,6 @@ class AbstractSimpleDatabase(abc.ABC):
                 line = infile.readline()
                 
                 while line and current_pair:
-
                     # the file pointer is before the next item, so advance pointer
                     if self.compare_pair_names(self.line_to_pair(line), current_pair) < 0:
                         line = infile.readline()
