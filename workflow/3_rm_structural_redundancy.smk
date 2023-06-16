@@ -107,7 +107,6 @@ rule lookup_distances:
         scores = []
         tmdb = TMDB(tm_distances_database)
         for found_dimer_pair in tmdb.get(dimer_pairs):
-            print(found_dimer_pair)
             dimer1, dimer2, score1to2, score2to1 = found_dimer_pair 
             scores.append( (dimer1, dimer2, score1to2, score2to1) )
 
@@ -319,7 +318,7 @@ rule store_distances:
                     dimers_scores.append( (dimer1, dimer2, score1, score2) )
 
         tmdb = TMDB(tm_distances_database)
-        TMDB.update(dimers_scores)
+        tmdb.update(dimers_scores)
 
         shell(''' touch {output.done} ''')
 
