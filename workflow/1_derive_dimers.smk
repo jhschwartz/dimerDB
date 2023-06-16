@@ -158,7 +158,8 @@ rule lookup_contacts:
     threads: 1
     resources:
         time = '3:00:00',
-        mem_mb = '2000'
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
+    retries: 4
     run:
         db = ContactDB(contacts_db_path)
         

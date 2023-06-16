@@ -6,3 +6,4 @@ slurm-*.out
 logs/
 **/.nfs*
 env/
+*.log
