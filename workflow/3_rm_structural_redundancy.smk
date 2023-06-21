@@ -96,6 +96,11 @@ rule lookup_distances:
     '''
     output:
         dists_lookup = outfile['seq_cluster']['template_dists_lookup'] 
+    threads: 1
+    resources:
+        time = '3:00:00',
+        mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
+    retries: 4
     run:
         # retrieve dimers
         dimers_of_seq_clust = sorted(get_dimers(wildcards.cluster_name))
@@ -154,18 +159,21 @@ rule compute_distances:
             if not dp in dists_found:
                 dimer_pairs_need_calc.append(dp) 
 
+        if dimer_pairs_need_calc != []:
 
-        ## STEP 2: perform calc
-        scores = calculate_many_dimers_TM_score(  dimer_pairs=dimer_pairs_need_calc, 
-                                                  usalign_exe=usalign_exe,
-                                                  lib_path=lib_path,
-                                                  cores=threads                      )
+            ## STEP 2: perform calc
+            scores = calculate_many_dimers_TM_score(  dimer_pairs=dimer_pairs_need_calc, 
+                                                      usalign_exe=usalign_exe,
+                                                      lib_path=lib_path,
+                                                      cores=threads                      )
 
-        ## STEP 3: write results
-        with open(output.dists_calc, 'w') as f:
-            for (dimer1, dimer2), (score1, score2) in zip(dimer_pairs_need_calc, scores):
-                f.write(f'{dimer1}\t{dimer2}\t{score1}\t{score2}\n')
+            ## STEP 3: write results
+            with open(output.dists_calc, 'w') as f:
+                for (dimer1, dimer2), (score1, score2) in zip(dimer_pairs_need_calc, scores):
+                    f.write(f'{dimer1}\t{dimer2}\t{score1}\t{score2}\n')
 
+        else:
+            shell(''' touch {output.dists_calc} ''')
 
 
 rule download_resolu_file:
@@ -215,10 +223,12 @@ rule cluster_poses_and_choose_rep:
     output:
         reps_txt = outfile['seq_cluster']['template_reps_list'],
         reps_tsv = outfile['seq_cluster']['template_reps_table']
-    threads: lambda wildcards, attempt: 2**attempt
+    #threads: lambda wildcards, attempt: 2**attempt
+    threads: 1
     resources:
-        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
+        time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=max(24, 6*attempt)),
         mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
+    retries: 5
     run:
         # retrieve all dimer names
         dimers_of_seq_clust = sorted(get_dimers(wildcards.cluster_name))

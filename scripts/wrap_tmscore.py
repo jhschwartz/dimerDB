@@ -81,6 +81,8 @@ def calculate_dimers_TM_score(dimer1, dimer2, usalign_exe):
 
 
 def calculate_many_dimers_TM_score(dimer_pairs, usalign_exe, lib_path, cores=1):
+    if dimer_pairs == []:
+        return []
     args = []
     for dp in dimer_pairs:
         dimer1_chain1, dimer1_chain2 = name_pdb.dimer2pdbs(dp[0], lib_path)

@@ -10,6 +10,7 @@ import itertools
 import math
 import shutil
 from sortedcontainers import SortedList, SortedSet
+import subprocess
 
 sys.path.append('scripts')
 import name_pdb
@@ -181,6 +182,9 @@ rule pairs_needing_contact_calc:
     output:
         contactsneedcalc_div = outfile['div']['contacts_needcalc']
     threads: 1
+    resources:
+        mem_mb = lambda wildcards, attempt: str(1000 * 2**attempt)
+    retries: 4
     shell:
         # ok to use GNU sort here because it's just for generating the need_calc file,
         # which can be used without sorting and which gets its results sorted later
@@ -188,8 +192,8 @@ rule pairs_needing_contact_calc:
         tmp_not_need_calc=$(mktemp /tmp/XXXXXXXX);
         tmp_all_pairs=$(mktemp /tmp/XXXXXXXX);
         awk '{{print $1}}' {input.contactsfound_div} > $tmp_not_need_calc; 
-        sort -s --key=1.2 -o $tmp_not_need_calc $tmp_not_need_calc;
-        sort -s --key=1.2 -o $tmp_all_pairs {input.pairsfile_div}; 
+        sort -s  -o $tmp_not_need_calc $tmp_not_need_calc;
+        sort -s  -o $tmp_all_pairs {input.pairsfile_div}; 
         comm -23 --check-order $tmp_all_pairs $tmp_not_need_calc > {output.contactsneedcalc_div};
         '''
 
@@ -320,18 +324,22 @@ rule calc_dimer_seq_ids:
         time = lambda wildcards, attempt: '{hrs}:00:00'.format(hrs=6*attempt),
         mem_mb = lambda wildcards, attempt: str(2000 * 2**attempt)
     run:
-        with open(input.dimersfile_div, 'r') as fi:
-            d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)
-            pdb_pairs = ( d2p(line.rstrip()) for line in fi )
-            scores = parallel_calc_nwalign_glocal(  USnw=nw_exe,
-                                                    pdb_pairs=pdb_pairs,
-                                                    cores=threads        )
-            fi.seek(0)
-            with open(output.dimer_seq_ids_file, 'w') as fo:
-                for line, score in zip(fi, scores):
-                    dimer = line.rstrip()
-                    score = round(score, 4)
-                    fo.write(f'{dimer}\t{score}\n')
+        if os.stat(input.dimersfile_div).st_size == 0:
+            shell(''' touch {output.dimer_seq_ids_file} ''')
+
+        else:
+            with open(input.dimersfile_div, 'r') as fi:
+                d2p = lambda dimer_name: name_pdb.dimer2pdbs(dimer_name, lib_path)
+                pdb_pairs = ( d2p(line.rstrip()) for line in fi )
+                scores = parallel_calc_nwalign_glocal(  USnw=nw_exe,
+                                                        pdb_pairs=pdb_pairs,
+                                                        cores=threads        )
+                fi.seek(0)
+                with open(output.dimer_seq_ids_file, 'w') as fo:
+                    for line, score in zip(fi, scores):
+                        dimer = line.rstrip()
+                        score = round(score, 4)
+                        fo.write(f'{dimer}\t{score}\n')
 
 
 

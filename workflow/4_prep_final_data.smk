@@ -29,7 +29,7 @@ subworkflow_done = config['subworkflow_done']['4_prep_final_data']
 
 # data locations set by config
 intermediates = config['paths']['intermediates_dir']
-lib_path = config['paths']['lib'] 
+lib_path = config['paths']['lib_full'] 
 
 # input data, given data locations
 pdb_index = os.path.join(lib_path, 'pdb_index.txt') 
@@ -288,30 +288,30 @@ rule out_extra_clusters:
                                  outfasta=output.seqs_fasta                  )
         
              
-
-
-# shadow input is the fasta library at lib_path and fasta_index
-rule out_all_seqs:
-    '''
-    This rule writes the sequences of all chains involved
-    in homodimerization to a single output file all/seqs.fasta
-    These sequences are simply collected from lib fasta_index.txt
-    and the fasta files in <lib_path>/fasta/...
-    '''
-    output:
-        fasta = outfile['all']['seqs']
-    run:
-        chains_list = set() 
-        with open(fasta_index, 'r') as f:
-            for line in f:
-                path = line.split()[0]
-                chain_name = os.path.basename(path).split('.fasta')[0]
-                chains_list.add(chain_name)
-        write_fastas_of_chains(  chains_list=sorted(list(chains_list)), 
-                                 fasta_lib=fasta_lib, 
-                                 outfasta=output.fasta                  )
-
-
+# CONSIDERING REMOVAL
+#
+## shadow input is the fasta library at lib_path and fasta_index
+#rule out_all_seqs:
+#    '''
+#    This rule writes the sequences of all chains involved
+#    in homodimerization to a single output file all/seqs.fasta
+#    These sequences are simply collected from lib fasta_index.txt
+#    and the fasta files in <lib_path>/fasta/...
+#    '''
+#    output:
+#        fasta = outfile['all']['seqs']
+#    run:
+#        chains_list = set() 
+#        with open(fasta_index, 'r') as f:
+#            for line in f:
+#                path = line.split()[0]
+#                chain_name = os.path.basename(path).split('.fasta')[0]
+#                chains_list.add(chain_name)
+#        write_fastas_of_chains(  chains_list=sorted(list(chains_list)), 
+#                                 fasta_lib=fasta_lib, 
+#                                 outfasta=output.fasta                  )
+#
+#
 
 
 

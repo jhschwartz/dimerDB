@@ -14,18 +14,22 @@ subworkflow_done = config['subworkflow_done']['0_local_pdb']
 
 files = config['paths']['intermediates_dir']
 lib = config['paths']['lib']
+lib_full_chains = config['paths']['lib_rcsb_sidechains']
 
 cif2pdb_exe = config['exe']['cif2pdb']
+parallel_exe = config['exe']['parallel']
 
 outfile = {
-    'assemblies_dir': os.path.join(lib, 'rcsb'),
+    'assemblies_dir': os.path.join(lib_full_chains, 'rcsb'),
+    'assemblies_truncated': os.path.join(lib, 'rcsb'),
     'chains_index': os.path.join(lib, 'pdb_index.txt'),
     'empty_pdbs': os.path.join(files, 'sub_0', 'initially_empty_pdbs.txt'),
     'done': {
         'rsync': os.path.join(files, 'sub_0', 'assemblies_download.done'),
         'ungzip': os.path.join(files, 'sub_0', 'assemblies_ungzip.done'),
         'split': os.path.join(files, 'sub_0', 'split_rename.done'),
-        'fill_empty': os.path.join(files, 'sub_0', 'filled_init_empty_pdbs.done')
+        'fill_empty': os.path.join(files, 'sub_0', 'filled_init_empty_pdbs.done'),
+        'pdb_truncated': os.path.join(files, 'sub_0', 'pdb_truncated.done')
     }
 }
 
@@ -33,7 +37,8 @@ outfile = {
 localrules: all
 rule all:
     input: 
-        done = outfile['done']['fill_empty']
+        #    done = outfile['done']['fill_empty']
+        done = outfile['done']['pdb_truncated']
     output:
         done = subworkflow_done
     run:
@@ -147,6 +152,47 @@ rule fill_empty_pdb_files:
 
 
 
+rule truncate_pdb:
+    input:
+        done = outfile['done']['fill_empty'],
+        indexfile = outfile['chains_index']
+    output:
+        done = outfile['done']['pdb_truncated']
+    params:
+        pdb_full = outfile['assemblies_dir'],
+        pdb_truncated = outfile['assemblies_truncated']
+    resources:
+        mem_mb = '20000',
+        time = '24:00:00',
+        cpus_per_task = 64
+    shell:
+        '''
+        inlist=$(mktemp);
+        outlist=$(mktemp);
+
+        for pdb in $(cat {input.indexfile});
+        do
+            echo "{params.pdb_full}/$pdb" >> $inlist;
+            echo "{params.pdb_truncated}/$pdb" >> $outlist;
+        done
+
+        function truncatePDB () {{
+            input=$1;
+            output=$2;
+            if [[ -f $output ]]; then
+                echo "skipping truncation of $input because $output already exists...";
+            else
+                mkdir -p $(dirname $output);
+                grep -P "( CA )|( CB )" $input | cut -c1-54 > $output;
+            fi
+        }}
+
+        export -f truncatePDB;
+
+        {parallel_exe} --bar --halt now,fail=1% --retries=2 --memfree=1G -j{resources.cpus_per_task} --link truncatePDB {{1}} {{2}} :::: $inlist ::::  $outlist;
+
+        touch {output.done};
+        '''
 
 
 

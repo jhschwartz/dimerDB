@@ -1,0 +1,26 @@
+#!/bin/bash
+
+inlist=$(mktemp);
+outlist=$(mktemp);
+
+for pdb in $(head lib/pdb_index.txt)
+do
+	echo "lib/incl_rcsb_sidechains/rcsb/$pdb" >> $inlist;
+	echo "lib/rcsb/$pdb" >> $outlist;
+done
+
+function truncatePDB () {
+	input=$1;
+	output=$2;
+    if [[ -f $output ]]; then
+        echo "skipping truncation of $input because $output already exists...";  
+    else
+        mkdir -p $(dirname $output);
+        grep -P "( CA )|( CB )" $input | cut -c1-54 > $output;
+    fi
+}
+
+export -f truncatePDB;
+
+env/bin/parallel --progress --halt now,fail=1% --retries=2 --memfree=1G --delay=0.1s -j4 --link truncatePDB {1} {2} :::: $inlist ::::  $outlist;
+

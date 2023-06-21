@@ -2,6 +2,7 @@ paths:
     basepath: !BASEPATH!
     intermediates_dir: !BASEPATH!/intermediates
     lib: !BASEPATH!/lib
+    lib_rcsb_sidechains: !BASEPATH!/lib/incl_rcsb_sidechains
     tmscore_db: !BASEPATH!/lib/tmdb
     contacts_db: !BASEPATH!/lib/contactsdb
     seqid_db: !BASEPATH!/lib/seqiddb

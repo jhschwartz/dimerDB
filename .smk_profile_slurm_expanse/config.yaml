@@ -4,11 +4,13 @@ default-resources:
     - account="mia174"
     - mem_mb="1000"
     - time="01:00:00"
+    - cpus_per_task=1
 cluster:
     mkdir -p logs/{rule} &&
     sbatch
         --partition={resources.queue}
         --ntasks-per-node={threads}
+        --cpus-per-task={resources.cpus_per_task}
         --nodes=1
         --mem={resources.mem_mb}
         --job-name={rule}-%j

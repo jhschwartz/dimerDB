@@ -69,8 +69,11 @@ rule all:
         prep_final_data(            out_sub4 )
     run:
         print('PIPELINE FINISHED!')
-        print('full pipeline start time:', start)
-        print('full pipeline end time:', datetime.utcnow())
+        print('full pipeline start time:')
+        shell(''' cat build_start.tmp ''')
+        print('full pipeline start time:')
+        print('full pipeline end time:')
+        print(datetime.utcnow())
         
         # each outfile timestamps the end of each subworkflow, so we print
         shell('''

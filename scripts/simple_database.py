@@ -158,7 +158,7 @@ class AbstractSimpleDatabase(abc.ABC):
                         line = infile.readline()
 
                     # the file pointer is at the next item, so yield it and advance both
-                    if self.compare_pair_names(self.line_to_pair(line), current_pair) == 0:
+                    elif self.compare_pair_names(self.line_to_pair(line), current_pair) == 0:
                         yield self.line_to_output(line)
                         current_pair = next(group, None)
                         line = infile.readline()
